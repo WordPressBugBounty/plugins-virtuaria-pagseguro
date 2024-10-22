@@ -31,10 +31,15 @@ class Virtuaria_PagSeguro_Settings {
 	 * Add submenu pagseguro.
 	 */
 	public function add_submenu_pagseguro() {
+		$capability = apply_filters(
+			'virtuaria_pagseguro_menu_capability',
+			'remove_users'
+		);
+
 		add_menu_page(
 			'Virtuaria PagSeguro',
 			'Virtuaria PagSeguro',
-			'remove_users',
+			$capability,
 			'virtuaria_pagseguro',
 			array( $this, 'main_setting_screen' ),
 			plugin_dir_url( __FILE__ ) . '../admin/images/virtuaria.png'
@@ -44,7 +49,7 @@ class Virtuaria_PagSeguro_Settings {
 			'virtuaria_pagseguro',
 			'Integração',
 			'Integração',
-			'remove_users',
+			$capability,
 			'virtuaria_pagseguro'
 		);
 
@@ -54,21 +59,21 @@ class Virtuaria_PagSeguro_Settings {
 				'virtuaria_pagseguro',
 				'Crédito',
 				'Crédito',
-				'remove_users',
+				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' )
 			);
 			add_submenu_page(
 				'virtuaria_pagseguro',
 				'Pix',
 				'Pix',
-				'remove_users',
+				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' )
 			);
 			add_submenu_page(
 				'virtuaria_pagseguro',
 				'Boleto',
 				'Boleto',
-				'remove_users',
+				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' )
 			);
 		} else {
@@ -76,7 +81,7 @@ class Virtuaria_PagSeguro_Settings {
 				'virtuaria_pagseguro',
 				'Crédito, Pix e Boleto',
 				'Crédito, Pix e Boleto',
-				'remove_users',
+				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' )
 			);
 		}
@@ -86,7 +91,7 @@ class Virtuaria_PagSeguro_Settings {
 				'virtuaria_pagseguro',
 				'Split',
 				'Split',
-				'remove_users',
+				$capability,
 				'virtuaria_pagbank_split',
 				array( $this, 'split_settings' )
 			);

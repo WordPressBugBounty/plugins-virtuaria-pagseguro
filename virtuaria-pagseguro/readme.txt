@@ -4,13 +4,13 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.6.2
-Stable tag: 3.3.6
+Stable tag: 3.3.7
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 
-Crédito, Pix e Boleto na sua loja virtual. Mais segurança, menos chargebacks com 3DS.
+Crédito, Pix e Boleto na sua loja virtual. Mais segurança, menos chargebacks com 3DS. Descontos nas taxas do PagBank.
 
 == Description ==
 
@@ -39,6 +39,24 @@ Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso
 
 
 📹 [Playlist do Plugin no Youtube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
+
+
+### ⭐ **VIRTUARIA & PAGBANK: PARCEIROS EM EXCELÊNCIA** ⭐
+
+A Virtuaria é **Parceira Oficial PagBank**, com nosso plugin sendo elogiado pela própria PagBank por sua excelência e riqueza de recursos, antes mesmo de assinarmos o Contrato de Parceria em Agosto de 2023.
+
+Esta parceria, não só fortalece a confiabilidade e eficiência do nosso plugin, mas também traz benefícios exclusivos, como **taxas especiais** para todos os usuários que optem pelo nosso plugin.
+
+Basta escolher a taxa especial desejada no painel de configuração do plugin.
+
+## **Opções de Taxa:**
+
+**Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
+**Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
+**Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
+**Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
+
+*Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
 
 
 ### ✨ Ativação ###
@@ -321,6 +339,9 @@ O uso da autenticação 3DS não garante a prevenção de disputas em sua loja o
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.3.7 2024-10-22 =
+* Novo - filtro “virtuaria_pagseguro_menu_capability” que permite alterar a capability usada nas páginas de menu do plugin.
+
 = 3.3.6 2024-09-24 =
 * Novo - Compatibilidade com Campos Extras do Virtuaria Correios.
 

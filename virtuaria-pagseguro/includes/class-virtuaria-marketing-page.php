@@ -27,7 +27,10 @@ class Virtuaria_Marketing_Page {
 			'virtuaria_pagseguro',
 			'Virtuaria Marketing',
 			'Virtuaria Marketing',
-			'remove_users',
+			apply_filters(
+				'virtuaria_pagseguro_menu_capability',
+				'remove_users'
+			),
 			'virtuaria_marketing',
 			array( $this, 'content_marketing_tab' ),
 		);
