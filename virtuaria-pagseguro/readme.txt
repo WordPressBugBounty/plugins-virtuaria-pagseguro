@@ -40,21 +40,12 @@ Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso
 
 📹 [Playlist do Plugin no Youtube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
 
+### ⭐ **Descontos nas Taxas do PagBank:**
 
-### ⭐ **VIRTUARIA & PAGBANK: PARCEIROS EM EXCELÊNCIA** ⭐
-
-A Virtuaria é **Parceira Oficial PagBank**, com nosso plugin sendo elogiado pela própria PagBank por sua excelência e riqueza de recursos, antes mesmo de assinarmos o Contrato de Parceria em Agosto de 2023.
-
-Esta parceria, não só fortalece a confiabilidade e eficiência do nosso plugin, mas também traz benefícios exclusivos, como **taxas especiais** para todos os usuários que optem pelo nosso plugin.
-
-Basta escolher a taxa especial desejada no painel de configuração do plugin.
-
-## **Opções de Taxa:**
-
-**Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
-**Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
-**Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
-**Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
+– **Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
+– **Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
+– **Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
+– **Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
 
 *Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
 
