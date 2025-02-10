@@ -127,48 +127,48 @@ class WC_Virtuaria_PagSeguro_API {
 				'shipping'          => array(
 					'address' => array(
 						'street'      => substr(
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_shipping_address_1()
 								: $order->get_billing_address_1(),
 							0,
 							159
 						),
 						'number'      => substr(
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_meta( '_shipping_number' )
 								: $order->get_meta( '_billing_number' ),
 							0,
 							19
 						),
 						'complement'  => substr(
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_shipping_address_2()
 								: $order->get_billing_address_2(),
 							0,
 							40
 						),
 						'locality'    => substr(
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_meta( '_shipping_neighborhood' )
 								: $order->get_meta( '_billing_neighborhood' ),
 							0,
 							60
 						),
 						'city'        => substr(
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_shipping_city()
 								: $order->get_billing_city(),
 							0,
 							90
 						),
-						'region_code' => isset( $posted['ship_to_different_address'] )
+						'region_code' => $this->should_use_shipping_fields( $order, $posted )
 							? $order->get_shipping_state()
 							: $order->get_billing_state(),
 						'country'     => 'BRA',
 						'postal_code' => preg_replace(
 							'/\D/',
 							'',
-							isset( $posted['ship_to_different_address'] )
+							$this->should_use_shipping_fields( $order, $posted )
 								? $order->get_shipping_postcode()
 								: $order->get_billing_postcode()
 						),
@@ -179,15 +179,23 @@ class WC_Virtuaria_PagSeguro_API {
 			'timeout' => self::TIMEOUT,
 		);
 
-		if ( ( isset( $posted['ship_to_different_address'] )
+		if ( ( $this->should_use_shipping_fields( $order, $posted )
 			&& ! $order->get_shipping_address_2() )
-			|| ( ! isset( $posted['ship_to_different_address'] )
+			|| ( ! $this->should_use_shipping_fields( $order, $posted )
 			&& ! $order->get_billing_address_2() ) ) {
 			unset( $data['body']['shipping']['address']['complement'] );
 		}
 
-		if ( ! $order->get_meta( '_billing_neighborhood' ) ) {
+		$ignore_address = isset( $this->gateway->global_settings['ignore_shipping_address'] )
+			? 'yes' === $this->gateway->global_settings['ignore_shipping_address']
+			: false;
+
+		if ( ! $order->get_meta( '_billing_neighborhood' ) && ! $ignore_address ) {
 			return array( 'error' => __( 'o campo <b>Bairro</b> é obrigatório!', 'virtuaria-pagseguro' ) );
+		}
+
+		if ( $ignore_address ) {
+			unset( $data['body']['shipping'] );
 		}
 
 		if ( ! $order->get_meta( '_billing_cpf' ) || 2 == $order->get_meta( '_billing_persontype' ) ) {
@@ -1228,8 +1236,14 @@ class WC_Virtuaria_PagSeguro_API {
 	 * @return mixed The 3DS session if retrieval is successful, false otherwise.
 	 */
 	public function get_3ds_session( $retry = true ) {
+		$endpoint = 'https://sdk.pagseguro.com/checkout-sdk/sessions';
+		if ( isset( $this->gateway->global_settings['environment'] )
+			&& 'sandbox' === $this->gateway->global_settings['environment'] ) {
+			$endpoint = 'https://sandbox.sdk.pagseguro.com/checkout-sdk/sessions';
+		}
+
 		$request = wp_remote_post(
-			'https://sdk.pagseguro.com/checkout-sdk/sessions',
+			$endpoint,
 			array(
 				'headers' => array(
 					'Authorization' => 'Bearer ' . $this->gateway->token,
@@ -1266,5 +1280,320 @@ class WC_Virtuaria_PagSeguro_API {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Decides whether to use shipping fields or not.
+	 *
+	 * This checks whether it should use shipping fields based on WooCommerce
+	 * settings and whether the order needs shipping address.
+	 *
+	 * @param wc_order $order The order object.
+	 * @param array    $posted The posted data.
+	 *
+	 * @return boolean true if should use shipping fields.
+	 */
+	private function should_use_shipping_fields( $order, $posted ) {
+		$shipping_address_default = 'shipping' === get_option( 'woocommerce_ship_to_destination' );
+		$ship_different_address   = isset( $posted['ship_to_different_address'] )
+			&& '1' == $posted['ship_to_different_address'];
+
+		return (
+			( $shipping_address_default && ! $ship_different_address )
+			|| ( ! $shipping_address_default && $ship_different_address )
+		) && $order->needs_shipping_address();
+	}
+
+	/**
+	 * Do recurrence charge to credit card.
+	 *
+	 * @param wc_order $order     the order.
+	 * @param int      $amount    the quantity from additional charge.
+	 */
+	public function process_subscription_payment( $order, $amount ) {
+		$amount = str_replace( array( '.', ',' ), '', $amount );
+
+		if ( $amount <= 0 ) {
+			$order->add_order_note(
+				'PagSeguro: Cobrança de recorrência abortada devido ao valor inválido.',
+				0,
+				true
+			);
+			if ( $this->debug_on ) {
+				$this->gateway->log->add(
+					$this->tag,
+					'PagSeguro: Valor inválido ou pedido não encontrado para cobrança recorrente.',
+					WC_Log_Levels::ERROR
+				);
+			}
+			// Allow the request to continue if the amount is invalid.
+			return true;
+		}
+
+		$pagseguro_card_info = get_user_meta(
+			$order->get_customer_id(),
+			'_pagseguro_credit_info_store_' . get_current_blog_id(),
+			true
+		);
+
+		if ( ! $pagseguro_card_info || ! isset( $pagseguro_card_info['token'] ) ) {
+			if ( $this->debug_on ) {
+				$order->add_order_note(
+					'PagSeguro: Cobrança de recorrência abortada, método de pagamento do cliente ausente.',
+					0,
+					true
+				);
+				if ( $this->debug_on ) {
+					$this->gateway->log->add(
+						$this->tag,
+						'PagSeguro: método de pagamento do cliente ausente durante a recorrência.',
+						WC_Log_Levels::ERROR
+					);
+				}
+			}
+			return;
+		}
+
+		$phone = $order->get_billing_phone();
+		$phone = explode( ' ', $phone );
+
+		if ( ! $order->get_meta( '_billing_cpf' ) || 2 == $order->get_meta( '_billing_persontype' ) ) {
+			$tax_id = preg_replace( '/\D/', '', $order->get_meta( '_billing_cnpj' ) );
+		} else {
+			$tax_id = preg_replace( '/\D/', '', $order->get_meta( '_billing_cpf' ) );
+		}
+
+		$data = array(
+			'headers' => array(
+				'Authorization' => $this->gateway->token,
+				'Content-Type'  => 'application/json',
+			),
+			'body'    => array(
+				'reference_id'      => $this->gateway->invoice_prefix . strval( $order->get_id() ),
+				'customer'          => array(
+					'name'   => $order->get_formatted_billing_full_name(),
+					'email'  => $order->get_billing_email(),
+					'tax_id' => $tax_id,
+					'phone'  => array(
+						'country' => '55',
+						'area'    => preg_replace( '/\D/', '', $phone[0] ),
+						'number'  => preg_replace( '/\D/', '', $phone[1] ),
+						'type'    => 'CELLPHONE',
+					),
+				),
+				'items'             => array(
+					array(
+						'name'        => get_bloginfo( 'name' ),
+						'quantity'    => 1,
+						'unit_amount' => $amount,
+					),
+				),
+				'shipping'          => array(
+					'address' => array(
+						'street'      => substr(
+							$order->get_shipping_address_1(),
+							0,
+							159
+						),
+						'number'      => substr(
+							$order->get_meta( '_shipping_number' ),
+							0,
+							19
+						),
+						'complement'  => substr(
+							$order->get_shipping_address_2(),
+							0,
+							40
+						),
+						'locality'    => substr(
+							$order->get_meta( '_shipping_neighborhood' ),
+							0,
+							60
+						),
+						'city'        => substr(
+							$order->get_shipping_city(),
+							0,
+							90
+						),
+						'region_code' => $order->get_shipping_state(),
+						'country'     => 'BRA',
+						'postal_code' => preg_replace(
+							'/\D/',
+							'',
+							$order->get_shipping_postcode()
+						),
+					),
+				),
+				'notification_urls' => array( home_url( 'wc-api/WC_Virtuaria_PagSeguro_Gateway' ) ),
+			),
+			'timeout' => self::TIMEOUT,
+		);
+
+		if ( ! $order->get_shipping_address_2() ) {
+			unset( $data['body']['shipping']['address']['complement'] );
+		}
+
+		if ( ! $order->has_shipping_address()
+			|| ! $order->get_shipping_city()
+			|| ! $order->get_shipping_postcode() ) {
+			$data['body']['shipping']['address'] = array(
+				'street'      => substr(
+					$order->get_billing_address_1(),
+					0,
+					159
+				),
+				'number'      => substr(
+					$order->get_meta( '_billing_number' ),
+					0,
+					19
+				),
+				'complement'  => substr(
+					$order->get_billing_address_2(),
+					0,
+					40
+				),
+				'locality'    => substr(
+					$order->get_meta( '_billing_neighborhood' ),
+					0,
+					60
+				),
+				'city'        => substr(
+					$order->get_billing_city(),
+					0,
+					90
+				),
+				'region_code' => $order->get_billing_state(),
+				'country'     => 'BRA',
+				'postal_code' => preg_replace(
+					'/\D/',
+					'',
+					$order->get_billing_postcode()
+				),
+			);
+
+			if ( ! $order->get_billing_address_2() ) {
+				unset( $data['body']['shipping']['address']['complement'] );
+			}
+		}
+
+		$data['body']['charges'] = array(
+			array(
+				'reference_id'      => $this->gateway->invoice_prefix . strval( $order->get_id() ),
+				'description'       => substr( get_bloginfo( 'name' ), 0, 63 ),
+				'amount'            => array(
+					'value'    => $amount,
+					'currency' => 'BRL',
+				),
+				'notification_urls' => array( home_url( 'wc-api/WC_Virtuaria_PagSeguro_Gateway' ) ),
+				'payment_method'    => array(
+					'type'            => 'CREDIT_CARD',
+					'installments'    => 1,
+					'capture'         => true,
+					'soft_descriptor' => $this->gateway->soft_descriptor,
+					'card'            => array(
+						'id' => $pagseguro_card_info['token'],
+					),
+				),
+			),
+		);
+
+		if ( ! $order->get_billing_address_2() ) {
+			unset( $data['body']['shipping']['address']['complement'] );
+		}
+
+		if ( $this->debug_on ) {
+			$to_log = $data;
+			unset( $to_log['headers'] );
+			if ( isset( $to_log['body']['charges'][0]['payment_method']['card']['id'] ) ) {
+				$to_log['body']['charges'][0]['payment_method']['card']['id'] = preg_replace(
+					'/\w/',
+					'x',
+					$to_log['body']['charges'][0]['payment_method']['card']['id']
+				);
+			}
+			$this->gateway->log->add(
+				$this->tag,
+				'Enviando recorrência: ' . wp_json_encode( $data ),
+				WC_Log_Levels::INFO
+			);
+		}
+		$data['body'] = wp_json_encode( $data['body'] );
+
+		$request = wp_remote_post(
+			$this->endpoint . 'orders',
+			$data
+		);
+
+		if ( is_wp_error( $request ) ) {
+			if ( $this->debug_on ) {
+				$this->gateway->log->add(
+					$this->tag,
+					'Erro na cobrança de recorrência: ' . $request->get_error_message(),
+					WC_Log_Levels::ERROR
+				);
+			}
+			$order->add_order_note(
+				'PagSeguro: Não foi possível efetivar a recorrência.',
+				0,
+				true
+			);
+			return;
+		}
+
+		if ( $this->debug_on ) {
+			$this->gateway->log->add(
+				$this->tag,
+				'Resposta da cobrança recorrente: ' . wp_json_encode( $request ),
+				WC_Log_Levels::INFO
+			);
+		}
+
+		$response  = json_decode( wp_remote_retrieve_body( $request ), true );
+		$resp_code = intval( wp_remote_retrieve_response_code( $request ) );
+		$note_resp = '';
+		if ( 201 !== $resp_code ) {
+			if ( 401 === $resp_code ) {
+				if ( isset( $response['error_messages'][0]['description'] )
+					&& 'Invalid credential. Review AUTHORIZATION header' === $response['error_messages'][0]['description'] ) {
+					update_option( 'virtuaria_pagseguro_not_authorized', true );
+				}
+				$note_resp = __( 'Pagamento não autorizado.', 'virtuaria-pagseguro' );
+			} elseif ( in_array( $resp_code, array( 400, 409 ), true ) ) {
+				$msg = $response['error_messages'][0]['description'];
+				if ( 'invalid_parameter' === $response['error_messages'][0]['description'] ) {
+					$msg = 'Verifique os dados enviados e tente novamente.';
+				}
+				$note_resp = $msg;
+			} else {
+				$note_resp = __(
+					'Não foi possível processar a sua cobrança.',
+					'virtuaria-pagseguro'
+				);
+			}
+		}
+
+		if ( $note_resp ) {
+			$order->add_order_note( 'PagSeguro: ' . $note_resp, 0, true );
+			return;
+		}
+
+		$order->add_order_note(
+			'PagSeguro: Recorrência enviada R$' . number_format( $amount / 100, 2, ',', '.' ) . '.',
+			0,
+			true
+		);
+
+		if ( 'DECLINED' === $response['charges'][0]['status'] ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: payment response */
+					__( 'PagSeguro: Não autorizado, %s.', 'virtuaria-pagseguro' ),
+					$response['charges'][0]['payment_response']['message']
+				)
+			);
+			return false;
+		}
+
+		return true;
 	}
 }

@@ -112,7 +112,7 @@ trait Virtuaria_PagSeguro_Common {
 			|| 'BOLETO' === $order->get_meta( '_payment_mode' )
 			|| ( 'CREDIT_CARD' === $order->get_meta( '_payment_mode' ) && $this->global_settings['payment_status'] !== $order->get_status() )
 			|| ( 'PIX' === $order->get_meta( '_payment_mode' ) && ! in_array( $order->get_status(), array( 'on-hold', $this->global_settings['payment_status'] ), true ) )
-			|| ( ! isset( $options['enabled'] ) || 'yes' !== $options['enabled'] )
+			// || ( ! isset( $options['enabled'] ) || 'yes' !== $options['enabled'] )
 			|| ( ( ! isset( $credit['token'] ) || ! $credit['token'] ) && 'PIX' !== $order->get_meta( '_payment_mode' ) ) ) {
 			return;
 		}
@@ -993,16 +993,34 @@ trait Virtuaria_PagSeguro_Common {
 			&& ! apply_filters( 'virtuaria_pagseguro_disable_discount_by_cart', false, WC()->cart )
 			&& $this->id === $gateway_id ) {
 
+			$method = '';
 			if ( 'virt_pagseguro_pix' === $gateway_id ) {
 				$has_discount = 'yes' === $this->pix_enable
-				&& $this->pix_discount > 0
-				&& ( ! $this->pix_discount_coupon || count( WC()->cart->get_applied_coupons() ) === 0 );
+					&& $this->pix_discount > 0
+					&& ( ! $this->pix_discount_coupon || count( WC()->cart->get_applied_coupons() ) === 0 );
+				$method       = 'pix';
 			} elseif ( 'virt_pagseguro_ticket' === $gateway_id ) {
 				$has_discount = 'yes' === $this->ticket_enable
-				&& $this->ticket_discount > 0
-				&& ( ! $this->ticket_discount_coupon || count( WC()->cart->get_applied_coupons() ) === 0 );
+					&& $this->ticket_discount > 0
+					&& ( ! $this->ticket_discount_coupon || count( WC()->cart->get_applied_coupons() ) === 0 );
+				$method       = 'ticket';
 			} else {
 				$has_discount = false;
+			}
+
+			if ( $has_discount && $method ) {
+				foreach ( WC()->cart->get_cart() as $item ) {
+					$product = wc_get_product( $item['product_id'] );
+					if ( $product && apply_filters(
+						'virtuaria_pagseguro_disable_discount',
+						false,
+						$product,
+						$method
+					) ) {
+						$has_discount = false;
+						break;
+					}
+				}
 			}
 
 			if ( ! $has_discount ) {
@@ -1040,6 +1058,10 @@ trait Virtuaria_PagSeguro_Common {
 			: 'ticket';
 
 		$ignored_categories = $this->get_option( $method . '_discount_ignore', '' );
+
+		if ( $ignored_categories && is_string( $ignored_categories ) ) {
+			$ignored_categories = explode( ',', $ignored_categories );
+		}
 
 		if ( is_array( $ignored_categories ) ) {
 			$ignored_categories = array_filter( $ignored_categories );
@@ -1086,6 +1108,11 @@ trait Virtuaria_PagSeguro_Common {
 		}
 	}
 
+	/**
+	 * Display the total discounted based on Pix or Boleto method.
+	 *
+	 * @since 1.0.0
+	 */
 	public function display_total_discounted() {
 		if ( 'after_virtuaria_pix_validate_text' === current_action() ) {
 			$disabled_with_coupon = $this->pix_discount_coupon;

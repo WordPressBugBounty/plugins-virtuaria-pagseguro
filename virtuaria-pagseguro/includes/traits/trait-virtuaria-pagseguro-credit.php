@@ -590,4 +590,117 @@ trait Virtuaria_PagSeguro_Credit {
 
 		return false;
 	}
+
+	/**
+	 * Handles a scheduled subscription payment, by triggering a new payment
+	 * for the set amount, and then either completing or failing the payment
+	 * depending on the result.
+	 *
+	 * @param float    $amount_to_charge The amount to charge.
+	 * @param WC_Order $order            The order object.
+	 */
+	public function scheduled_subscription_payment( $amount_to_charge, $order ) {
+		$debug_on = isset( $this->global_settings['debug'] )
+			&& 'yes' === $this->global_settings['debug'];
+
+		if ( $debug_on ) {
+			$this->log->add(
+				'virtuaria-pagseguro',
+				'Processing subscription payment',
+				WC_Log_Levels::DEBUG
+			);
+		}
+
+		if ( ! class_exists( 'WC_Subscriptions_Manager' ) ) {
+			if ( $debug_on ) {
+				$this->log->add(
+					'virtuaria-pagseguro',
+					'Class WC_Subscriptions_Manager not found',
+					WC_Log_Levels::DEBUG
+				);
+			}
+			return;
+		}
+
+		$subscription_parent_id = $order->get_meta( '_subscription_renewal' );
+		if ( $subscription_parent_id ) {
+			$parent_id = wp_get_post_parent_id( $subscription_parent_id );
+			if ( $parent_id ) {
+				$parent_order = wc_get_order( $parent_id );
+			}
+		}
+
+		if ( $debug_on && ! $parent_order ) {
+			$this->log->add(
+				'virtuaria-pagseguro',
+				'Subscription parent id not found',
+				WC_Log_Levels::DEBUG
+			);
+		}
+
+		if ( isset( $this->global_settings['status_order_subscriptions'] )
+			&& 'yes' === $this->global_settings['status_order_subscriptions']
+			&& $parent_order ) {
+			$parent_order->update_status(
+				'pending',
+				__( 'Aguardando pagamento da assinatura.', 'virtuaria-pagseguro' )
+			);
+		}
+
+		$success = $this->api->process_subscription_payment( $order, $amount_to_charge );
+
+		if ( ! $success ) {
+			if ( $debug_on ) {
+				$this->log->add(
+					'virtuaria-pagseguro',
+					'API Error processing subscription payment',
+					WC_Log_Levels::DEBUG
+				);
+			}
+
+			WC_Subscriptions_Manager::process_subscription_payment_failure_on_order( $order );
+
+			if ( isset( $this->global_settings['status_order_subscriptions'] )
+				&& 'yes' === $this->global_settings['status_order_subscriptions']
+				&& $parent_order ) {
+				$parent_order->update_status(
+					'cancelled',
+					sprintf(
+						/* translators: %s: admin log URL. */
+						__( 'Falha no pagamento da assinatura. Consulte o log para mais detalhes clicando <a href="%s">aqui</a>.', 'virtuaria-pagseguro' ),
+						admin_url( 'admin.php?page=wc-status&tab=logs&source=virtuaria-pagseguro' )
+					)
+				);
+			}
+		} else {
+			if ( $debug_on ) {
+				$this->log->add(
+					'virtuaria-pagseguro',
+					'API Success processing subscription payment',
+					WC_Log_Levels::DEBUG
+				);
+			}
+
+			WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
+
+			if ( isset( $this->global_settings['status_order_subscriptions'] )
+				&& 'yes' === $this->global_settings['status_order_subscriptions']
+				&& $parent_order ) {
+				$parent_order->update_status(
+					isset( $this->global_settings['payment_status'] )
+						? $this->global_settings['payment_status']
+						: 'processing',
+					__( 'Pagamento da assinatura realizado com sucesso.', 'virtuaria-pagseguro' )
+				);
+			}
+		}
+
+		if ( $debug_on ) {
+			$this->log->add(
+				'virtuaria-pagseguro',
+				'End Processing subscription payment',
+				WC_Log_Levels::DEBUG
+			);
+		}
+	}
 }

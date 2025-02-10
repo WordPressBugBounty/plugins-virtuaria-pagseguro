@@ -110,6 +110,8 @@ class WC_Virtuaria_PagSeguro_Gateway_Pix extends WC_Payment_Gateway {
 
 		$this->supports = array( 'products', 'refunds' );
 
+		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+
 		// Load the form fields.
 		$this->init_form_fields();
 
@@ -125,9 +127,7 @@ class WC_Virtuaria_PagSeguro_Gateway_Pix extends WC_Payment_Gateway {
 		$this->signup_checkout     = 'yes' === get_option( 'woocommerce_enable_signup_and_login_from_checkout' );
 		$this->pix_msg_payment     = $this->get_option( 'pix_msg_payment' );
 		$this->pix_discount_coupon = 'yes' === $this->get_option( 'pix_discount_coupon' );
-
-		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
-		$this->invoice_prefix  = $this->get_invoice_prefix();
+		$this->invoice_prefix      = $this->get_invoice_prefix();
 
 		// Active logs.
 		$this->log = $this->get_log();

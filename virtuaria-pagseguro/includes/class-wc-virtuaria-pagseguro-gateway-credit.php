@@ -129,7 +129,17 @@ class WC_Virtuaria_PagSeguro_Gateway_Credit extends WC_Payment_Gateway {
 			'virtuaria-pagseguro'
 		);
 
-		$this->supports = array( 'products', 'refunds' );
+		$this->supports = array(
+			'products',
+			'refunds',
+			'subscriptions',
+			'subscription_cancellation',
+			'subscription_suspension',
+			'subscription_reactivation',
+			'subscription_amount_changes',
+		);
+
+		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
 
 		// Load the form fields.
 		$this->init_form_fields();
@@ -149,8 +159,6 @@ class WC_Virtuaria_PagSeguro_Gateway_Credit extends WC_Payment_Gateway {
 		$this->credit_enable   = $this->enabled;
 		$this->comments        = $this->get_option( 'comments' );
 		$this->signup_checkout = 'yes' === get_option( 'woocommerce_enable_signup_and_login_from_checkout' );
-
-		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
 		$this->invoice_prefix  = $this->get_invoice_prefix();
 
 		// Active logs.
@@ -217,6 +225,13 @@ class WC_Virtuaria_PagSeguro_Gateway_Credit extends WC_Payment_Gateway {
 			array( $this, 'variation_discount_and_installment' ),
 			10,
 			3
+		);
+
+		add_action(
+			'woocommerce_scheduled_subscription_payment_' . $this->id,
+			array( $this, 'scheduled_subscription_payment' ),
+			10,
+			2
 		);
 	}
 

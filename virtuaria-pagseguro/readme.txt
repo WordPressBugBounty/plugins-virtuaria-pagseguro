@@ -3,8 +3,8 @@
 Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
-Tested up to: 6.6.2
-Stable tag: 3.3.7
+Tested up to: 6.7.1
+Stable tag: 3.4.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -330,6 +330,13 @@ O uso da autenticação 3DS não garante a prevenção de disputas em sua loja o
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.4.1 2025-02-10 =
+* Melhoria - Registro de falhas de validação no 3DS em log.
+= 3.4.0 2024-12-23 =
+* Novo - Suporte a Woocommerce Subscriptions;
+* Novo - Configuração que permite não enviar dados de entrega. Essa configuração é útil para lojas virtuais que não realizam entregas físicas ou que não possuem campos de endereço no checkout, evitando problemas de validação de vendas.
+* Melhoria - Compatibilidade com Wordpress 6.7.1;
+* Ajuste - Correção na exibição da caixa de cobranças extras.
 = 3.3.7 2024-10-22 =
 * Novo - filtro “virtuaria_pagseguro_menu_capability” que permite alterar a capability usada nas páginas de menu do plugin.
 

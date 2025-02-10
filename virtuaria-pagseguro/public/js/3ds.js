@@ -63,7 +63,7 @@ jQuery(document).ready(function($) {
         let request = {
             data: {
                 customer: {
-                    name: checkoutFormDataObj['billing_first_name'] + ' ' + checkoutFormDataObj['billing_last_name'],
+                    name: removespecialchars( checkoutFormDataObj['billing_first_name'] ) + ' ' + removespecialchars( checkoutFormDataObj['billing_last_name'] ),
                     email: checkoutFormDataObj['billing_email'],
                     phones: [
                         {
@@ -125,6 +125,7 @@ jQuery(document).ready(function($) {
                         auth_3ds_authorized_or_bypass();
                         return true;
                     }
+                    register_3ds_error(request, 'Fluxo de autenticação completo mas não autenticado.');
                     alert( 'PagBank: Não foi possível autenticar o cartão. Tente novamente.' );
                     return false;
                 case 'AUTH_NOT_SUPPORTED':
@@ -134,6 +135,7 @@ jQuery(document).ready(function($) {
                         auth_3ds_authorized_or_bypass();
                         return true;
                     }
+                    register_3ds_error(request, 'O cartão não suporta autenticação 3D.');
                     alert('Seu cartão não suporta autenticação 3D. Escolha outro método de pagamento ou cartão.');
                     return false;
                 case 'REQUIRE_CHALLENGE':
@@ -144,6 +146,7 @@ jQuery(document).ready(function($) {
             if(err instanceof PagSeguro.PagSeguroError ) {
                 let msgs = err.detail.errorMessages.map(error => translateErrorMessage(error)).join('\n');
                 console.error(msgs);
+                register_3ds_error(request, msgs);
                 alert('PagBank: Falha ao processar os dados. \n' + msgs );
                 $('#virt_pagseguro_auth_3ds').val('');
 
@@ -207,5 +210,33 @@ jQuery(document).ready(function($) {
         $('#place_order').attr('virt_pagseguro_3ds_processed', 'yes');
         $('#place_order').attr('disabled', false);
         $('#place_order').trigger('click');
+    }
+
+    function register_3ds_error( auth_data, error_msg ) {
+        $.ajax({
+            url: auth_3ds.ajax_url,
+            method: 'POST',
+            async: false,
+            data: {
+                action: 'virt_pagseguro_3ds_error',
+                nonce: auth_3ds.nonce_3ds,
+                fields: auth_data,
+                errors: error_msg
+            },
+            success: function(response) {
+                if ( response ) {
+                    console.log('Erro registrado no log da loja.');
+                } else {
+                    console.log('Falha ao enviar o erro no log da loja.');
+                }
+            },
+            error: function(response) {
+                console.log('Falha ao enviar o erro no log da loja.');
+            }
+        });
+    }
+
+    function removespecialchars(str) {
+        return str.replace(/[^a-zA-ZÀ-ÿ\s^]/g, '');
     }
 });

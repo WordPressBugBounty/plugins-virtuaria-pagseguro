@@ -315,6 +315,14 @@ class Virtuaria_PagSeguro_Settings {
 				unset( $options['debug'] );
 			}
 
+			if ( ! isset( $_POST['woocommerce_virt_pagseguro_status_order_subscriptions'] ) ) {
+				unset( $options['status_order_subscriptions'] );
+			}
+
+			if ( ! isset( $_POST['woocommerce_virt_pagseguro_ignore_shipping_address'] ) ) {
+				unset( $options['ignore_shipping_address'] );
+			}
+
 			update_option(
 				'woocommerce_virt_pagseguro_settings',
 				$options

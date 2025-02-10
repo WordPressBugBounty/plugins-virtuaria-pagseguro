@@ -272,6 +272,53 @@ if ( ! isset( $options['payment_form'] ) ) {
 					</fieldset>
 				</td>
 			</tr>
+			<?php
+			if ( class_exists( 'WC_Subscriptions' ) ) :
+				?>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label for="woocommerce_virt_pagseguro_status_order_subscriptions">Status Pedido Subscriptions</label>
+					</th>
+					<td class="forminp">
+						<fieldset>
+							<legend class="screen-reader-text"><span>Status Pedido Subscriptions</span></legend>
+							<input
+								type="checkbox"
+								name="woocommerce_virt_pagseguro_status_order_subscriptions"
+								id="woocommerce_virt_pagseguro_status_order_subscriptions"
+								value="yes" <?php checked( 'yes', isset( $options['status_order_subscriptions'] ) ? $options['status_order_subscriptions'] : '' ); ?>/>
+
+							<label for="woocommerce_virt_pagseguro_status_order_subscriptions">
+							Habilitar gerenciamento de status do pedido em subscriptions.
+							</label>
+							<p class="description">
+								Modifica o status do pedido original com base no resultado das subscrições. Ex: Cancela o pedido original quando houver falha na cobrança da subscrição.
+							</p>
+						</fieldset>
+					</td>
+				</tr>
+				<?php
+			endif;
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<label for="woocommerce_virt_pagseguro_ignore_shipping_address">Desativar Envio de Dados de Entrega</label>
+				</th>
+				<td class="forminp">
+					<fieldset>
+						<legend class="screen-reader-text"><span>Desativar Envio de Dados de Entrega</span></legend>
+						<label for="woocommerce_virt_pagseguro_ignore_shipping_address">
+						<input
+							type="checkbox"
+							name="woocommerce_virt_pagseguro_ignore_shipping_address"
+							id="woocommerce_virt_pagseguro_ignore_shipping_address"
+							value="yes" <?php checked( 'yes', isset( $options['ignore_shipping_address'] ) ? $options['ignore_shipping_address'] : '' ); ?>> Desativar envio de dados de entrega a PagBank</label><br>
+						<p class="description">
+							Marque esta opção para desativar o envio de dados de entrega (como cidade, rua, bairro, número, UF.) ao PagBank. Essa configuração é útil para lojas virtuais que não realizam entregas físicas ou que não possuem campos de endereço no checkout, evitando problemas de validação de vendas. <b>Nota:</b> O PagBank pode utilizar essas informações para fins de segurança e antifraude, portanto, desativá-las pode impactar a análise de risco das transações.
+						</p>
+					</fieldset>
+				</td>
+			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
 					<label for="woocommerce_virt_pagseguro_debug">Log de depuração </label>

@@ -21,7 +21,7 @@ $is_android = ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'com.virtuaria.sup
 		<li>Escolha pagar via PIX</li>
 		<li>Use o seguinte QR Code:</li>
 	</ol>
-	<img style="max-width: 150px" src="<?php echo esc_html( $qr_code_png ); ?>" alt="Qr code" />
+	<img style="max-width: 150px; display: block;" src="<?php echo esc_html( $qr_code_png ); ?>" alt="Qr code" />
 	<div class="code-area">
 		<span class="code-text">
 			Ou cole o seguinte código QR para fazer o pagamento ( escolha a opção Pix Copia e Cola no seu Internet Banking ).
