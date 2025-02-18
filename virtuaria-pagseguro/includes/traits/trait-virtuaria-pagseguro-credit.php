@@ -130,7 +130,7 @@ trait Virtuaria_PagSeguro_Credit {
 
 				if ( ! $session_3d && 'yes' !== $confirm_sell_no_3ds ) {
 					wc_add_notice(
-						__( 'Ocorreu uma falha na comunicação com o PagBank. Pagamento com cartão de crédito foi desativado. Por favor recarregue a página.', 'virtuaria-pagseguro' ),
+						__( 'There was a communication error with PagBank. Credit card payments have been disabled. Please reload the page.', 'virtuaria-pagseguro' ),
 						'error'
 					);
 				}
@@ -151,9 +151,9 @@ trait Virtuaria_PagSeguro_Credit {
 	public function get_credit_default_settings() {
 		$settings = array(
 			'installments'        => array(
-				'title'       => __( 'Número de parcelas', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Number of installments', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Selecione o número máximo de parcelas disponíveis para seus clientes.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Select the maximum number of installments available to your customers.', 'virtuaria-pagseguro' ),
 				'options'     => array(
 					'1'  => '1x',
 					'2'  => '2x',
@@ -171,38 +171,38 @@ trait Virtuaria_PagSeguro_Credit {
 				'default'     => 12,
 			),
 			'min_installment'     => array(
-				'title'             => __( 'Valor mínimo da parcela (R$)', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Minimum installment value (R$)', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
-				'description'       => __( 'Define o valor mínimo que uma parcela pode receber.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Defines the minimum amount that a parcel can receive.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'min'  => 0,
 					'step' => 'any',
 				),
 			),
 			'display_installment' => array(
-				'title'       => __( 'Exibir parcelamento?', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Show installment?', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Selecione a forma de exibição do parcelamento na listagem de produtos.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Select the way to display the installment payment in the product listing.', 'virtuaria-pagseguro' ),
 				'options'     => array(
-					'no-display' => __( 'Não exibir', 'virtuaria-pagseguro' ),
-					'with-fee'   => __( 'Exibir todas as parcelas', 'virtuaria-pagseguro' ),
-					'no-fee'     => __( 'Exibir somente as parcelas sem juros', 'virtuaria-pagseguro' ),
+					'no-display' => __( 'Do not display', 'virtuaria-pagseguro' ),
+					'with-fee'   => __( 'Show all plots', 'virtuaria-pagseguro' ),
+					'no-fee'     => __( 'Show only interest-free installments', 'virtuaria-pagseguro' ),
 				),
 				'default'     => 'no-display',
 			),
 			'tax'                 => array(
-				'title'             => __( 'Taxa de juros (%)', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Interest rate (%)', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
-				'description'       => __( 'Define o percentual de juros aplicado ao parcelamento.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Defines the interest percentage applied to the installment plan.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'min'  => 0,
 					'step' => '0.01',
 				),
 			),
 			'fee_from'            => array(
-				'title'       => __( 'Parcelamento com juros ', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Installments with interest', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Define a partir de qual parcela os juros serão aplicados.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Defines from which installment the interest will be applied.', 'virtuaria-pagseguro' ),
 				'options'     => array(
 					'2'  => '2x',
 					'3'  => '3x',
@@ -218,71 +218,71 @@ trait Virtuaria_PagSeguro_Credit {
 				),
 			),
 			'soft_descriptor'     => array(
-				'title'             => __( 'Nome na fatura', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Name on invoice', 'virtuaria-pagseguro' ),
 				'type'              => 'text',
-				'description'       => __( 'Texto exibido na fatura do cartão para identificar a loja (máximo de <b>17 caracteres</b>, não deve conter caracteres especiais ou espaços em branco).', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Text displayed on the card statement to identify the store (maximum <b>17 characters</b>, must not contain special characters or blank spaces).', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'maxlength' => '17',
 				),
 			),
 			'save_card_info'      => array(
-				'title'       => __( 'Salvar dados de pagamento?', 'woocommerce-pagseguro' ),
+				'title'       => __( 'Save payment details?', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Define se será possível memorizar as informações de pagamento do cliente para compras futuras', 'woocommerce-pagseguro' ),
+				'description' => __( "Defines whether it will be possible to memorize the customer's payment information for future purchases.", 'virtuaria-pagseguro' ),
 				'desc_tip'    => true,
 				'default'     => 'do_not_store',
 				'class'       => 'wc-enhanced-select',
 				'options'     => array(
-					'do_not_store'     => __( 'Não memorizar (padrão)', 'woocommerce-pagseguro' ),
-					'customer_defines' => __( 'O cliente decide sobre o armazenamento', 'woocommerce-pagseguro' ),
-					'always_store'     => __( 'Sempre memorizar', 'woocommerce-pagseguro' ),
+					'do_not_store'     => __( 'Do not memorize (default)', 'virtuaria-pagseguro' ),
+					'customer_defines' => __( 'Customer decides on storage', 'virtuaria-pagseguro' ),
+					'always_store'     => __( 'Always memorize', 'virtuaria-pagseguro' ),
 				),
 			),
 			'display'             => array(
-				'title'       => __( 'Formulário de crédito', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Credit form', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Define como serão exibidos os campos do checkout.' ),
+				'description' => __( 'Defines how the checkout fields will be displayed.' ),
 				'default'     => 'two',
 				'options'     => array(
-					'one' => __( 'Uma coluna', 'virtuaria-pagseguro' ),
-					'two' => __( 'Duas colunas', 'virtuaria-pagseguro' ),
+					'one' => __( 'A column', 'virtuaria-pagseguro' ),
+					'two' => __( 'Two columns', 'virtuaria-pagseguro' ),
 				),
 			),
 			'erase_cards'         => array(
-				'title'       => __( 'Limpar cartões (tokens)', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Clear cards (tokens)', 'virtuaria-pagseguro' ),
 				'type'        => 'erase_cards',
-				'description' => __( 'Remove os métodos de pagamento armazenados. <b>Atenção:</b> É recomendada a criação de um backup, pois, essa opção não pode ser desfeita.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Removes stored payment methods. <b>Attention:</b> It is recommended to create a backup, as this option cannot be undone.', 'virtuaria-pagseguro' ),
 			),
 			'3ds'                 => array(
-				'title'       => __( 'Autenticação 3DS', 'virtuaria-pagseguro' ),
-				'label'       => __( 'Habilitar autenticação 3DS', 'virtuaria-pagseguro' ),
+				'title'       => __( '3DS Authentication', 'virtuaria-pagseguro' ),
+				'label'       => __( 'Enable 3DS authentication', 'virtuaria-pagseguro' ),
 				'type'        => 'checkbox',
 				'description' => __(
-					'Ative a autenticação 3D Secure para transações de cartão de crédito,
-					implementando um protocolo de segurança avançado que reforça a proteção em compras online.
-					Este mecanismo previne chargebacks resultantes de transações não autorizadas, protegendo o lojista contra possíveis fraudes. Para detalhes adicionais, consulte a <a href="https://dev.pagbank.uol.com.br/reference/criar-pagar-pedido-com-3ds-validacao-pagbank" target="_blank">documentação</a>.',
+					'Enable 3D Secure authentication for credit card transactions,
+					implementing an advanced security protocol that reinforces protection in online purchases.
+					This mechanism prevents chargebacks resulting from unauthorized transactions, protecting the merchant against possible fraud. For additional details, see the <a href="https://dev.pagbank.uol.com.br/reference/criar-pagar-pedido-com-3ds-validacao-pagbank" target="_blank">documentation</a>.',
 					'virtuaria-pagseguro'
 				),
 				'default'     => 'no',
 			),
 			'confirm_sell'        => array(
-				'title'       => __( 'Permitir a venda quando o 3DS não for suportado?', 'virtuaria-pagseguro' ),
-				'label'       => __( 'Habilite a conclusão da venda em casos de incompatibilidade com o 3DS', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Allow sale when 3DS is not supported?', 'virtuaria-pagseguro' ),
+				'label'       => __( 'Enable sale completion in cases of 3DS incompatibility', 'virtuaria-pagseguro' ),
 				'type'        => 'checkbox',
 				'description' => __(
-					'Alguns cartões não oferecem suporte à autenticação 3DS, por isso, recomendamos ativar esta configuração para não perder vendas.
-					Ao selecionar esta opção, o cliente terá a possibilidade de finalizar a compra,
-					mesmo que o cartão não suporte esse recurso ou se a obtenção da sessão 3D Secure junto ao PagBank não for bem-sucedida.',
+					'Some cards do not support 3DS authentication, so we recommend enabling this setting to avoid missing out on sales..
+					By selecting this option, the customer will be able to complete the purchase,
+					even if the card does not support this feature or if obtaining the 3D Secure session with PagBank is not successful.',
 					'virtuaria-pagseguro'
 				),
 				'default'     => 'no',
 			),
 			'3ds_min_value'       => array(
-				'title'             => __( 'Valor mínimo (R$) do pedido para que a autenticação 3DS seja aplicada', 'virtuaria-pagseguro' ),
-				'label'             => __( 'Informe o valor mínimo do carrinho para que autenticação 3DS seja utilizada.', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Minimum order value (R$) for 3DS authentication to be applied', 'virtuaria-pagseguro' ),
+				'label'             => __( 'Enter the minimum cart value for 3DS authentication to be used.', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
 				'description'       => __(
-					'Use para evitar uma etapa extra na finalização da compra de pedidos de menor valor. Deixe o campo em branco para desativar esta verificação e aplicar 3DS a pedidos de qualquer valor.',
+					'Use to avoid an extra step at checkout for lower value orders. Leave the field blank to disable this check and apply 3DS to orders of any value.',
 					'virtuaria-pagseguro'
 				),
 				'custom_attributes' => array(
@@ -296,14 +296,14 @@ trait Virtuaria_PagSeguro_Credit {
 			|| 'separated' !== $this->global_settings['payment_form'] ) {
 			$settings = array(
 				'credit'        => array(
-					'title'       => __( 'Cartão de crédito', 'virtuaria-pagseguro' ),
+					'title'       => __( 'credit card', 'virtuaria-pagseguro' ),
 					'type'        => 'title',
 					'description' => '',
 				),
 				'credit_enable' => array(
-					'title'       => __( 'Habilitar', 'virtuaria-pagseguro' ),
+					'title'       => __( 'Enable', 'virtuaria-pagseguro' ),
 					'type'        => 'checkbox',
-					'description' => __( 'Define se a opção de pagamento Crédito deve estar disponível durante o checkout.', 'virtuaria-pagseguro' ),
+					'description' => __( 'Defines whether the Credit payment option should be available during checkout.', 'virtuaria-pagseguro' ),
 					'default'     => 'yes',
 				),
 			) + $settings;
@@ -361,7 +361,7 @@ trait Virtuaria_PagSeguro_Credit {
 			</th>
 			<td class="forminp forminp-<?php echo esc_attr( $data['type'] ); ?>">
 				<input type="hidden" name="erase_cards" id="erase-cards" />
-				<button class="button-primary erase-card-option">Remover TODOS os cartões</button>
+				<button class="button-primary erase-card-option"><?php esc_html_e( 'Remove ALL cards', 'virtuaria-pagseguro' ); ?></button>
 				<p class="description">
 					<?php echo wp_kses_post( $data['description'] ); ?>
 				</p>
@@ -486,7 +486,8 @@ trait Virtuaria_PagSeguro_Credit {
 		}
 
 		return sprintf(
-			'<div class="virt-pagseguro-installments">Em <span class="installment">%dx</span> de <span class="subtotal">R$%s</span> <span class="notax">%s</span></div>',
+			/* translators: %1$d: installments number %2$s: money amount %3$s: interest */
+			wp_kses_post( __( '<div class="virt-pagseguro-installments">In <span class="installment">%1$dx</span> of <span class="subtotal">R$%2$s</span> <span class="notax">%3$s</span></div>', 'virtuaria-pagseguro' ) ),
 			esc_html( $installment ),
 			floatval( $subtotal ) > 0 ? esc_html(
 				number_format(
@@ -496,7 +497,9 @@ trait Virtuaria_PagSeguro_Credit {
 					'.'
 				)
 			) : '0,00',
-			$tax_applied ? '' : 'sem juros'
+			$tax_applied
+				? ''
+				: __( 'interest free', 'virtuaria-pagseguro' )
 		);
 	}
 
@@ -557,7 +560,7 @@ trait Virtuaria_PagSeguro_Credit {
 			&& ( ( $charge_amount / 100 ) - $order->get_total() ) > 0 ) {
 			$fee = new WC_Order_Item_Fee();
 			$fee->set_name(
-				__( 'Parcelamento pagseguro', 'virtuaria-pagseguro' )
+				__( 'Pagseguro installment payment', 'virtuaria-pagseguro' )
 			);
 			$fee->set_total(
 				( $charge_amount / 100 ) - $order->get_total()
@@ -643,7 +646,7 @@ trait Virtuaria_PagSeguro_Credit {
 			&& $parent_order ) {
 			$parent_order->update_status(
 				'pending',
-				__( 'Aguardando pagamento da assinatura.', 'virtuaria-pagseguro' )
+				__( 'Waiting for subscription payment.', 'virtuaria-pagseguro' )
 			);
 		}
 
@@ -667,7 +670,7 @@ trait Virtuaria_PagSeguro_Credit {
 					'cancelled',
 					sprintf(
 						/* translators: %s: admin log URL. */
-						__( 'Falha no pagamento da assinatura. Consulte o log para mais detalhes clicando <a href="%s">aqui</a>.', 'virtuaria-pagseguro' ),
+						__( 'Subscription payment failed. Please see the log for more details by clicking <a href="%s">here</a>.', 'virtuaria-pagseguro' ),
 						admin_url( 'admin.php?page=wc-status&tab=logs&source=virtuaria-pagseguro' )
 					)
 				);
@@ -690,7 +693,7 @@ trait Virtuaria_PagSeguro_Credit {
 					isset( $this->global_settings['payment_status'] )
 						? $this->global_settings['payment_status']
 						: 'processing',
-					__( 'Pagamento da assinatura realizado com sucesso.', 'virtuaria-pagseguro' )
+					__( 'Subscription payment completed successfully.', 'virtuaria-pagseguro' )
 				);
 			}
 		}

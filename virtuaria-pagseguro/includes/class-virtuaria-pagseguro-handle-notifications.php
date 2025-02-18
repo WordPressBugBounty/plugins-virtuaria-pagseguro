@@ -74,7 +74,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 		if ( isset( $this->log ) ) {
 			$this->log->add(
 				$this->tag,
-				'IPN request...',
+				__( 'IPN request...', 'virtuaria-pagseguro' ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -82,7 +82,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 		if ( isset( $this->log ) ) {
 			$this->log->add(
 				$this->tag,
-				'Request to order ' . $body,
+				__( 'Request to order ', 'virtuaria-pagseguro' ) . $body,
 				WC_Log_Levels::INFO
 			);
 		}
@@ -146,7 +146,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 								$order->add_order_note(
 									sprintf(
 										/* translators: %s: amount */
-										__( 'PagSeguro: R$ %s Devolvido(s).', 'virtuaria-pagseguro' ),
+										__( 'PagSeguro: R$ %s refunded.', 'virtuaria-pagseguro' ),
 										number_format(
 											$request['charges'][0]['amount']['summary']['refunded'] / 100,
 											2,
@@ -161,7 +161,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 								&& ! $is_additional_charge ) {
 								$order->update_status(
 									'cancelled',
-									__( 'PagSeguro: Pagamento cancelado.', 'virtuaria-pagseguro' )
+									__( 'PagSeguro: Payment cancelled.', 'virtuaria-pagseguro' )
 								);
 							}
 
@@ -180,20 +180,17 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						break;
 					case 'IN_ANALYSIS':
 						$order->add_order_note(
-							__(
-								'PagSeguro: O PagSeguro está analisando o risco da transação.',
-								'virtuaria-pagseguro'
-							)
+							__( 'PagSeguro: O PagSeguro está analisando o risco da transação.', 'virtuaria-pagseguro' )
 						);
 						break;
 					case 'DECLINED':
 						$order->add_order_note(
-							__( 'PagSeguro: Compra não autorizada.', 'virtuaria-pagseguro' )
+							__( 'PagSeguro: Unauthorized purchase.', 'virtuaria-pagseguro' )
 						);
 						if ( ! $is_additional_charge ) {
 							$order->update_status(
 								'cancelled',
-								__( 'PagSeguro: Pagamento não aprovado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Payment not approved.', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
@@ -213,7 +210,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 								$order->add_order_note(
 									sprintf(
 										/* translators: %s: amount */
-										__( 'PagSeguro: Cobrança recebida R$ %s.', 'virtuaria-pagseguro' ),
+										__( 'PagSeguro: Charge received R$ %s.', 'virtuaria-pagseguro' ),
 										// phpcs:ignore
 										number_format(
 											(string) $request['charges'][0]['amount']['value'] / 100,
@@ -228,7 +225,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 									&& ! $order->has_status( $this->settings['payment_status'] ) ) {
 									$order->update_status(
 										$this->settings['payment_status'],
-										__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+										__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 									);
 								}
 
@@ -322,10 +319,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 				switch ( (int) $transaction->status ) {
 					case 1:
 						$order->add_order_note(
-							__(
-								'PagSeguro: O comprador iniciou a transação, mas até o momento o PagSeguro não recebeu nenhuma informação sobre o pagamento.',
-								'virtuaria-pagseguro'
-							)
+							__( 'PagSeguro: The buyer initiated the transaction, but so far PagSeguro has not received any information about the payment.', 'virtuaria-pagseguro' )
 						);
 						if ( ! $is_additional_charge ) {
 							$order->update_status( 'on-hold' );
@@ -333,17 +327,14 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						break;
 					case 2:
 						$order->add_order_note(
-							__(
-								'PagSeguro: O comprador optou por pagar com um cartão de crédito e o PagSeguro está analisando o risco da transação.',
-								'virtuaria-pagseguro'
-							)
+							__( 'PagSeguro: The buyer chose to pay with a credit card and PagSeguro is analyzing the risk of the transaction.', 'virtuaria-pagseguro' )
 						);
 						break;
 					case 3:
 						$order->add_order_note(
 							sprintf(
 								/* translators: %s: amount */
-								__( 'PagSeguro: Cobrança recebida R$ %s' ),
+								__( 'PagSeguro: Charge received R$ %s' ),
 								// phpcs:ignore
 								number_format( (string) $transaction->grossAmount, 2, ',', '.' )
 							)
@@ -351,7 +342,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						if ( ! $is_additional_charge ) {
 							$order->update_status(
 								$this->settings['payment_status'],
-								__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
@@ -359,7 +350,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						$order->add_order_note(
 							sprintf(
 								/* translators: %s: amount */
-								__( 'PagSeguro: R$ %s disponível na conta.', 'virtuaria-pagseguro' ),
+								__( 'PagSeguro: R$ %s available in the account.', 'virtuaria-pagseguro' ),
 								// phpcs:ignore
 								number_format( (string) $transaction->grossAmount, 2, ',', '.' )
 							)
@@ -367,77 +358,59 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						if ( ! $is_additional_charge ) {
 							$order->update_status(
 								$this->settings['payment_status'],
-								__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
 					case 5:
 						$order->add_order_note(
-							__(
-								'PagSeguro: O comprador, dentro do prazo de liberação da transação, abriu uma disputa. Acesse o painel da conta pagseguro para mais detalhes.',
-								'virtuaria-pagseguro'
-							)
+							__( 'PagSeguro: The buyer, within the transaction release period, opened a dispute. Access the PagSeguro account panel for more details.', 'virtuaria-pagseguro' )
 						);
 						break;
 					case 6:
 						if ( ! $is_additional_charge ) {
 							$order->add_order_note(
-								__(
-									'PagSeguro: O valor da transação foi devolvido para o comprador. ',
-									'virtuaria-pagseguro'
-								)
+								__( 'PagSeguro: The transaction amount was returned to the buyer. ', 'virtuaria-pagseguro' )
 							);
 							$order->update_status(
 								'refunded',
-								__( 'PagSeguro: Pedido reembolsado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Order refunded.', 'virtuaria-pagseguro' )
 							);
 						} else {
 							$order->add_order_note(
-								__(
-									'PagSeguro: O valor da cobrança adicional foi devolvido para o comprador. ',
-									'virtuaria-pagseguro'
-								)
+								__( 'PagSeguro: The amount of the additional charge was returned to the buyer. ', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
 					case 7:
 						if ( ! $is_additional_charge ) {
 							$order->add_order_note(
-								__( 'PagSeguro: Pedido cancelado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Order cancelled.', 'virtuaria-pagseguro' )
 							);
 							$order->update_status(
 								'cancelled',
-								__( 'PagSeguro: Pedido cancelado.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Order cancelled.', 'virtuaria-pagseguro' )
 							);
 						} else {
 							$order->add_order_note(
-								__( 'PagSeguro: Cobrança adicional cancelada.', 'virtuaria-pagseguro' )
+								__( 'PagSeguro: Additional charge cancelled.', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
 					case 8:
 						if ( ! $is_additional_charge ) {
 							$order->add_order_note(
-								__(
-									'PagSeguro: O valor da transação foi devolvido para o comprador.',
-									'virtuaria-pagseguro'
-								)
+								__( 'PagSeguro: The transaction amount has been refunded to the buyer.', 'virtuaria-pagseguro' )
 							);
 						} else {
 							$order->add_order_note(
-								__(
-									'PagSeguro: O valor da cobrança adicional foi devolvido para o comprador.',
-									'virtuaria-pagseguro'
-								)
+								__( 'PagSeguro: The amount of the additional charge was returned to the buyer.', 'virtuaria-pagseguro' )
 							);
 						}
 						break;
 					case 9:
 						$order->add_order_note(
-							__(
-								'PagSeguro: O comprador abriu uma solicitação de chargeback junto à operadora do cartão de crédito.',
-								'virtuaria-pagseguro'
-							)
+							__( 'PagSeguro: The buyer opened a chargeback request with the credit card operator.', 'virtuaria-pagseguro' )
 						);
 						break;
 				}
@@ -451,7 +424,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 					WC_Log_Levels::INFO
 				);
 			}
-			$error = __( 'Requisição PagSeguro Não autorizada', 'virtuaria-pagseguro' );
+			$error = __( 'PagSeguro request not authorized.', 'virtuaria-pagseguro' );
 			wp_die( esc_html( $error ), esc_html( $error ), array( 'response' => 401 ) );
 		}
 	}

@@ -10,9 +10,11 @@ defined( 'ABSPATH' ) || exit;
 <div id="virt-pagseguro-banking-ticket-form" class="virt-pagseguro-method-form payment-details">
 	<div class="ticket-text">
 		<p>
-			<?php esc_html_e( 'O pedido será confirmado apenas após a confirmação do pagamento.', 'virtuaria-pagseguro' ); ?>
+			<?php esc_html_e( 'The order will be confirmed only after payment confirmation.', 'virtuaria-pagseguro' ); ?>
 		</p>
-		<p><?php esc_html_e( '* Depois de clicar em "Realizar pagamento", você terá acesso ao boleto bancário, podendo imprimir e pagar via internet banking ou rede bancária credenciada.', 'virtuaria-pagseguro' ); ?></p>
+		<p>
+			<?php esc_html_e( '* After clicking on "Make payment", you will have access to the bank slip, which you can print and pay via internet banking or an accredited banking network.', 'virtuaria-pagseguro' ); ?>
+		</p>
 		<?php do_action( 'after_virtuaria_ticket_text', WC()->cart ); ?>
 	</div>
 	<i id="pagseguro-icon-ticket"></i>

@@ -99,7 +99,7 @@ class WC_Virtuaria_PagSeguro_API {
 			&& ( ! isset( $posted['virt_pagseguro_auth_3ds'] )
 			|| ! $posted['virt_pagseguro_auth_3ds'] )
 			&& 'no' === $this->gateway->get_option( 'confirm_sell' ) ) {
-			return array( 'error' => __( 'Falha na autenticaçaõ 3DS, não autorizado!', 'virtuaria-pagseguro' ) );
+			return array( 'error' => __( '3DS authentication failed, not authorized!', 'virtuaria-pagseguro' ) );
 		}
 
 		$phone = $order->get_billing_phone();
@@ -191,7 +191,7 @@ class WC_Virtuaria_PagSeguro_API {
 			: false;
 
 		if ( ! $order->get_meta( '_billing_neighborhood' ) && ! $ignore_address ) {
-			return array( 'error' => __( 'o campo <b>Bairro</b> é obrigatório!', 'virtuaria-pagseguro' ) );
+			return array( 'error' => __( 'The <b>Neighborhood</b> field is required!', 'virtuaria-pagseguro' ) );
 		}
 
 		if ( $ignore_address ) {
@@ -280,12 +280,12 @@ class WC_Virtuaria_PagSeguro_API {
 						if ( $this->debug_on ) {
 							$this->gateway->log->add(
 								$this->tag,
-								'Não foi possível encriptar o cartão de crédito.',
+								__( 'Unable to encrypt the credit card.', 'virtuaria-pagseguro' ),
 								WC_Log_Levels::ERROR
 							);
 						}
 
-						return array( 'error' => 'Dados do cartão inválidos, verifique os dados informados e tente novamente.' );
+						return array( 'error' => __( 'Invalid card data, please check the entered information and try again.', 'virtuaria-pagseguro' ) );
 					}
 
 					if ( $posted['virt_pagseguro_save_hash_card'] ) {
@@ -398,7 +398,7 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Enviando novo pedido: ' . wp_json_encode( $to_log ),
+					__( 'Sending new order: ', 'virtuaria-pagseguro' ) . wp_json_encode( $to_log ),
 					WC_Log_Levels::INFO
 				);
 			}
@@ -415,7 +415,7 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Erro ao criar pedido: ' . $request->get_error_message(),
+					__( 'Error creating order: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -425,7 +425,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta do servidor ao tentar criar novo pedido: ' . wp_json_encode( $request ),
+				__( 'Server response while trying to create a new order: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -446,15 +446,15 @@ class WC_Virtuaria_PagSeguro_API {
 					&& 'Invalid credential. Review AUTHORIZATION header' === $response['error_messages'][0]['description'] ) {
 					update_option( 'virtuaria_pagseguro_not_authorized', true );
 				}
-				return array( 'error' => 'Pagamento não autorizado.' );
+				return array( 'error' => __( 'Payment not authorized.', 'virtuaria-pagseguro' ) );
 			} elseif ( in_array( $resp_code, array( 400, 409 ), true ) ) {
 				$msg = $response['error_messages'][0]['description'];
 				if ( in_array( $response['error_messages'][0]['description'], array( 'invalid_parameter', 'required_parameter' ), true ) ) {
-					$msg = 'Verifique os dados digitados e tente novamente.';
+					$msg = __( 'Please check the entered data and try again.', 'virtuaria-pagseguro' );
 				}
 				return array( 'error' => $msg );
 			} else {
-				return array( 'error' => 'Não foi possível processar a sua compra. Por favor, tente novamente mais tarde.' );
+				return array( 'error' => __( 'Unable to process your purchase. Please try again later.', 'virtuaria-pagseguro' ) );
 			}
 		}
 
@@ -472,9 +472,9 @@ class WC_Virtuaria_PagSeguro_API {
 
 					$order->add_order_note(
 						sprintf(
-							'Bandeira: %1$s<br>%2$s<br>Parcelas: %3$dx<br>Total: R$ %4$s',
+							__( 'Card brand: %1$s<br>%2$s<br>Installments: %3$dx<br>Total: R$ %4$s', 'virtuaria-pagseguro' ),
 							strtoupper( $response['charges'][0]['payment_method']['card']['brand'] ),
-							'Titular: ' . $card_holder,
+							__( 'Cardholder: ', 'virtuaria-pagseguro' ) . $card_holder,
 							$response['charges'][0]['payment_method']['installments'],
 							number_format( $response['charges'][0]['amount']['value'] / 100, 2, ',', '.' )
 						)
@@ -484,7 +484,7 @@ class WC_Virtuaria_PagSeguro_API {
 						$order->add_order_note(
 							sprintf(
 								/* translators: %s: autentication status */
-								__( 'Autenticação 3DS aplicada com sucesso. Status: <b>%s</b>', 'virtuaria-pagseguro' ),
+								__( '3DS authentication successfully applied. Status: <b>%s</b>', 'virtuaria-pagseguro' ),
 								$response['charges'][0]['payment_method']['authentication_method']['status']
 							)
 						);
@@ -509,14 +509,14 @@ class WC_Virtuaria_PagSeguro_API {
 					$order->save();
 				}
 			} elseif ( 'DECLINED' === $response['charges'][0]['status'] ) {
-				return array( 'error' => 'Não autorizado, ' . $response['charges'][0]['payment_response']['message'] . '.' );
+				return array( 'error' => __( 'Not authorized, ', 'virtuaria-pagseguro' ) . $response['charges'][0]['payment_response']['message'] . '.' );
 			} elseif ( 'WAITING' === $response['charges'][0]['status'] && 'BOLETO' === $response['charges'][0]['payment_method']['type'] ) {
 				$order->update_meta_data( '_payment_mode', 'BOLETO' );
 				$order->update_meta_data( '_formatted_barcode', $response['charges'][0]['payment_method']['boleto']['formatted_barcode'] );
 				$order->update_meta_data( '_pdf_link', $response['charges'][0]['links'][0]['href'] );
 				$order->add_order_note(
 					sprintf(
-						'R$ %s no Boleto Bancário',
+						__( 'R$ %s via Bank Slip', 'virtuaria-pagseguro' ),
 						number_format( $response['charges'][0]['amount']['value'] / 100, 2, ',', '.' )
 					)
 				);
@@ -578,10 +578,12 @@ class WC_Virtuaria_PagSeguro_API {
 			sprintf(
 				/* translators: %s: payment method */
 				__(
-					'Desconto do %s',
+					'%s discount',
 					'virtuaria-pagseguro'
 				),
-				'pix' === $method ? 'Pix' : 'Boleto'
+				'pix' === $method
+					? __( 'Pix', 'virtuaria-pagseguro' )
+					: __( 'Bank Slip', 'virtuaria-pagseguro' )
 			)
 		);
 
@@ -657,7 +659,7 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Charge code not found',
+					__( 'Charge code not found.', 'virtuaria-pagseguro' ),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -682,7 +684,7 @@ class WC_Virtuaria_PagSeguro_API {
 			unset( $to_log['headers'] );
 			$this->gateway->log->add(
 				$this->tag,
-				'Reembolso para o pedido ' . $order_id . ' (' . $charge . ') ' . wp_json_encode( $to_log ),
+				__( 'Refund for order ', 'virtuaria-pagseguro' ) . $order_id . ' (' . $charge . ') ' . wp_json_encode( $to_log ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -697,7 +699,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta do reembolso: ' . wp_json_encode( $request ),
+				__( 'Refund response: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -732,7 +734,7 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Falha ao obter chave pública: ' . $request->get_error_message(),
+					__( 'Failed to obtain public key: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -742,7 +744,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta do servidor ao tentar obter chave pública: ' . wp_json_encode( $request ),
+				__( 'Server response when trying to obtain a public key: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -779,7 +781,7 @@ class WC_Virtuaria_PagSeguro_API {
 				if ( $this->debug_on ) {
 					$this->gateway->log->add(
 						$this->tag,
-						'Falha ao obter chave pública: ' . $request->get_error_message(),
+						__( 'Failed to obtain public key: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 						WC_Log_Levels::ERROR
 					);
 				}
@@ -803,13 +805,13 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $amount <= 0 ) {
 			if ( $this->debug_on ) {
 				$order->add_order_note(
-					'PagSeguro: Cobrança Adicional com valor inválido.',
+					__( 'PagSeguro: Additional charge with invalid value.', 'virtuaria-pagseguro' ),
 					0,
 					true
 				);
 				$this->gateway->log->add(
 					$this->tag,
-					'Valor inválido ou pedido não encontrado para cobrança adicional.',
+					__( 'Invalid amount or order not found for additional charge.', 'virtuaria-pagseguro' ),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -826,13 +828,13 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( 'CREDIT_CARD' === $mode && ( ! $pagseguro_card_info || ! isset( $pagseguro_card_info['token'] ) ) ) {
 			if ( $this->debug_on ) {
 				$order->add_order_note(
-					'PagSeguro: Cobrança Adicional, método de pagamento do cliente ausente.',
+					__( 'PagSeguro: Additional charge, missing customer payment method.', 'virtuaria-pagseguro' ),
 					0,
 					true
 				);
 				$this->gateway->log->add(
 					$this->tag,
-					'Cobrança Adicional: método de pagamento do cliente ausente',
+					__( 'Additional charge: missing customer payment method', 'virtuaria-pagseguro' ),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -1015,7 +1017,7 @@ class WC_Virtuaria_PagSeguro_API {
 			}
 			$this->gateway->log->add(
 				$this->tag,
-				'Enviando cobrança adicional: ' . wp_json_encode( $data ),
+				__( 'Sending additional charge: ', 'virtuaria-pagseguro' ) . wp_json_encode( $data ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -1030,12 +1032,12 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Erro na cobrança adicional: ' . $request->get_error_message(),
+					__( 'Error in additional charge: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 					WC_Log_Levels::ERROR
 				);
 			}
 			$order->add_order_note(
-				'PagSeguro: Não foi possível criar cobrança adicional.',
+				__( 'PagSeguro: Unable to create additional charge.', 'virtuaria-pagseguro' ),
 				0,
 				true
 			);
@@ -1045,7 +1047,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta da cobrança adicional: ' . wp_json_encode( $request ),
+				__( 'Additional charge response: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -1059,16 +1061,16 @@ class WC_Virtuaria_PagSeguro_API {
 					&& 'Invalid credential. Review AUTHORIZATION header' === $response['error_messages'][0]['description'] ) {
 					update_option( 'virtuaria_pagseguro_not_authorized', true );
 				}
-				$note_resp = __( 'Pagamento não autorizado.', 'virtuaria-pagseguro' );
+				$note_resp = __( 'Payment not authorized.', 'virtuaria-pagseguro' );
 			} elseif ( in_array( $resp_code, array( 400, 409 ), true ) ) {
 				$msg = $response['error_messages'][0]['description'];
 				if ( 'invalid_parameter' === $response['error_messages'][0]['description'] ) {
-					$msg = 'Verifique os dados enviados e tente novamente.';
+					$msg = __( 'Please check the submitted data and try again.', 'virtuaria-pagseguro' );
 				}
 				$note_resp = $msg;
 			} else {
 				$note_resp = __(
-					'Não foi possível processar a sua cobrança. Por favor, tente novamente mais tarde.',
+					'We were unable to process your charge. Please try again later.',
 					'virtuaria-pagseguro'
 				);
 			}
@@ -1083,9 +1085,12 @@ class WC_Virtuaria_PagSeguro_API {
 			$reason = '<br>Motivo: ' . $reason . '.';
 		}
 
-		$charge_title = ( $amount / 100 ) == $order->get_total() ? 'Nova Cobrança' : 'Cobrança Extra';
+		$charge_title = ( $amount / 100 ) == $order->get_total()
+			? __( 'New Charge', 'virtuaria-pagseguro' )
+			: __( 'Extra Charge', 'virtuaria-pagseguro' );
 		$order->add_order_note(
-			'PagSeguro: ' . $charge_title . ' enviada R$' . number_format( $amount / 100, 2, ',', '.' ) . '.' . $reason,
+			'PagSeguro: ' . $charge_title . ' '
+			. __( 'sent R$', 'virtuaria-pagseguro' ) . number_format( $amount / 100, 2, ',', '.' ) . '.' . $reason,
 			0,
 			true
 		);
@@ -1095,7 +1100,7 @@ class WC_Virtuaria_PagSeguro_API {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: payment response */
-						__( 'PagSeguro: Não autorizado, %s.', 'virtuaria-pagseguro' ),
+						__( 'PagSeguro: Unauthorized, %s.', 'virtuaria-pagseguro' ),
 						$response['charges'][0]['payment_response']['message']
 					)
 				);
@@ -1153,13 +1158,13 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( 200 === $resp_code ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Simulação de Pagamento Pix efetuada com sucesso.',
+					__( 'Pix payment simulation successfully completed.', 'virtuaria-pagseguro' ),
 					WC_Log_Levels::INFO
 				);
 			} else {
 				$this->gateway->log->add(
 					$this->tag,
-					'Simulação de pagamento Pix:' . $result['body'],
+					__( 'Pix payment simulation:', 'virtuaria-pagseguro' ) . $result['body'],
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -1215,7 +1220,9 @@ class WC_Virtuaria_PagSeguro_API {
 		}
 
 		if ( is_wp_error( $request ) || ! in_array( wp_remote_retrieve_response_code( $request ), array( 200, 201 ), true ) ) {
-			$error_message = is_wp_error( $request ) ? $request->get_error_message() : wp_remote_retrieve_body( $request );
+			$error_message = is_wp_error( $request )
+				? $request->get_error_message()
+				: wp_remote_retrieve_body( $request );
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
@@ -1256,7 +1263,7 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Falha ao obter sessão 3DS: ' . $request->get_error_message(),
+					__( 'Failed to obtain 3DS session: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -1266,7 +1273,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta do servidor ao tentar obter sessão 3DS: ' . wp_json_encode( $request ),
+				__( 'Server response while trying to obtain a 3DS session: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -1315,14 +1322,14 @@ class WC_Virtuaria_PagSeguro_API {
 
 		if ( $amount <= 0 ) {
 			$order->add_order_note(
-				'PagSeguro: Cobrança de recorrência abortada devido ao valor inválido.',
+				__( 'PagSeguro: Recurring charge aborted due to invalid amount.', 'virtuaria-pagseguro' ),
 				0,
 				true
 			);
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'PagSeguro: Valor inválido ou pedido não encontrado para cobrança recorrente.',
+					__( 'PagSeguro: Invalid amount or order not found for recurring charge.', 'virtuaria-pagseguro' ),
 					WC_Log_Levels::ERROR
 				);
 			}
@@ -1339,14 +1346,14 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( ! $pagseguro_card_info || ! isset( $pagseguro_card_info['token'] ) ) {
 			if ( $this->debug_on ) {
 				$order->add_order_note(
-					'PagSeguro: Cobrança de recorrência abortada, método de pagamento do cliente ausente.',
+					__( 'PagSeguro: Recurring charge aborted, missing customer payment method.', 'virtuaria-pagseguro' ),
 					0,
 					true
 				);
 				if ( $this->debug_on ) {
 					$this->gateway->log->add(
 						$this->tag,
-						'PagSeguro: método de pagamento do cliente ausente durante a recorrência.',
+						__( 'PagSeguro: Missing customer payment method during recurrence.', 'virtuaria-pagseguro' ),
 						WC_Log_Levels::ERROR
 					);
 				}
@@ -1513,7 +1520,7 @@ class WC_Virtuaria_PagSeguro_API {
 			}
 			$this->gateway->log->add(
 				$this->tag,
-				'Enviando recorrência: ' . wp_json_encode( $data ),
+				__( 'Sending recurrence: ', 'virtuaria-pagseguro' ) . wp_json_encode( $data ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -1528,12 +1535,12 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(
 					$this->tag,
-					'Erro na cobrança de recorrência: ' . $request->get_error_message(),
+					__( 'Error in recurring charge: ', 'virtuaria-pagseguro' ) . $request->get_error_message(),
 					WC_Log_Levels::ERROR
 				);
 			}
 			$order->add_order_note(
-				'PagSeguro: Não foi possível efetivar a recorrência.',
+				__( 'PagSeguro: Unable to execute recurrence.', 'virtuaria-pagseguro' ),
 				0,
 				true
 			);
@@ -1543,7 +1550,7 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( $this->debug_on ) {
 			$this->gateway->log->add(
 				$this->tag,
-				'Resposta da cobrança recorrente: ' . wp_json_encode( $request ),
+				__( 'Recurring charge response: ', 'virtuaria-pagseguro' ) . wp_json_encode( $request ),
 				WC_Log_Levels::INFO
 			);
 		}
@@ -1557,16 +1564,16 @@ class WC_Virtuaria_PagSeguro_API {
 					&& 'Invalid credential. Review AUTHORIZATION header' === $response['error_messages'][0]['description'] ) {
 					update_option( 'virtuaria_pagseguro_not_authorized', true );
 				}
-				$note_resp = __( 'Pagamento não autorizado.', 'virtuaria-pagseguro' );
+				$note_resp = __( 'Payment not authorized.', 'virtuaria-pagseguro' );
 			} elseif ( in_array( $resp_code, array( 400, 409 ), true ) ) {
 				$msg = $response['error_messages'][0]['description'];
 				if ( 'invalid_parameter' === $response['error_messages'][0]['description'] ) {
-					$msg = 'Verifique os dados enviados e tente novamente.';
+					$msg = __( 'Please check the submitted data and try again.', 'virtuaria-pagseguro' );
 				}
 				$note_resp = $msg;
 			} else {
 				$note_resp = __(
-					'Não foi possível processar a sua cobrança.',
+					'We were unable to process your charge.',
 					'virtuaria-pagseguro'
 				);
 			}
@@ -1578,7 +1585,7 @@ class WC_Virtuaria_PagSeguro_API {
 		}
 
 		$order->add_order_note(
-			'PagSeguro: Recorrência enviada R$' . number_format( $amount / 100, 2, ',', '.' ) . '.',
+			__( 'PagSeguro: Recurrence sent R$', 'virtuaria-pagseguro' ) . number_format( $amount / 100, 2, ',', '.' ) . '.',
 			0,
 			true
 		);
@@ -1587,7 +1594,7 @@ class WC_Virtuaria_PagSeguro_API {
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: payment response */
-					__( 'PagSeguro: Não autorizado, %s.', 'virtuaria-pagseguro' ),
+					__( 'PagSeguro: Unauthorized, %s.', 'virtuaria-pagseguro' ),
 					$response['charges'][0]['payment_response']['message']
 				)
 			);

@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.7.1
-Stable tag: 3.4.1
+Stable tag: 3.4.4
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -330,6 +330,11 @@ O uso da autenticação 3DS não garante a prevenção de disputas em sua loja o
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.4.4 2025-02-18 =
+* Melhoria - Atualização das traduções do plugin (.pot, .po e .po);
+* Melhoria - Ajuste no envio de dados ao 3DS.
+= 3.4.2 2025-02-14 =
+* Melhoria - Internacionalização das strings do plugin, atualiação dos aquivos: .pot, .pot e .po.
 = 3.4.1 2025-02-10 =
 * Melhoria - Registro de falhas de validação no 3DS em log.
 = 3.4.0 2024-12-23 =

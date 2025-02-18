@@ -190,7 +190,7 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 		$this->has_fields         = true;
 		$this->method_title       = __( 'Virtuaria PagSeguro', 'virtuaria-pagseguro' );
 		$this->method_description = __(
-			'Pague com cartão de crédito, pix e boleto.',
+			'Pay with credit card, pix and bank slip.',
 			'virtuaria-pagseguro'
 		);
 

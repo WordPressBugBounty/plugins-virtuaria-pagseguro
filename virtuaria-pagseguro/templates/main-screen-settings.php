@@ -10,7 +10,10 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'virtuaria_pagseguro_save_settings' );
 
 if ( get_transient( 'virtuaria_pagseguro_main_setting_saved' ) ) {
-	echo '<div id="message" class="updated inline"><p><strong>Suas configurações foram salvas.</strong></p></div>';
+	echo '<div id="message" class="updated inline"><p><strong>';
+	esc_html_e( 'Your settings have been saved.', 'virtuaria-pagseguro' );
+	echo '</strong></p></div>';
+
 	delete_transient(
 		'virtuaria_pagseguro_main_setting_saved'
 	);
@@ -45,27 +48,28 @@ if ( ! isset( $options['payment_form'] ) ) {
 	$options['payment_form'] = 'unified';
 }
 ?>
-<h1 class="main-title">Virtuaria PagSeguro</h1>
+<h1 class="main-title"><?php esc_html_e( 'Virtuaria PagSeguro', 'virtuaria-pagseguro' ); ?></h1>
 <form action="" method="post" id="mainform" class="main-setting">
 	<table class="form-table">
 		<tbody>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_payment_form">Modo de Funcionamento</label>
+					<label for="woocommerce_virt_pagseguro_payment_form"><?php esc_html_e( 'Operating Mode', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Modo de Funcionamento</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Operating Mode', 'virtuaria-pagseguro' ); ?></span></legend>
 						<select class="select " name="woocommerce_virt_pagseguro_payment_form" id="woocommerce_virt_pagseguro_payment_form">
-							<option value="unified" <?php selected( 'unified', $options['payment_form'] ); ?>>Unificado</option>
-							<option value="separated" <?php selected( 'separated', $options['payment_form'] ); ?>>Separado</option>
+							<option value="unified" <?php selected( 'unified', $options['payment_form'] ); ?>><?php esc_html_e( 'Unified', 'virtuaria-pagseguro' ); ?></option>
+							<option value="separated" <?php selected( 'separated', $options['payment_form'] ); ?>><?php esc_html_e( 'Separate', 'virtuaria-pagseguro' ); ?></option>
 						</select>
 						<p class="description">
-							Define o modo de configuração e exibição dos métodos de pagamento disponibilizados pelo PagSeguro.
-							<span href="#" class="read-more">Saiba mais</span>
+							<?php esc_html_e( 'Defines the configuration and display mode of payment methods made available by PagSeguro.', 'virtuaria-pagseguro' ); ?>
+							
+							<span href="#" class="read-more"><?php esc_html_e( 'Learn more', 'virtuaria-pagseguro' ); ?></span>
 							<span class="tip-desc" style="display: none;">
-								<b>- Unificado:</b> Exibe unicamente o método de pagamento PagSeguro com configurações para Crédito, Pix e Boleto. Essa abordagem simplifica a experiência do usuário no checkout e painel, agrupando todas as opções de pagamento do PagSeguro.
-								<br><br><b>- Separado:</b> Exibe três métodos de pagamento distintos, PagSeguro Crédito, PagSeguro Pix e PagSeguro Boleto. Cada um deles aparece como uma opção independente dentro da interface do painel e checkout do WooCommerce, permitindo que os clientes selecionem diretamente o método de pagamento de sua preferência. Essa abordagem ajuda nas integrações com outros sistemas (ERP, CRM, etc) e também na compatibilidade com plugins de desconto por método de pagamento.
+								<b> <?php esc_html_e( 'Unified:', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( 'Displays only the PagSeguro payment method with settings for Credit, Pix and Bank Slip. This approach simplifies the user experience at checkout and dashboard, grouping all PagSeguro payment options.', 'virtuaria-pagseguro' ); ?>
+								<br><br><b> <?php esc_html_e( '- Separate:', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( 'It displays three distinct payment methods, PagSeguro Crédito, PagSeguro Pix and PagSeguro Bank Slip. Each of them appears as an independent option within the WooCommerce dashboard and checkout interface, allowing customers to directly select their preferred payment method. This approach helps with integrations with other systems (ERP, CRM, etc.) and also with compatibility with payment method discount plugins.', 'virtuaria-pagseguro' ); ?>
 							</span>
 						</p>
 					</fieldset>
@@ -76,18 +80,20 @@ if ( ! isset( $options['payment_form'] ) ) {
 				?>
 				<tr valign="top">
 					<th scope="row" class="titledesc">
-						<label for="woocommerce_virt_pagseguro_fee_setup">Taxas </label>
+						<label for="woocommerce_virt_pagseguro_fee_setup"><?php esc_html_e( 'Fees', 'virtuaria-pagseguro' ); ?></label>
 					</th>
 					<td class="forminp">
 						<fieldset>
-							<legend class="screen-reader-text"><span>Taxas</span></legend>
+							<legend class="screen-reader-text"><span><?php esc_html_e( 'Fees', 'virtuaria-pagseguro' ); ?></span></legend>
 							<select class="select" name="woocommerce_virt_pagseguro_fee_setup" id="woocommerce_virt_pagseguro_fee_setup">
-								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'd30', $options['fee_setup'] ) : ''; ?> value="d30">Especial Virtuaria 01: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99</option>
-								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'd14', $options['fee_setup'] ) : ''; ?> value="d14">Especial Virtuaria 02: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99</option>
-								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'default', $options['fee_setup'] ) : ''; ?> value="default">Padrão do PagSeguro</option>
-								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'custom', $options['fee_setup'] ) : ''; ?> value="custom">Negociada PagSeguro (caso tenha negociado com o PagSeguro uma taxa personalizada)</option>
+								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'd30', $options['fee_setup'] ) : ''; ?> value="d30"><?php esc_html_e( 'Virtuaria Special 01: Credit 3.79% (receipt in 30 days) | Pix 0.99% | Bank Slip R$ 2.99', 'virtuaria-pagseguro' ); ?></option>
+								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'd14', $options['fee_setup'] ) : ''; ?> value="d14"><?php esc_html_e( 'Virtuaria Special 02: Credit 4.39% (receipt in 14 days) | Pix 0.99% | Bank Slip R$ 2.99', 'virtuaria-pagseguro' ); ?></option>
+								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'default', $options['fee_setup'] ) : ''; ?> value="default"><?php esc_html_e( 'PagSeguro Standard', 'virtuaria-pagseguro' ); ?></option>
+								<option <?php echo isset( $options['fee_setup'] ) ? selected( 'custom', $options['fee_setup'] ) : ''; ?> value="custom"><?php esc_html_e( 'Negotiated PagSeguro (if you have negotiated a personalized rate with PagSeguro)', 'virtuaria-pagseguro' ); ?></option>
 							</select>
-							<p class="description">Define a taxa utilizada na integração com PagSeguro. O percentual especial pode ser redefinido a critério do PagSeguro.</p>
+							<p class="description">
+								<?php esc_html_e( "Defines the rate used in the integration with PagSeguro. The special percentage can be redefined at PagSeguro's discretion.", 'virtuaria-pagseguro' ); ?>
+							</p>
 						</fieldset>
 					</td>
 				</tr>
@@ -96,35 +102,45 @@ if ( ! isset( $options['payment_form'] ) ) {
 			?>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_environment">Ambiente </label>
+					<label for="woocommerce_virt_pagseguro_environment"><?php esc_html_e( 'Environment', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Ambiente</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Environment', 'virtuaria-pagseguro' ); ?></span></legend>
 						<select class="select " name="woocommerce_virt_pagseguro_environment" id="woocommerce_virt_pagseguro_environment">
-							<option value="sandbox" <?php selected( 'sandbox', $options['environment'] ); ?>>Sandbox</option>
-							<option value="production" <?php selected( 'production', $options['environment'] ); ?>>Produção</option>
+							<option value="sandbox" <?php selected( 'sandbox', $options['environment'] ); ?>><?php esc_html_e( 'Sandbox', 'virtuaria-pagseguro' ); ?></option>
+							<option value="production" <?php selected( 'production', $options['environment'] ); ?>><?php esc_html_e( 'Production', 'virtuaria-pagseguro' ); ?></option>
 						</select>
-						<p class="description">Selecione Sandbox para testes ou Produção para vendas reais. O ambiente de sandbox é instável e comumente apresenta problemas. Consulte o item 12 da FAQ na <a href="https://wordpress.org/plugins/virtuaria-pagseguro/#faq" target="_blank">página do plugin</a> para mais informações.</p>
+						<p class="description">
+							<?php
+							printf(
+								/* translators: %s: faq url */
+								esc_html__( 'Select Sandbox for testing or Production for real sales. The sandbox environment is unstable and often has issues. See FAQ item 12 on the %s for more information.', 'virtuaria-pagseguro' ),
+								'<a href="https://wordpress.org/plugins/virtuaria-pagseguro/#faq" target="_blank">plugin page</a>'
+							);
+							?>
+						</p>
 					</fieldset>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_email">E-mail </label>
+					<label for="woocommerce_virt_pagseguro_email"><?php esc_html_e( 'E-mail', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>E-mail</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'E-mail', 'virtuaria-pagseguro' ); ?></span></legend>
 						<input class="input-text regular-input " type="text" name="woocommerce_virt_pagseguro_email" id="woocommerce_virt_pagseguro_email" value="<?php echo isset( $options['email'] ) ? esc_attr( $options['email'] ) : ''; ?>" >
-						<p class="description">Informe seu e-mail utilizado na conta do Pagseguro. Isto é necessário para a confirmação do pagamento.</p>
+						<p class="description">
+							<?php esc_html_e( 'Enter the email address used for your Pagseguro account. This is required to confirm payment.', 'virtuaria-pagseguro' ); ?>
+						</p>
 					</fieldset>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
 					<label for="woocommerce_virt_pagseguro_autorization">
-						Autorização <span class="woocommerce-help-tip"></span>
+						<?php esc_html_e( 'Authorization', 'virtuaria-pagseguro' ); ?> <span class="woocommerce-help-tip"></span>
 					</label>
 				</th>
 				<td class="forminp forminp-auth">
@@ -160,56 +176,56 @@ if ( ! isset( $options['payment_form'] ) ) {
 					$auth .= '--' . $mail;
 
 					if ( $token ) {
-						$revoke_url = $app_revoke . '?state=' . $origin . ( $fee_setup ? '--' . $fee_setup : '' ) . '--' . $mail . ( isset( $options['marketplace'] ) ?  $options['marketplace'] : '' );
-						echo '<span class="connected"><strong>Status: <span class="status">Conectado.</span></strong></span>';
-						echo '<a href="' . esc_url( $revoke_url ) . '" class="auth button-primary">Desconectar com PagSeguro <img src="' . esc_url( VIRTUARIA_PAGSEGURO_URL ) . 'public/images/conectado.svg" alt="Desconectar" /></a>';
+						$revoke_url = $app_revoke . '?state=' . $origin . ( $fee_setup ? '--' . $fee_setup : '' ) . '--' . $mail . ( isset( $options['marketplace'] ) ? $options['marketplace'] : '' );
+						echo '<span class="connected"><strong>Status: <span class="status">' . esc_html__( 'Connected.', 'virtuaria-pagseguro' ) . '</span></strong></span>';
+						echo '<a href="' . esc_url( $revoke_url ) . '" class="auth button-primary">' . esc_html__( 'Disconnect with PagSeguro', 'virtuaria-pagseguro' ) . ' <img src="' . esc_url( VIRTUARIA_PAGSEGURO_URL ) . 'public/images/conectado.svg" alt="Desconectar" /></a>';
 					} else {
-						echo '<span class="disconnected"><strong>Status: <span class="status">Desconectado.</span></strong></span>';
-						echo '<a href="' . esc_url( $auth ) . '" class="auth button-primary">Conectar com PagSeguro <img src="' . esc_url( VIRTUARIA_PAGSEGURO_URL ) . 'public/images/conectar.png" alt="Conectar" /></a>';
+						echo '<span class="disconnected"><strong>Status: <span class="status">' . esc_html__( 'Disconnected.', 'virtuaria-pagseguro' ) . '</span></strong></span>';
+						echo '<a href="' . esc_url( $auth ) . '" class="auth button-primary">' . esc_html__( 'Connect with PagSeguro.', 'virtuaria-pagseguro' ) . ' <img src="' . esc_url( VIRTUARIA_PAGSEGURO_URL ) . 'public/images/conectar.png" alt="Conectar" /></a>';
 					}
-					echo '<span class="expire-info">A conexão é válida por tempo indefinido. O plugin exibirá um alerta, caso ocorra algum problema recorrente com a conexão.</span>';
+					echo '<span class="expire-info">' . esc_html__( 'The connection is valid indefinitely. The plugin will display an alert if there is a recurring problem with the connection.', 'virtuaria-pagseguro' ) . '</span>';
 					?>
 				</td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_process_mode">Modo de processamento </label>
+					<label for="woocommerce_virt_pagseguro_process_mode"><?php esc_html_e( 'Processing mode', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Modo de processamento</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Processing mode', 'virtuaria-pagseguro' ); ?></span></legend>
 						<select class="select " name="woocommerce_virt_pagseguro_process_mode" id="woocommerce_virt_pagseguro_process_mode">
-							<option value="sync" <?php selected( 'sync', isset( $options['process_mode'] ) ? $options['process_mode'] : '' ); ?>>Síncrono</option>
-							<option value="async" <?php selected( 'async', isset( $options['process_mode'] ) ? $options['process_mode'] : '' ); ?>>Assíncrono</option>
+							<option value="sync" <?php selected( 'sync', isset( $options['process_mode'] ) ? $options['process_mode'] : '' ); ?>><?php esc_html_e( 'Synchronous', 'virtuaria-pagseguro' ); ?></option>
+							<option value="async" <?php selected( 'async', isset( $options['process_mode'] ) ? $options['process_mode'] : '' ); ?>><?php esc_html_e( 'Asynchronous', 'virtuaria-pagseguro' ); ?></option>
 						</select>
 						<p class="description">
-							A mudança de status do pedido dispara uma série de ações, como envio de emails, redução do estoque, eventos em plugins, entre muitas outras. No modo assíncrono, o checkout não precisa esperar pela conclusão destas ações,  consequentemente fica mais rápido. A confirmação do pagamento via Cartão de Crédito ocorre da mesma forma, independente do modo escolhido. Apenas a mudança de status do pedido é afetada, pois passa a ocorrer via agendamento (cron) em até 5 minutos após a finalização da compra pelo cliente.
+							<?php esc_html_e( 'Changing the order status triggers a series of actions, such as sending emails, reducing stock, events in plugins, among many others. In asynchronous mode, the checkout does not need to wait for these actions to be completed, and is therefore faster. Confirmation of payment via credit card occurs in the same way, regardless of the method chosen. Only the change in the order status is affected, as it now occurs via scheduling (cron) within 5 minutes after the customer completes the purchase.', 'virtuaria-pagseguro' ); ?>
 						</p>
 					</fieldset>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_invoice_prefix">Prefixo da transação </label>
+					<label for="woocommerce_virt_pagseguro_invoice_prefix"><?php esc_html_e( 'Transaction Prefix', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Prefixo da transação</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Transaction Prefix', 'virtuaria-pagseguro' ); ?></span></legend>
 						<input class="input-text regular-input " type="text" name="woocommerce_virt_pagseguro_invoice_prefix" id="woocommerce_virt_pagseguro_invoice_prefix" value="<?php echo isset( $options['invoice_prefix'] ) ? esc_attr( $options['invoice_prefix'] ) : ''; ?>">
 						<p class="description">
-							Este prefixo é usado para definir o identificador do pedido. Caso precise utilizar a mesma conta PagSeguro em mais de uma loja virtual, será preciso definir um prefixo único para cada loja, pois o PagSeguro não permitirá pedidos com o mesmo identificador.
+							<?php esc_html_e( 'This prefix is ​​used to define the order identifier. If you need to use the same PagSeguro account in more than one online store, you will need to define a unique prefix for each store, as PagSeguro will not allow orders with the same identifier.', 'virtuaria-pagseguro' ); ?>
 						</p>
 					</fieldset>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_payment_status">Status após confirmação </label>
+					<label for="woocommerce_virt_pagseguro_payment_status"><?php esc_html_e( 'Status after confirmation', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Status após confirmação</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Status after confirmation', 'virtuaria-pagseguro' ); ?></span></legend>
 						<select class="select" name="woocommerce_virt_pagseguro_payment_status" id="woocommerce_virt_pagseguro_payment_status">
 							<?php
 							foreach ( wc_get_order_statuses() as $key => $text ) {
@@ -226,7 +242,7 @@ if ( ! isset( $options['payment_form'] ) ) {
 							?>
 						</select>
 						<p class="description">
-							Define o status que o pedido assumirá após a confirmação de pagamento. O status padrão é processando.
+							<?php esc_html_e( 'Defines the status that the order will assume after payment confirmation. The default status is processing.', 'virtuaria-pagseguro' ); ?>
 						</p>
 					</fieldset>
 				</td>
@@ -237,17 +253,17 @@ if ( ! isset( $options['payment_form'] ) ) {
 				?>
 				<tr valign="top">
 					<th scope="row" class="titledesc">
-						<label for="woocommerce_virt_pagseguro_layout_checkout">Layout </label>
+						<label for="woocommerce_virt_pagseguro_layout_checkout"><?php esc_html_e( 'Layout', 'virtuaria-pagseguro' ); ?></label>
 					</th>
 					<td class="forminp">
 						<fieldset>
-							<legend class="screen-reader-text"><span>Layout</span></legend>
+							<legend class="screen-reader-text"><span><?php esc_html_e( 'Layout', 'virtuaria-pagseguro' ); ?></span></legend>
 							<select class="select" name="woocommerce_virt_pagseguro_layout_checkout" id="woocommerce_virt_pagseguro_layout_checkout">
-								<option value="lines" <?php selected( 'lines', isset( $options['layout_checkout'] ) ? $options['layout_checkout'] : '' ); ?>>Linhas</option>
-								<option value="tabs" <?php selected( 'tabs', isset( $options['layout_checkout'] ) ? $options['layout_checkout'] : '' ); ?>>Abas</option>
+								<option value="lines" <?php selected( 'lines', isset( $options['layout_checkout'] ) ? $options['layout_checkout'] : '' ); ?>><?php esc_html_e( 'Lines', 'virtuaria-pagseguro' ); ?></option>
+								<option value="tabs" <?php selected( 'tabs', isset( $options['layout_checkout'] ) ? $options['layout_checkout'] : '' ); ?>><?php esc_html_e( 'Tabs', 'virtuaria-pagseguro' ); ?></option>
 							</select>
 							<p class="description">
-								Define o padrão visual utilizado na página de finalização das compras.
+								<?php esc_html_e( 'Defines the visual pattern used on the checkout page.', 'virtuaria-pagseguro' ); ?>
 							</p>
 						</fieldset>
 					</td>
@@ -257,17 +273,17 @@ if ( ! isset( $options['payment_form'] ) ) {
 			?>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_logo">Marca PagSeguro(PagBank)</label>
+					<label for="woocommerce_virt_pagseguro_logo"><?php esc_html_e( 'PagSeguro Brand (PagBank)', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Marca PagSeguro(PagBank)</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'PagSeguro Brand (PagBank)', 'virtuaria-pagseguro' ); ?></span></legend>
 						<select name="woocommerce_virt_pagseguro_logo" id="woocommerce_virt_pagseguro_logo">
-							<option <?php selected( 'title_logo', isset( $options['logo'] ) ? $options['logo'] : '' ); ?> value="title_logo">Exibe título e marca do método de pagamento</option>
-							<option <?php selected( 'only_title', isset( $options['logo'] ) ? $options['logo'] : '' ); ?> value="only_title">Exibe apenas título do método de pagamento</option>
+							<option <?php selected( 'title_logo', isset( $options['logo'] ) ? $options['logo'] : '' ); ?> value="title_logo"><?php esc_html_e( 'Displays payment method title and brand', 'virtuaria-pagseguro' ); ?></option>
+							<option <?php selected( 'only_title', isset( $options['logo'] ) ? $options['logo'] : '' ); ?> value="only_title"><?php esc_html_e( 'Display only payment method title', 'virtuaria-pagseguro' ); ?></option>
 						</select><br>
 						<p class="description">
-							Define o padrão visual utilizado na página de finalização das compras.
+							<?php esc_html_e( 'Defines the visual pattern used on the checkout page.', 'virtuaria-pagseguro' ); ?>
 						</p>
 					</fieldset>
 				</td>
@@ -277,11 +293,11 @@ if ( ! isset( $options['payment_form'] ) ) {
 				?>
 				<tr valign="top">
 					<th scope="row" class="titledesc">
-						<label for="woocommerce_virt_pagseguro_status_order_subscriptions">Status Pedido Subscriptions</label>
+						<label for="woocommerce_virt_pagseguro_status_order_subscriptions"><?php esc_html_e( 'Subscriptions Order Status', 'virtuaria-pagseguro' ); ?></label>
 					</th>
 					<td class="forminp">
 						<fieldset>
-							<legend class="screen-reader-text"><span>Status Pedido Subscriptions</span></legend>
+							<legend class="screen-reader-text"><span><?php esc_html_e( 'Subscriptions Order Status', 'virtuaria-pagseguro' ); ?></span></legend>
 							<input
 								type="checkbox"
 								name="woocommerce_virt_pagseguro_status_order_subscriptions"
@@ -289,10 +305,10 @@ if ( ! isset( $options['payment_form'] ) ) {
 								value="yes" <?php checked( 'yes', isset( $options['status_order_subscriptions'] ) ? $options['status_order_subscriptions'] : '' ); ?>/>
 
 							<label for="woocommerce_virt_pagseguro_status_order_subscriptions">
-							Habilitar gerenciamento de status do pedido em subscriptions.
+								<?php esc_html_e( 'Enable order status management in subscriptions.', 'virtuaria-pagseguro' ); ?>
 							</label>
 							<p class="description">
-								Modifica o status do pedido original com base no resultado das subscrições. Ex: Cancela o pedido original quando houver falha na cobrança da subscrição.
+								<?php esc_html_e( 'Modifica o status do pedido original com base no resultado das subscrições. Ex: Cancela o pedido original quando houver falha na cobrança da subscrição.', 'virtuaria-pagseguro' ); ?>
 							</p>
 						</fieldset>
 					</td>
@@ -302,34 +318,40 @@ if ( ! isset( $options['payment_form'] ) ) {
 			?>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_ignore_shipping_address">Desativar Envio de Dados de Entrega</label>
+					<label for="woocommerce_virt_pagseguro_ignore_shipping_address"><?php esc_html_e( 'Disable Sending Delivery Data', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Desativar Envio de Dados de Entrega</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Disable Sending Delivery Data', 'virtuaria-pagseguro' ); ?></span></legend>
 						<label for="woocommerce_virt_pagseguro_ignore_shipping_address">
 						<input
 							type="checkbox"
 							name="woocommerce_virt_pagseguro_ignore_shipping_address"
 							id="woocommerce_virt_pagseguro_ignore_shipping_address"
-							value="yes" <?php checked( 'yes', isset( $options['ignore_shipping_address'] ) ? $options['ignore_shipping_address'] : '' ); ?>> Desativar envio de dados de entrega a PagBank</label><br>
+							value="yes" <?php checked( 'yes', isset( $options['ignore_shipping_address'] ) ? $options['ignore_shipping_address'] : '' ); ?>> <?php esc_html_e( 'Disable sending delivery data to PagBank', 'virtuaria-pagseguro' ); ?></label><br>
 						<p class="description">
-							Marque esta opção para desativar o envio de dados de entrega (como cidade, rua, bairro, número, UF.) ao PagBank. Essa configuração é útil para lojas virtuais que não realizam entregas físicas ou que não possuem campos de endereço no checkout, evitando problemas de validação de vendas. <b>Nota:</b> O PagBank pode utilizar essas informações para fins de segurança e antifraude, portanto, desativá-las pode impactar a análise de risco das transações.
+							<?php echo wp_kses_post( __( 'Check this option to disable sending delivery data (such as city, street, neighborhood, number, state) to PagBank. This setting is useful for online stores that do not make physical deliveries or that do not have address fields at checkout, avoiding sales validation issues. <b>Note:</b> PagBank may use this information for security and anti-fraud purposes, so disabling it may impact the risk analysis of transactions.', 'virtuaria-pagseguro' ) ); ?>
 						</p>
 					</fieldset>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="woocommerce_virt_pagseguro_debug">Log de depuração </label>
+					<label for="woocommerce_virt_pagseguro_debug"><?php esc_html_e( 'Debug log', 'virtuaria-pagseguro' ); ?></label>
 				</th>
 				<td class="forminp">
 					<fieldset>
-						<legend class="screen-reader-text"><span>Log de depuração</span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e( 'Debug log', 'virtuaria-pagseguro' ); ?></span></legend>
 						<label for="woocommerce_virt_pagseguro_debug">
 						<input type="checkbox" name="woocommerce_virt_pagseguro_debug" id="woocommerce_virt_pagseguro_debug" value="yes" <?php checked( 'yes', isset( $options['debug'] ) ? $options['debug'] : '' ); ?>> Habilitar registro de log</label><br>
 						<p class="description">
-							Registra eventos de comunição com a API e erros. Para visualizar clique <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-status&tab=logs&source=virtuaria-pagseguro' ) ); ?>">aqui</a>.
+							<?php
+							printf(
+								/* translators: %s: log url */
+								wp_kses_post( __( 'Log API communication events and errors. To view click <a href="%s">here</a>.', 'virtuaria-pagseguro' ) ),
+								esc_url( admin_url( 'admin.php?page=wc-status&tab=logs&source=virtuaria-pagseguro' ) )
+							);
+							?>
 						</p>
 					</fieldset>
 				</td>
@@ -337,6 +359,8 @@ if ( ! isset( $options['payment_form'] ) ) {
 		</tbody>
 	</table>
 
-	<button name="save" class="button-primary woocommerce-save-button" type="submit" value="Salvar alterações">Salvar alterações</button>
+	<button name="save" class="button-primary woocommerce-save-button">
+		<?php esc_html_e( 'Save changes', 'virtuaria-pagseguro' ); ?>
+	</button>
 	<?php wp_nonce_field( 'setup_virtuaria_module', 'setup_nonce' ); ?>
 </form>

@@ -95,9 +95,9 @@ class WC_Virtuaria_PagSeguro_Gateway_Ticket extends WC_Payment_Gateway {
 			VIRTUARIA_PAGSEGURO_URL . '/public/images/pagseguro.png'
 		);
 		$this->has_fields         = true;
-		$this->method_title       = __( 'PagSeguro Boleto', 'virtuaria-pagseguro' );
+		$this->method_title       = __( 'PagSeguro Bank Slip', 'virtuaria-pagseguro' );
 		$this->method_description = __(
-			'Pague com boleto bancário.',
+			'Pay with bank slip.',
 			'virtuaria-pagseguro'
 		);
 

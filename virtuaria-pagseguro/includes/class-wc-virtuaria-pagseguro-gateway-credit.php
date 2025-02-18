@@ -123,9 +123,9 @@ class WC_Virtuaria_PagSeguro_Gateway_Credit extends WC_Payment_Gateway {
 			VIRTUARIA_PAGSEGURO_URL . '/public/images/pagseguro.png'
 		);
 		$this->has_fields         = true;
-		$this->method_title       = __( 'PagSeguro Crédito', 'virtuaria-pagseguro' );
+		$this->method_title       = __( 'PagSeguro Credit', 'virtuaria-pagseguro' );
 		$this->method_description = __(
-			'Pague com cartão de crédito.',
+			'Pay by credit card.',
 			'virtuaria-pagseguro'
 		);
 

@@ -90,18 +90,18 @@ class Virtuaria_PagSeguro_Events {
 				if ( $order->has_status( 'pending' ) ) {
 					$order->update_status(
 						'on-hold',
-						__( 'PagSeguro: Aguardando confirmação de pagamento.', 'virtuaria-pagseguro' )
+						__( 'PagSeguro: Awaiting payment confirmation.', 'virtuaria-pagseguro' )
 					);
 				}
 			} elseif ( isset( $this->settings['payment_status'] ) ) {
 				$order->update_status(
 					$this->settings['payment_status'],
-					__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+					__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 				);
 			} else {
 				$order->update_status(
 					'processing',
-					__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+					__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 				);
 			}
 		}
@@ -117,7 +117,7 @@ class Virtuaria_PagSeguro_Events {
 
 		if ( $order && ! $order->get_meta( '_charge_id' ) ) {
 			$order->add_order_note(
-				'Pagseguro Pix: o limite de tempo para pagamento deste pedido expirou.'
+				__( 'Pagseguro Pix: the time limit for payment of this order has expired.', 'virtuaria-pagseguro' ),
 			);
 			$order->update_status( 'cancelled' );
 			if ( 'yes' === $this->settings['debug'] ) {
@@ -168,8 +168,6 @@ class Virtuaria_PagSeguro_Events {
 				'get_3ds_order_total'
 			)
 		) {
-			$log = wc_get_logger();
-
 			if ( is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ) {
 				$fields = map_deep( wp_unslash( $_POST['fields'] ), 'sanitize_text_field' );
 			}
@@ -188,17 +186,22 @@ class Virtuaria_PagSeguro_Events {
 				);
 			}
 
-			$log->add(
-				'virtuaria-pagseguro',
-				'Falha no processamento 3DS ao enviar: ' . wp_json_encode( $fields ),
-				WC_Log_Levels::ERROR
-			);
+			var_dump( $this->settings['debug'] );
+			if ( isset( $this->settings['debug'] )
+				&& 'yes' === $this->settings['debug'] ) {
+				$log = wc_get_logger();
+				$log->add(
+					'virtuaria-pagseguro',
+					'Falha no processamento 3DS ao enviar: ' . wp_json_encode( $fields ),
+					WC_Log_Levels::ERROR
+				);
 
-			$log->add(
-				'virtuaria-pagseguro',
-				'Falha no processamento 3DS com a resposta: ' . sanitize_text_field( wp_unslash( $_POST['errors'] ) ),
-				WC_Log_Levels::ERROR
-			);
+				$log->add(
+					'virtuaria-pagseguro',
+					'Falha no processamento 3DS com a resposta: ' . sanitize_text_field( wp_unslash( $_POST['errors'] ) ),
+					WC_Log_Levels::ERROR
+				);
+			}
 			echo 'success';
 		}
 		wp_die();

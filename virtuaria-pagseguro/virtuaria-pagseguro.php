@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.4.1
+ * Version: 3.4.4
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  *
@@ -78,7 +78,7 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		public function missing_dependency() {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php esc_attr_e( 'Virtuaria PagSeguro precisa do Woocommerce 4.0+ para funcionar!', 'virtuaria-pagseguro' ); ?></p>
+				<p><?php esc_attr_e( 'Virtuaria PagSeguro needs Woocommerce 4.0+ to work!', 'virtuaria-pagseguro' ); ?></p>
 			</div>
 			<?php
 		}
@@ -89,7 +89,7 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		public function conflict_module() {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php esc_attr_e( 'Virtuaria PagSeguro não pode ser usado ao mesmo tempo que "Claudio Sanches - PagSeguro for WooCommerce"', 'virtuaria-pagseguro' ); ?></p>
+				<p><?php esc_attr_e( 'Virtuaria PagSeguro cannot be used at the same time as "Claudio Sanches - PagSeguro for WooCommerce"', 'virtuaria-pagseguro' ); ?></p>
 			</div>
 			<?php
 		}
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 						sprintf(
 							/* translators: %1$s: plugin link */
 							__(
-								'Virtuaria PagSeguro precisa do plugin <a href="%1$s" target="_blank">Virtuaria Correios</a> na versão 1.5.6+ ou o <a href="%2$s" target="_blank">Brazilian Market on WooCommerce</a> 3.7 ou superior para funcionar!.',
+								'Virtuaria PagSeguro requires the <a href="%1$s" target="_blank">Virtuaria Correios</a> plugin in version 1.5.6+ or the <a href="%2$s" target="_blank">Brazilian Market on WooCommerce</a> 3.7 or higher to work!.',
 								'virtuaria-pagseguro'
 							),
 							'https://wordpress.org/plugins/virtuaria-correios/',

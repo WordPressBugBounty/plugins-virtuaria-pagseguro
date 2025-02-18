@@ -104,7 +104,7 @@ class WC_Virtuaria_PagSeguro_Gateway_Pix extends WC_Payment_Gateway {
 		$this->has_fields         = true;
 		$this->method_title       = __( 'PagSeguro Pix', 'virtuaria-pagseguro' );
 		$this->method_description = __(
-			'Pague com pix.',
+			'Pay with pix.',
 			'virtuaria-pagseguro'
 		);
 

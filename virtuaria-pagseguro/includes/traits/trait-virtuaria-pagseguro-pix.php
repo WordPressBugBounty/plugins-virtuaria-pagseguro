@@ -69,45 +69,45 @@ trait Virtuaria_PagSeguro_Pix {
 	public function get_pix_default_settings() {
 		$settings = array(
 			'pix_validate'        => array(
-				'title'       => __( 'Validade do Código PIX', 'virtuaria-pagseguro' ),
+				'title'       => __( 'PIX Code Validity', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Define o limite de tempo para aceitar pagamentos com PIX.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Sets the time limit for accepting payments with PIX.', 'virtuaria-pagseguro' ),
 				'options'     => array(
-					'1800'  => '30 Minutos',
-					'3600'  => '1 hora',
-					'5400'  => '1 hora e 30 minutos',
-					'7200'  => '2 horas',
-					'9000'  => '2 horas e 30 minutos',
-					'10800' => '3 horas',
+					'1800'  => __( '30 Minutes', 'virtuaria-pagseguro' ),
+					'3600'  => __( '1 hour', 'virtuaria-pagseguro' ),
+					'5400'  => __( '1 hour and 30 minutes', 'virtuaria-pagseguro' ),
+					'7200'  => __( '2 hours', 'virtuaria-pagseguro' ),
+					'9000'  => __( '2 hours and 30 minutes', 'virtuaria-pagseguro' ),
+					'10800' => __( '3 hours', 'virtuaria-pagseguro' ),
 				),
 				'default'     => '1800',
 			),
 			'pix_msg_payment'     => array(
-				'title'       => __( 'Pagamento confirmado', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Payment confirmed', 'virtuaria-pagseguro' ),
 				'type'        => 'textarea',
-				'description' => __( 'Define a mensagem que será exibida na tela de pedido após o pagamento do Pix. O pagamento é identificado automaticamente e a tela muda exibindo esta mensagem.', 'virtuaria-pagseguro' ),
-				'default'     => 'Seu pagamento foi aprovado!',
+				'description' => __( 'Defines the message that will be displayed on the order screen after Pix payment. The payment is automatically identified and the screen changes to display this message.', 'virtuaria-pagseguro' ),
+				'default'     => __( 'Your payment has been approved!', 'virtuaria-pagseguro' ),
 			),
 			'pix_discount'        => array(
-				'title'             => __( 'Desconto (%)', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Discount (%)', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
-				'description'       => __( 'Define um percentual de desconto a ser aplicado ao total do pedido, caso o pagamento seja realizado com Pix. O desconto não incide sobre o valor do frete.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Sets a discount percentage to be applied to the total order, if payment is made with Pix. The discount does not apply to the shipping cost.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'min'  => 0,
 					'step' => '0.01',
 				),
 			),
 			'pix_discount_coupon' => array(
-				'title'       => __( 'Desabilitar desconto em cupons', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Disable discount on coupons', 'virtuaria-pagseguro' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Desabilita o desconto Pix em conjunto com cupons', 'virtuaria-pagseguro' ),
-				'description' => __( 'Desabilita o desconto Pix, caso um cupom seja aplicado ao pedido.', 'virtuaria-pagseguro' ),
+				'label'       => __( 'Disables Pix discount in conjunction with coupons', 'virtuaria-pagseguro' ),
+				'description' => __( 'Disables the Pix discount if a coupon is applied to the order.', 'virtuaria-pagseguro' ),
 				'default'     => '',
 			),
 			'pix_discount_ignore' => array(
-				'title'       => __( 'Desabilitar desconto em produtos das seguintes categorias', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Disable discount on products from the following categories', 'virtuaria-pagseguro' ),
 				'type'        => 'ignore_discount',
-				'description' => __( 'Define as categorias que serão ignoradas para o cálculo do desconto pix.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Defines the categories that will be ignored when calculating the Pix discount.', 'virtuaria-pagseguro' ),
 				'default'     => '',
 			),
 		);
@@ -120,9 +120,9 @@ trait Virtuaria_PagSeguro_Pix {
 					'type'  => 'title',
 				),
 				'pix_enable' => array(
-					'title'       => __( 'Habilitar', 'virtuaria-pagseguro' ),
+					'title'       => __( 'Enable', 'virtuaria-pagseguro' ),
 					'type'        => 'checkbox',
-					'description' => __( 'Habilita Pix durante o checkout. Obrigatório ter <a href="https://blog.pagseguro.uol.com.br/passo-a-passo-para-cadastrar-suas-chaves-pix-no-pagbank/" target="_blank">chave pix</a> configurada no painel da conta pagbank.', 'virtuaria-pagseguro' ),
+					'description' => __( 'Enable Pix during checkout. It is mandatory to have <a href="https://blog.pagseguro.uol.com.br/passo-a-passo-para-cadastrar-suas-chaves-pix-no-pagbank/" target="_blank">pix key</a> configured in the Pagbank account panel.', 'virtuaria-pagseguro' ),
 					'default'     => 'yes',
 				),
 			) + $settings;
@@ -179,22 +179,22 @@ trait Virtuaria_PagSeguro_Pix {
 		$format = intval( $validate ) / 3600;
 		switch ( $format ) {
 			case 0.5:
-				$format = '30 minutos';
+				$format = __( '30 minutes', 'virtuaria-pagseguro' );
 				break;
 			case 1:
-				$format = '1 hora';
+				$format = __( '1 hour', 'virtuaria-pagseguro' );
 				break;
 			case 1.5:
-				$format = '1 hora e 30 minutos';
+				$format = __( '1 hour and 30 minutes', 'virtuaria-pagseguro' );
 				break;
 			case 2:
-				$format = '2 horas';
+				$format = __( '2 hours', 'virtuaria-pagseguro' );
 				break;
 			case 2.5:
-				$format = '2 horas e 30 minutos';
+				$format = __( '2 hours and 30 minutes', 'virtuaria-pagseguro' );
 				break;
 			default:
-				$format = '3 horas';
+				$format = __( '3 hours', 'virtuaria-pagseguro' );
 				break;
 		}
 		return $format;
@@ -213,9 +213,12 @@ trait Virtuaria_PagSeguro_Pix {
 				'\\order\\limit_characters_order_note'
 			);
 			$order->add_order_note(
-				'PagSeguro Pix Copia e Cola: <div class="pix">'
+				__( 'PagSeguro Pix Copy and Paste:', 'virtuaria-pagseguro' )
+				. '<div class="pix">'
 				. $qr_code
-				. '</div><a href="#" id="copy-qr" class="button button-primary">Copiar</a>'
+				. '</div><a href="#" id="copy-qr" class="button button-primary">'
+				. __( 'Copy', 'virtuaria-pagseguro' )
+				. '</a>'
 			);
 			add_filter(
 				'woocommerce_new_order_note_data',
@@ -223,9 +226,12 @@ trait Virtuaria_PagSeguro_Pix {
 			);
 		} else {
 			$order->add_order_note(
-				'PagSeguro Pix Copia e Cola: <div class="pix">'
+				__( 'PagSeguro Pix Copy and Paste:', 'virtuaria-pagseguro' )
+				. '<div class="pix">'
 				. $qr_code
-				. '</div><a href="#" id="copy-qr" class="button button-primary">Copiar</a>'
+				. '</div><a href="#" id="copy-qr" class="button button-primary">'
+				. __( 'Copy', 'virtuaria-pagseguro' )
+				. '</a>'
 			);
 		}
 	}
@@ -247,7 +253,7 @@ trait Virtuaria_PagSeguro_Pix {
 			&& $order->has_status( 'on-hold' ) ) {
 			add_meta_box(
 				'pix-payment',
-				'Pagamento Pix',
+				__( 'Pix Payment', 'virtuaria-pagseguro' ),
 				array( $this, 'pix_payment_content' ),
 				'shop_order',
 				'side'
@@ -260,7 +266,9 @@ trait Virtuaria_PagSeguro_Pix {
 	 */
 	public function pix_payment_content() {
 		?>
-		<button class="button make_payment button-primary">Simular pagamento do pix</button>
+		<button class="button make_payment button-primary">
+			<?php esc_html_e( 'Simulate pix payment', 'virtuaria-pagseguro' ); ?>
+		</button>
 		<input type="hidden" name="pix_button_clicked" class="pix_input"/>
 		<script>
 			jQuery(document).ready(function($) {
@@ -298,13 +306,13 @@ trait Virtuaria_PagSeguro_Pix {
 
 			if ( $paid ) {
 				$order->add_order_note(
-					__( 'PagSeguro: Simulação de pagamento Pix realizada com sucesso.', 'virtuaria-pagseguro' ),
+					__( 'PagSeguro: Pix payment simulation completed successfully.', 'virtuaria-pagseguro' ),
 					0,
 					true
 				);
 			} else {
 				$order->add_order_note(
-					__( 'PagSeguro: A simulação de pagamento Pix falhou.', 'virtuaria-pagseguro' ),
+					__( 'PagSeguro: Pix payment simulation failed.', 'virtuaria-pagseguro' ),
 					0,
 					true
 				);

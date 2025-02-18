@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 			?>
 			<li class="active">
 				<label>
-					<input id="credit-card" type="radio" name="payment_mode" value="credit" <?php echo isset( $_POST['payment_mode'] ) && 'credit' === $_POST['payment_mode'] ? 'checked' : ''; ?> /> <?php esc_html_e( 'Cartão de Crédito', 'virtuaria-pagseguro' ); ?>
+					<input id="credit-card" type="radio" name="payment_mode" value="credit" <?php echo isset( $_POST['payment_mode'] ) && 'credit' === $_POST['payment_mode'] ? 'checked' : ''; ?> /> <?php esc_html_e( 'Credit Card', 'virtuaria-pagseguro' ); ?>
 				</label>
 			</li>	
 				<?php
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) || exit;
 			?>
 			<li>
 				<label>
-					<input id="banking-ticket" type="radio" name="payment_mode" value="ticket" <?php echo isset( $_POST['payment_mode'] ) && 'ticket' === $_POST['payment_mode'] ? 'checked' : ''; ?>/> <?php esc_html_e( 'Boleto', 'virtuaria-pagseguro' ); ?>
+					<input id="banking-ticket" type="radio" name="payment_mode" value="ticket" <?php echo isset( $_POST['payment_mode'] ) && 'ticket' === $_POST['payment_mode'] ? 'checked' : ''; ?>/> <?php esc_html_e( 'Bank Slip', 'virtuaria-pagseguro' ); ?>
 				</label>
 			</li>
 			<?php

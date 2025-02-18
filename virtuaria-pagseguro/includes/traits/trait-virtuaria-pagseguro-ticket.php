@@ -37,11 +37,12 @@ trait Virtuaria_PagSeguro_Ticket {
 			return;
 		}
 		echo '<div class="ticket-info">';
-		echo '<h3 style="margin: 0;">' . esc_html_e( 'Utilize o código de barras abaixo para efetuar o pagamento em lotéricas, instituições financeiras ou internet banking.', 'virtuaria-pagseguro' ) . '</h3>';
+		echo '<h3 style="margin: 0;">' . esc_html_e( 'Use the barcode below to make payment at lottery outlets, financial institutions or online banking.', 'virtuaria-pagseguro' ) . '</h3>';
 		echo '<strong style="display:block;margin: 15px 0;">' . esc_html( $formatted_barcode ) . '</strong>';
 		echo '<a class="pdf-link" target="_blank" href="' . esc_url( $order->get_meta( '_pdf_link', true ) ) . '">';
 		echo '<img class="barcode-icon" src="' . esc_url( home_url( 'wp-content/plugins/virtuaria-pagseguro/public/images/codigo-de-barras.png' ) ) . '" alt="Boleto"/>';
-		echo 'Imprimir Boleto Bancário</a>';
+		esc_html_e( 'Print Bank Slip', 'virtuaria-pagseguro' );
+		echo '</a>';
 		echo '</div>';
 		echo '<style>
 		.ticket-info {
@@ -95,52 +96,52 @@ trait Virtuaria_PagSeguro_Ticket {
 	public function get_ticket_default_settings() {
 		$settings = array(
 			'ticket_validate'    => array(
-				'title'             => __( 'Validade', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Validity', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
-				'description'       => __( 'Define o limite de dias onde o boleto pode ser pago.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Sets the limit of days in which the bill can be paid.', 'virtuaria-pagseguro' ),
 				'default'           => '5',
 				'custom_attributes' => array(
 					'min' => 1,
 				),
 			),
 			'instruction_line_1'     => array(
-				'title'             => __( '1º Linha de Instrução', 'virtuaria-pagseguro' ),
+				'title'             => __( '1st Line of Instruction', 'virtuaria-pagseguro' ),
 				'type'              => 'text',
-				'description'       => __( 'Define a primeira linha de instruções sobre o pagamento do Boleto. Deixe em branco para desativar.', 'virtuaria-pagseguro' ),
-				'default'           => __( '* Pagável em qualquer instituição bancária e lotéricas.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Sets the first line of instructions about Bank Slip payment. Leave blank to disable.', 'virtuaria-pagseguro' ),
+				'default'           => __( '* Payable at any banking institution or lottery outlet.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'maxlength' => '75',
 				),
 			),
 			'instruction_line_2'     => array(
-				'title'             => __( '2º Linha de Instrução', 'virtuaria-pagseguro' ),
+				'title'             => __( '2nd Line of Instruction', 'virtuaria-pagseguro' ),
 				'type'              => 'text',
-				'description'       => __( 'Define a segunda linha de instruções sobre o pagamento do Boleto. Deixe em branco para desativar.', 'virtuaria-pagseguro' ),
-				'default'           => __( '* Não receber após o vencimento.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Sets the second line of instructions about Bank Slip payment. Leave blank to disable.', 'virtuaria-pagseguro' ),
+				'default'           => __( '* Not receiving after due date.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'maxlength' => '75',
 				),
 			),
 			'ticket_discount'        => array(
-				'title'             => __( 'Desconto (%)', 'virtuaria-pagseguro' ),
+				'title'             => __( 'Discount (%)', 'virtuaria-pagseguro' ),
 				'type'              => 'number',
-				'description'       => __( 'Define um percentual de desconto a ser aplicado ao total do pedido, caso o pagamento seja realizado com Boleto. O desconto não incide sobre o valor do frete.', 'virtuaria-pagseguro' ),
+				'description'       => __( 'Sets a discount percentage to be applied to the total order, if payment is made by Bank Slip. The discount does not apply to the shipping cost.', 'virtuaria-pagseguro' ),
 				'custom_attributes' => array(
 					'min'  => 0,
 					'step' => '0.01',
 				),
 			),
 			'ticket_discount_coupon' => array(
-				'title'       => __( 'Desabilitar desconto em cupons', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Disable discount on coupons', 'virtuaria-pagseguro' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Desabilita o desconto do Boleto em conjunto com cupons', 'virtuaria-pagseguro' ),
-				'description' => __( 'Desabilita o desconto do Boleto, caso um cupom seja aplicado ao pedido.', 'virtuaria-pagseguro' ),
+				'label'       => __( 'Disables Bank Slip discount in conjunction with coupons', 'virtuaria-pagseguro' ),
+				'description' => __( 'Disables the Bank Slip discount, if a coupon is applied to the order.', 'virtuaria-pagseguro' ),
 				'default'     => '',
 			),
 			'ticket_discount_ignore' => array(
-				'title'       => __( 'Desabilitar desconto em produtos das seguintes categorias', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Disable discount on products from the following categories', 'virtuaria-pagseguro' ),
 				'type'        => 'ignore_discount',
-				'description' => __( 'Define as categorias que serão ignoradas para o cálculo do desconto ticket.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Defines the categories that will be ignored when calculating the bank slip discount.', 'virtuaria-pagseguro' ),
 				'default'     => '',
 			),
 		);
@@ -149,14 +150,14 @@ trait Virtuaria_PagSeguro_Ticket {
 			|| 'separated' !== $this->global_settings['payment_form'] ) {
 			$settings = array(
 				'ticket'        => array(
-					'title'       => __( 'Boleto', 'virtuaria-pagseguro' ),
+					'title'       => __( 'Bank Slip', 'virtuaria-pagseguro' ),
 					'type'        => 'title',
 					'description' => '',
 				),
 				'ticket_enable' => array(
-					'title'       => __( 'Habilitar', 'virtuaria-pagseguro' ),
+					'title'       => __( 'Enable', 'virtuaria-pagseguro' ),
 					'type'        => 'checkbox',
-					'description' => __( 'Define se a opção de pagamento Boleto deve estar disponível durante o checkout.', 'virtuaria-pagseguro' ),
+					'description' => __( 'Defines whether the Bank Slip payment option should be available during checkout.', 'virtuaria-pagseguro' ),
 					'default'     => 'yes',
 				),
 			) + $settings;
@@ -183,10 +184,11 @@ trait Virtuaria_PagSeguro_Ticket {
 			}
 			$order->add_order_note(
 				sprintf(
-					'%1$s:<br> PDF 📁: <a href="%2$s" target="_blank" style="font-weight: bold">%3$s</a>.<br><br><b>Código de barras 📦:</b> <div class="barcode" style="display:block">%4$s</div><a href="#" id="copy-barcode" style="display:table;margin: 10px auto 0;" class="button button-primary">Copiar</a>',
-					__( 'PagSeguro Boleto', 'virtuaria-pagseguro' ),
+					/* translators: %1$s: Payment title %2$s: url link %3$s: button text %4$s: barcode */
+					__( '%1$s:<br> PDF 📁: <a href="%2$s" target="_blank" style="font-weight: bold">%3$s</a>.<br><br><b>Barcode 📦:</b> <div class="barcode" style="display:block">%4$s</div><a href="#" id="copy-barcode" style="display:table;margin: 10px auto 0;" class="button button-primary">Copy</a>', 'virtuaria-pagseguro' ),
+					__( 'PagSeguro Bank Slip', 'virtuaria-pagseguro' ),
 					esc_url( $link ),
-					__( 'Imprimir o boleto bancário', 'virtuaria-pagseguro' ),
+					__( 'Print the bank slip', 'virtuaria-pagseguro' ),
 					esc_html( $bar_code )
 				)
 			);
@@ -219,7 +221,7 @@ trait Virtuaria_PagSeguro_Ticket {
 
 		if ( $order && ! $order->get_meta( '_paid_webhook', true ) ) {
 			$order->add_order_note(
-				__( 'PagSeguro Boleto: o limite de tempo para pagamento deste pedido expirou.', 'virtuaria-pagseguro' )
+				__( 'PagSeguro Bank Slip: the time limit for payment of this order has expired.', 'virtuaria-pagseguro' )
 			);
 
 			$order->update_status( 'cancelled' );

@@ -25,8 +25,8 @@ class Virtuaria_Marketing_Page {
 	public function add_submenu_marketing() {
 		add_submenu_page(
 			'virtuaria_pagseguro',
-			'Virtuaria Marketing',
-			'Virtuaria Marketing',
+			__( 'Virtuaria Marketing', 'virtuaria-pagseguro' ),
+			__( 'Virtuaria Marketing', 'virtuaria-pagseguro' ),
 			apply_filters(
 				'virtuaria_pagseguro_menu_capability',
 				'remove_users'
@@ -48,39 +48,39 @@ class Virtuaria_Marketing_Page {
 					<tr class="marketing" valign="top">
 						<td>
 							<h2 class="title">
-								Virtuaria Correios - Frete, Etiqueta e Rastreio
+								<?php esc_html_e( 'Virtuaria Correios - Shipping, Label, and Tracking', 'virtuaria-pagseguro' ); ?>
 							</h2>
-							<img src="<?php echo esc_url( VIRTUARIA_PAGSEGURO_URL ) . '/admin/images/entregador-correios.webp' ?>" alt="Correios Entrega">
+							<img src="<?php echo esc_url( VIRTUARIA_PAGSEGURO_URL ) . '/admin/images/entregador-correios.webp'; ?>" alt="Correios Entrega">
 							<p class="description">
-								Os Correios são a principal solução de entrega no Brasil, garantindo que seus produtos cheguem aos clientes de forma rápida e segura.
+								<?php esc_html_e( 'Correios is the main delivery solution in Brazil, ensuring that your products reach customers quickly and safely.', 'virtuaria-pagseguro' ); ?>
 								<h3 class="resources-title">
-									Principais Recursos
+									<?php esc_html_e( 'Main Features', 'virtuaria-pagseguro' ); ?>
 								</h3>
 								<ul class="correios-resources">
-									<li><b>Geração de etiqueta</b> -  Simplifique a logística de envio com a funcionalidade de criação de etiquetas diretamente do painel da sua loja online. Este processo, é também conhecido como pré-postagem ou impressão de rótulo, na nomenclatura dos Correios;</li>
-									<li><b>Cálculo automático de frete</b> - exibe no carrinho e checkout, valor e previsão de entrega do frete para seus clientes;</li>
-									<li><b>Cálculo na página do produto</b> - exibe calculadora de frete na página do produto;</li>
-									<li><b>Rastreamento</b> - permite a visualização dos status da entrega pelo gestor e pelo cliente, nas respectivas telas de detalhes do pedido de cada um.</li>
-									<li><b>Autopreenchimento</b> - com base no CEP informado no checkout, preenche as informações sobre o endereço do cliente.</li>
-									<li><b>Suporte a serviços adicionais dos Correios</b> - Opcionalmente, permite o uso dos serviços: Declaração de Valor, Mãos Próprias e Aviso de Recebimento;</li>
-									<li><b>Suporte a todas as modalidades de entregas do Contrato</b> - permite o uso dos serviços contratados em contrato com os Correios;</li>
-									<li><b>Compatível com Wordpress Multisite</b> - permite configuração unificada para todos os subsites usando os mesmos dados de contrato.</li>
+									<li><b><?php esc_html_e( 'Label generation', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( "- Simplify the shipping logistics with the label creation feature directly from your online store's panel. This process is also known as pre-posting or label printing, in Correios terminology.", 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Automatic freight calculation', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- displays the freight cost and delivery estimate at the cart and checkout for your customers;', 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Product page calculation', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- displays a freight calculator on the product page;', 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Tracking', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- allows the delivery status to be viewed by both the manager and the customer on their respective order details screens.', 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Autofill', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( "- based on the ZIP code provided at checkout, fills in the customer's address information.", 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Support for additional Correios services', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- Optionally allows the use of services such as Declared Value, Hand Delivery, and Delivery Notice.', 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Support for all contracted delivery methods', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- allows the use of services contracted through a Correios agreement;', 'virtuaria-pagseguro' ); ?></li>
+									<li><b><?php esc_html_e( 'Compatible with WordPress Multisite', 'virtuaria-pagseguro' ); ?></b> <?php esc_html_e( '- allows unified configuration for all subsites using the same contract data.', 'virtuaria-pagseguro' ); ?></li>
 								</ul>
 
 								<h3 class="resources-title">
-									Potencializando sua Experiência de Entrega com Correios
+									<?php esc_html_e( 'Enhancing Your Delivery Experience with Correios', 'virtuaria-pagseguro' ); ?>
 								</h3>
-								Ao expandir além dos recursos já robustos oferecidos na versão gratuita, nossa solução premium para integração com o serviço de entrega dos Correios adiciona uma camada de flexibilidade e personalização, capacitando ainda mais os comerciantes online a moldarem suas estratégias de envio de acordo com suas necessidades específicas e o perfil de seus produtos.<br><br>
+								<?php esc_html_e( "Expanding beyond the robust features already offered in the free version, our premium solution for integrating with Correios' delivery service adds a layer of flexibility and customization, further empowering online merchants to tailor their shipping strategies to their specific needs and product profiles.", 'virtuaria-pagseguro' ); ?><br><br>
 
-								<li><b>Preço por Categoria</b> - Tenha o controle total sobre os custos de envio, ajustando os preços de frete com base nas categorias de produtos selecionadas. Seja aumentando, diminuindo ou fixando os preços, essa funcionalidade permite uma abordagem granular e estratégica para gerenciar os custos de envio de acordo com a natureza dos produtos.</li>
-								<li><b>Barra de Progresso para Frete Grátis</b> - Transforme a experiência de compra dos seus clientes, proporcionando uma visualização clara e motivadora do progresso em direção ao frete grátis. Com uma barra de progresso visível no checkout e carrinho, os clientes são incentivados a adicionar mais itens ao carrinho para atingir o valor necessário para a gratuidade do frete, aumentando assim o valor médio do pedido.</li>
-								<li><b>Shortcode [progress_free_shipping]</b> - Flexibilidade é a chave, e com este shortcode, você pode exibir a barra de progresso para frete grátis em qualquer lugar do seu site. Seja na página inicial, em páginas de produtos específicos ou até mesmo em campanhas promocionais, essa ferramenta permite uma integração fluida e adaptável ao layout do seu site.</li>
-								<li><b>Esconder Métodos de Entrega</b> - Simplifique o processo de escolha do cliente ao oferecer frete grátis. Quando o método de envio gratuito está disponível, essa função oculta automaticamente todos os outros métodos de entrega, garantindo uma experiência de compra mais direta e intuitiva.</li>
-								<li><b>Frete Grátis</b> - O frete grátis do plugin permite que os métodos de envio dos Correios tenham um custo zero quando o valor mínimo para obtenção do frete grátis, configurado pelo usuário, é alcançado.</li>
+								<li><b><?php esc_html_e( 'Price by Category', 'virtuaria-pagseguro' ); ?></b><?php esc_html_e( ' - Gain full control over shipping costs by adjusting freight prices based on selected product categories. Whether increasing, decreasing, or fixing prices, this functionality enables a granular and strategic approach to managing shipping costs according to product nature.', 'virtuaria-pagseguro' ); ?></li>
+								<li><b><?php esc_html_e( 'Free Shipping Progress Bar', 'virtuaria-pagseguro' ); ?></b><?php esc_html_e( " - Enhance your customers' shopping experience by providing a clear and motivating view of their progress toward free shipping. With a visible progress bar at checkout and cart, customers are encouraged to add more items to their cart to reach the required amount for free shipping, thus increasing the average order value.", 'virtuaria-pagseguro' ); ?></li>
+								<li><b><?php esc_html_e( 'Shortcode [progress_free_shipping]', 'virtuaria-pagseguro' ); ?></b><?php esc_html_e( " - Flexibility is key, and with this shortcode, you can display the free shipping progress bar anywhere on your site. Whether on the homepage, specific product pages, or even in promotional campaigns, this tool allows for seamless and adaptable integration into your site's layout.", 'virtuaria-pagseguro' ); ?></li>
+								<li><b><?php esc_html_e( 'Hide Shipping Methods', 'virtuaria-pagseguro' ); ?></b><?php esc_html_e( " - Simplify the customer's selection process by offering free shipping. When the free shipping method is available, this function automatically hides all other shipping methods, ensuring a more direct and intuitive shopping experience.", 'virtuaria-pagseguro' ); ?></li>
+								<li><b><?php esc_html_e( 'Free Shipping', 'virtuaria-pagseguro' ); ?></b><?php esc_html_e( " - The plugin's free shipping option allows Correios' shipping methods to have zero cost when the minimum value for free shipping, set by the user, is reached.", 'virtuaria-pagseguro' ); ?></li>
 							</p>
 							<br><br>
 							<a class="button button-primary" target="_blank" href="https://virtuaria.com.br/correios-woocommerce-plugin/" target="_blank">
-								Obtenha o Virtuaria Correios
+								<?php esc_html_e( 'Get Virtuaria Correios', 'virtuaria-pagseguro' ); ?>
 							</a>
 						</td>
 					</tr>

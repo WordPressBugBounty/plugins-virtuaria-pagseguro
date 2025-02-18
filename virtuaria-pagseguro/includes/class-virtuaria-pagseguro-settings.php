@@ -37,8 +37,8 @@ class Virtuaria_PagSeguro_Settings {
 		);
 
 		add_menu_page(
-			'Virtuaria PagSeguro',
-			'Virtuaria PagSeguro',
+			__( 'Virtuaria PagSeguro', 'virtuaria-pagseguro' ),
+			__( 'Virtuaria PagSeguro', 'virtuaria-pagseguro' ),
 			$capability,
 			'virtuaria_pagseguro',
 			array( $this, 'main_setting_screen' ),
@@ -47,8 +47,8 @@ class Virtuaria_PagSeguro_Settings {
 
 		add_submenu_page(
 			'virtuaria_pagseguro',
-			'Integração',
-			'Integração',
+			__( 'Integration', 'virtuaria-pagseguro' ),
+			__( 'Integration', 'virtuaria-pagseguro' ),
 			$capability,
 			'virtuaria_pagseguro'
 		);
@@ -57,30 +57,30 @@ class Virtuaria_PagSeguro_Settings {
 		if ( isset( $options['payment_form'] ) && 'separated' === $options['payment_form'] ) {
 			add_submenu_page(
 				'virtuaria_pagseguro',
-				'Crédito',
-				'Crédito',
+				__( 'Credit', 'virtuaria-pagseguro' ),
+				__( 'Credit', 'virtuaria-pagseguro' ),
 				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' )
 			);
 			add_submenu_page(
 				'virtuaria_pagseguro',
-				'Pix',
-				'Pix',
+				__( 'Pix', 'virtuaria-pagseguro' ),
+				__( 'Pix', 'virtuaria-pagseguro' ),
 				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' )
 			);
 			add_submenu_page(
 				'virtuaria_pagseguro',
-				'Boleto',
-				'Boleto',
+				__( 'Bank Slip', 'virtuaria-pagseguro' ),
+				__( 'Bank Slip', 'virtuaria-pagseguro' ),
 				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' )
 			);
 		} else {
 			add_submenu_page(
 				'virtuaria_pagseguro',
-				'Crédito, Pix e Boleto',
-				'Crédito, Pix e Boleto',
+				__( 'Credit, Pix and Bank Slip', 'virtuaria-pagseguro' ),
+				__( 'Credit, Pix and Bank Slip', 'virtuaria-pagseguro' ),
 				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' )
 			);
@@ -89,8 +89,8 @@ class Virtuaria_PagSeguro_Settings {
 		if ( ! class_exists( 'Virtuaria_PagBank_Split' ) ) {
 			add_submenu_page(
 				'virtuaria_pagseguro',
-				'Split',
-				'Split',
+				__( 'Split', 'virtuaria-pagseguro' ),
+				__( 'Split', 'virtuaria-pagseguro' ),
 				$capability,
 				'virtuaria_pagbank_split',
 				array( $this, 'split_settings' )
@@ -117,11 +117,11 @@ class Virtuaria_PagSeguro_Settings {
 					<tr class="split-install" valign="top">
 						<td>
 							<p>
-								Split de Pagamento é uma forma de pagamento em que o valor total da compra é dividido de maneira automática entre duas ou mais contas do PagBank (PagSeguro).<br><br>
-								É uma solução que pode ser usada para marketplaces, dropshipping, franquias, delivery, entre outros. Ou seja, qualquer modelo de negócio que exige a distribuição de uma parcela do valor da venda entre diferentes contas PagBank.<br><br>
-								O diferencial do nosso plugin de Split de Pagamento reside em sua facilidade de adoção quando comparado a outras soluções do mercado. Trabalhamos duro para desenvolver uma solução inovadora que garante uma integração suave com lojas virtuais baseadas em WooCommerce.<br><br>
-								Na grande maioria das vezes, não será necessário realizar ajustes no tema para habilitar um checkout multilojas eficaz. Isto permite que clientes realizem pagamentos em uma única transação de produtos de vários vendedores (sellers). Esta inovação representa um avanço significativo no mercado de e-commerce, pois é ao mesmo tempo eficiente e extremamente fácil de usar. Ao adotar nosso plugin, os lojistas podem ampliar suas operações de vendas multivendedor com o mínimo esforço técnico.<br><br>
-								Os pagamentos podem ser realizados de forma flexível e segura, utilizando Cartão de Crédito, Pix ou Boleto. <b>Para utilizar este recurso, instale a última versão do plugin Virtuaria PagSeguro Split clicando</b> <a href="https://wordpress.org/plugins/virtuaria-pagbank-split/" target="_blank">aqui</a>.
+								<?php esc_html_e( 'Split Payment is a payment method in which the total purchase amount is automatically divided between two or more PagBank (PagSeguro) accounts.', 'virtuaria-pagseguro' ); ?><br><br>
+								<?php esc_html_e( 'It is a solution that can be used for marketplaces, dropshipping, franchises, delivery, among others. In other words, any business model that requires the distribution of a portion of the sales value between different PagBank accounts.', 'virtuaria-pagseguro' ); ?><br><br>
+								<?php esc_html_e( 'What sets our Split Payment plugin apart is its ease of adoption when compared to other solutions on the market. We have worked hard to develop an innovative solution that ensures smooth integration with WooCommerce-based online stores.', 'virtuaria-pagseguro' ); ?><br><br>
+								<?php esc_html_e( 'In most cases, you won’t need to make any adjustments to your theme to enable an effective multi-store checkout. This allows customers to pay for products from multiple sellers in a single transaction. This innovation represents a significant step forward in the e-commerce market, as it is both efficient and extremely easy to use. By adopting our plugin, retailers can scale their multi-vendor sales operations with minimal technical effort.', 'virtuaria-pagseguro' ); ?><br><br>
+								<?php esc_html_e( 'Payments can be made flexibly and securely, using Credit Card, Pix or Bank Slip.', 'virtuaria-pagseguro' ); ?><b><?php echo wp_kses_post( __( 'To use this feature, install the latest version of the Virtuaria PagSeguro Split plugin by clicking</b> <a href="https://wordpress.org/plugins/virtuaria-pagbank-split/" target="_blank">here</a>.', 'virtuaria-pagseguro' ) ); ?>
 							</p>
 							<img src="<?php echo esc_url( VIRTUARIA_PAGSEGURO_URL ); ?>admin/images/split.jpg" alt="Split" class="split-image" />
 						</td>
@@ -224,12 +224,12 @@ class Virtuaria_PagSeguro_Settings {
 					'navigation',
 					array(
 						'<div class="navigation-tab">
-							<a class="tablinks ' . ( 'virtuaria_pagseguro' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro' ) . '">Integração</a>
-							<a class="tablinks ' . ( 'virt_pagseguro_credit' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' ) . '">Crédito</a>
-							<a class="tablinks ' . ( 'virt_pagseguro_pix' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' ) . '">Pix</a>
-							<a class="tablinks ' . ( 'virt_pagseguro_ticket' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' ) . '">Boleto</a>
-							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">Split</a>
-							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">Correios</a>
+							<a class="tablinks ' . ( 'virtuaria_pagseguro' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro' ) . '">' . esc_html( __( 'Integration', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks ' . ( 'virt_pagseguro_credit' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' ) . '">' . esc_html( __( 'Credit', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks ' . ( 'virt_pagseguro_pix' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' ) . '">' . esc_html( __( 'Pix', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks ' . ( 'virt_pagseguro_ticket' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' ) . '">' . esc_html( __( 'Bank Slip', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">' . esc_html( __( 'Split', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">' . esc_html( __( 'Correios', 'virtuaria-pagseguro' ) ) . '</a>
 						</div>',
 					)
 				);
@@ -239,10 +239,10 @@ class Virtuaria_PagSeguro_Settings {
 					'navigation',
 					array(
 						'<div class="navigation-tab">
-							<a class="tablinks ' . ( 'virtuaria_pagseguro' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro' ) . '">Integração</a>
-							<a class="tablinks ' . ( 'virt_pagseguro' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' ) . '">Pagamento</a>
-							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">Split</a>
-							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">Correios</a>
+							<a class="tablinks ' . ( 'virtuaria_pagseguro' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro' ) . '">' . esc_html( __( 'Integration', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks ' . ( 'virt_pagseguro' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' ) . '">' . esc_html( __( 'Payment', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">' . esc_html( __( 'Split', 'virtuaria-pagseguro' ) ) . '</a>
+							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">' . esc_html( __( 'Correios', 'virtuaria-pagseguro' ) ) . '</a>
 						</div>',
 					)
 				);
@@ -283,14 +283,14 @@ class Virtuaria_PagSeguro_Settings {
 			&& isset( $_GET['section'] )
 			&& in_array( $_GET['section'], $methods, true ) ) ) {
 			echo '<style>#wpfooter{display: block;}</style>';
-			echo '<h4 class="stars">Avalie nosso trabalho ⭐</h4>';
-			echo '<p class="review-us">Apoie o nosso trabalho. Se gostou do plugin, deixe uma avaliação positiva clicando <a href="https://wordpress.org/support/plugin/virtuaria-pagseguro/reviews?rate=5#new-post " target="_blank">aqui</a>. Desde já, nossos agradecimentos.</p>';
-			echo '<h4 class="pagbank">Suporte PagBank 🤝</h4>';
-			echo '<p class="pagbank">Deseja negociar taxas? Use este link para ser atendido por um especialista do PagBank: <a target="_blank" href="https://pagseguro.uol.com.br/campanhas/contato/?parceiro=virtuaria#rmcl">Solicitar Contato do PagBank</a>.</p>';
-			echo '<h4 class="stars">Privacidade ✅</h4>';
-			echo '<p class="disclaimer">Email e domínio do site serão armazenados durante o processo de autorização, para contato e suporte caso necessário. O campo email é opcional.</p>';
-			echo '<h4 class="stars">Tecnologia Virtuaria ✨</h4>';
-			echo '<p class="disclaimer">Desenvolvimento, implantação e manutenção de e-commerces e marketplaces para atacado e varejo. Soluções personalizadas para cada cliente. <a target="_blank" href="https://virtuaria.com.br">Saiba mais</a>.</p>';
+			echo '<h4 class="stars">' . esc_html( __( 'Rate our work ⭐', 'virtuaria-pagseguro' ) ) . '</h4>';
+			echo '<p class="review-us">' . wp_kses_post( __( 'Support our work. If you liked the plugin, leave a positive review by clicking <a href="https://wordpress.org/support/plugin/virtuaria-pagseguro/reviews?rate=5#new-post " target="_blank">here</a>. Thank you in advance.', 'virtuaria-pagseguro' ) ) . '</p>';
+			echo '<h4 class="pagbank">' . esc_html( __( 'PagBank Support', 'virtuaria-pagseguro' ) ) . ' 🤝</h4>';
+			echo '<p class="pagbank">' . wp_kses_post( __( 'Do you want to negotiate rates? Use this link to be assisted by a PagBank specialist: <a target="_blank" href="https://pagseguro.uol.com.br/campanhas/contato/?parceiro=virtuaria#rmcl">Request PagBank Contact</a>.', 'virtuaria-pagseguro' ) ) . '</p>';
+			echo '<h4 class="stars">' . esc_html( __( 'Privacy', 'virtuaria-pagseguro' ) ) . ' ✅</h4>';
+			echo '<p class="disclaimer">' . esc_html( __( 'Email and website domain will be stored during the authorization process, for contact and support if necessary. The email field is optional.', 'virtuaria-pagseguro' ) ) . '</p>';
+			echo '<h4 class="stars">' . esc_html( __( 'Virtuaria Technology', 'virtuaria-pagseguro' ) ) . ' ✨</h4>';
+			echo '<p class="disclaimer">' . wp_kses_post( __( 'Development, implementation and maintenance of e-commerce and marketplaces for wholesale and retail. Customized solutions for each client. <a target="_blank" href="https://virtuaria.com.br">Learn more</a>.', 'virtuaria-pagseguro' ) ) . '</p>';
 		}
 	}
 
@@ -415,7 +415,7 @@ class Virtuaria_PagSeguro_Settings {
 	public function virtuaria_pagseguro_connected() {
 		?>
 		<div class="notice notice-success is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro Conectado!', 'virtuaria-pagseguro' ); ?></p>
+			<p><?php esc_attr_e( 'Virtuaria PagSeguro Connected!', 'virtuaria-pagseguro' ); ?></p>
 		</div>
 		<?php
 	}
@@ -426,7 +426,7 @@ class Virtuaria_PagSeguro_Settings {
 	public function virtuaria_pagseguro_disconnected() {
 		?>
 		<div class="notice notice-success is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro Desconectado!', 'virtuaria-pagseguro' ); ?></p>
+			<p><?php esc_attr_e( 'Virtuaria PagSeguro Disconnected!', 'virtuaria-pagseguro' ); ?></p>
 		</div>
 		<?php
 	}
@@ -437,7 +437,7 @@ class Virtuaria_PagSeguro_Settings {
 	public function virtuaria_pagseguro_failed() {
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro - Falha ao processar operação!', 'virtuaria-pagseguro' ); ?></p>
+			<p><?php esc_attr_e( 'Virtuaria PagSeguro - Operation processing failed!', 'virtuaria-pagseguro' ); ?></p>
 		</div>
 		<?php
 	}
@@ -450,7 +450,15 @@ class Virtuaria_PagSeguro_Settings {
 			?>
 			<div class="notice notice-warning is-dismissible">
 				<p>
-					Virtuaria PagSeguro - Sua conexão com a API do PagSeguro está sendo negada, impedindo a concretização das transações (pagamento, reembolso, etc). Tente reconectar o plugin via página de <a href="<?php echo esc_url( admin_url( 'admin.php?page=virtuaria_pagseguro' ) ); ?>">configuração</a> para renovar a autorização. Para mais detalhes, consulte o log do plugin.
+					<?php
+					echo wp_kses_post(
+						sprintf(
+							/* translators: %s: setting url */
+							__( 'Virtuaria PagSeguro - Your connection to the PagSeguro API is being denied, preventing transactions from being completed (payment, refund, etc.). Try reconnecting the plugin via the <a href="%s">configuration</a> page to renew authorization. For more details, see the plugin log.', 'virtuaria-pagseguro' ),
+							admin_url( 'admin.php?page=virtuaria_pagseguro' )
+						)
+					);
+					?>
 				</p>
 			</div>
 			<?php

@@ -9,27 +9,27 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div id="virt-pagseguro-credit-card-form" class="virt-pagseguro-method-form payment-details">
 	<p id="virt-pagseguro-card-holder-name-field" class="form-row <?php echo esc_attr( $instance->pagseguro_form_class( $card_loaded, $full_width, 'form-row-first' ) ); ?>">
-		<label for="virt-pagseguro-card-holder-name"><?php esc_html_e( 'Titular', 'virtuaria-pagseguro' ); ?> <small>(<?php esc_html_e( 'como no cartão', 'virtuaria-pagseguro' ); ?>)</small> <span class="required">*</span></label>
+		<label for="virt-pagseguro-card-holder-name"><?php esc_html_e( 'Cardholder', 'virtuaria-pagseguro' ); ?> <small>(<?php esc_html_e( 'as on the card', 'virtuaria-pagseguro' ); ?>)</small> <span class="required">*</span></label>
 		<input id="virt-pagseguro-card-holder-name" name="virt_pagseguro_card_holder_name" class="input-text" type="text" autocomplete="off" style="font-size: 1.5em; padding: 8px;" value="<?php echo isset( $_POST['pagseguro_holder_name'] ) ? esc_html( $_POST['pagseguro_holder_name'] ) : ''; ?>"/>
 	</p>
 	<p id="virt-pagseguro-card-number-field" class="form-row <?php echo esc_attr( $instance->pagseguro_form_class( $card_loaded, $full_width, 'form-row-last' ) ); ?>">
-		<label for="virt-pagseguro-card-number"><?php esc_html_e( 'Número do cartão', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
+		<label for="virt-pagseguro-card-number"><?php esc_html_e( 'Card Number', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
 		<input id="virt-pagseguro-card-number" name="virt_pagseguro_card_number" maxlength="16" class="input-text wc-credit-card-form-card-number" type="tel" maxlength="20" autocomplete="off" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" style="font-size: 1.5em; padding: 8px;"  value="<?php echo isset( $_POST['virt_pagseguro_card_number'] ) ? esc_html( $_POST['virt_pagseguro_card_number'] ) : ''; ?>"/>
 	</p>
 	<div class="clear"></div>
 	<p id="virt-pagseguro-card-expiry-field" class="form-row <?php echo esc_attr( $instance->pagseguro_form_class( $card_loaded, $full_width, 'form-row-first' ) ); ?>">
-		<label for="virt-pagseguro-card-expiry"><?php esc_html_e( 'Validade (MM / AAAA)', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
+		<label for="virt-pagseguro-card-expiry"><?php esc_html_e( 'Expiration Date (MM / YYYY)', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
 		<input id="virt-pagseguro-card-expiry" name="virt_pagseguro_card_validate" class="input-text wc-credit-card-form-card-expiry" type="tel" autocomplete="off" placeholder="<?php esc_html_e( 'MM / AAAA', 'virtuaria-pagseguro' ); ?>" style="font-size: 1.5em; padding: 8px;"  value="<?php echo isset( $_POST['virt_pagseguro_card_validate'] ) ? esc_html( $_POST['virt_pagseguro_card_validate'] ) : ''; ?>" maxlength="9"/>
 	</p>
 	<p id="virt-pagseguro-card-cvc-field" class="form-row <?php echo esc_attr( $instance->pagseguro_form_class( $card_loaded, $full_width, 'form-row-last' ) ); ?>">
-		<label for="virt-pagseguro-card-cvc"><?php esc_html_e( 'Código de segurança', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
+		<label for="virt-pagseguro-card-cvc"><?php esc_html_e( 'Security Code', 'virtuaria-pagseguro' ); ?> <span class="required">*</span></label>
 		<input id="virt-pagseguro-card-cvc" name="virt_pagseguro_card_cvc" class="input-text wc-credit-card-form-card-cvc" type="tel" autocomplete="off" placeholder="<?php esc_html_e( 'CVV', 'virtuaria-pagseguro' ); ?>" style="font-size: 1.5em; padding: 8px;"  value="<?php echo isset( $_POST['virt_pagseguro_card_cvc'] ) ? esc_html( $_POST['virt_pagseguro_card_cvc'] ) : ''; ?>"/>
 	</p>
 	<div class="clear"></div>
 	<p id="virt-pagseguro-card-installments-field" class="form-row <?php echo $full_width ? 'form-row-wide' : 'form-row-first'; ?>">
 		<label for="virt-pagseguro-card-installments">
 			<?php
-			esc_html_e( 'Parcelas', 'virtuaria-pagseguro' );
+			esc_html_e( 'Installments', 'virtuaria-pagseguro' );
 
 			if ( $min_installment ) :
 				?>
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 					echo esc_html(
 						sprintf(
 							/* translators: %s: amount */
-							__( 'mínima de R$ %s', 'virtuaria-pagseguro' ),
+							__( 'minimum of R$ %s', 'virtuaria-pagseguro' ),
 							number_format( $min_installment, 2, ',', '.' )
 						)
 					);
@@ -71,7 +71,9 @@ defined( 'ABSPATH' ) || exit;
 						esc_attr( $aux ),
 						esc_attr( $aux ),
 						wp_kses_post( wc_price( $installment / $aux ) ),
-						$has_tax && $fee_from <= $aux ? '(' . wp_kses_post( wc_price( $installment ) ) . ')' : ' sem juros'
+						$has_tax && $fee_from <= $aux
+							? '(' . wp_kses_post( wc_price( $installment ) ) . ')'
+							: esc_html__( ' interest free', 'virtuaria-pagseguro' )
 					);
 				}
 			}
@@ -108,7 +110,7 @@ defined( 'ABSPATH' ) || exit;
 		if ( $card_loaded ) :
 			?>
 			<p id="pagseguro-load-card" class="form-now form-wide">
-				<label for="virt-pagseguro-use-other-card"><?php esc_attr_e( 'Usar outro cartão?', 'virtuaria-pagseguro' ); ?></label>
+				<label for="virt-pagseguro-use-other-card"><?php esc_attr_e( 'Use another card?', 'virtuaria-pagseguro' ); ?></label>
 				<input type="checkbox" name="virt_pagseguro_use_other_card" id="virt-pagseguro-use-other-card" value="yes"/>
 				<input type="hidden" name="virt_pagseguro_save_hash_card" id="virt-pagseguro-save-hash-card" value="yes"/>
 			</p>
@@ -118,7 +120,7 @@ defined( 'ABSPATH' ) || exit;
 				?>
 				<p id="pagseguro-save-card" class="form-now form-wide">
 					<label for="virt-pagseguro-save-hash-card" style="font-size: 12px;">
-						<?php esc_html_e( 'Ao finalizar a compra, permito que a loja memorize esta forma de pagamento.', 'virtuaria-pagseguro' ); ?>
+						<?php esc_html_e( 'When completing the purchase, I allow the store to save this payment method.', 'virtuaria-pagseguro' ); ?>
 					</label>
 					<input type="hidden" name="virt_pagseguro_save_hash_card" id="virt-pagseguro-save-hash-card" value="yes"/>
 				</p>
@@ -126,7 +128,7 @@ defined( 'ABSPATH' ) || exit;
 			else :
 				?>
 				<p id="pagseguro-save-card" class="form-now form-wide">
-					<label for="virt-pagseguro-save-hash-card"><?php esc_html_e( 'Salvar método de pagamento para compras futuras?', 'virtuaria-pagseguro' ); ?></label>
+					<label for="virt-pagseguro-save-hash-card"><?php esc_html_e( 'Save payment method for future purchases?', 'virtuaria-pagseguro' ); ?></label>
 					<input type="checkbox" name="virt_pagseguro_save_hash_card" id="virt-pagseguro-save-hash-card" value="yes"/>
 				</p>
 				<?php

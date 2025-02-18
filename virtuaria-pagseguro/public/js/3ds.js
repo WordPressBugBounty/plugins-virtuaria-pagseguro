@@ -68,8 +68,8 @@ jQuery(document).ready(function($) {
                     phones: [
                         {
                             country: '55',
-                            area: checkoutFormDataObj['billing_phone'].replace(/\D/g, '').substring(0, 2),
-                            number: checkoutFormDataObj['billing_phone'].replace(/\D/g, '').substring(2),
+                            area: removeNonNumeric( checkoutFormDataObj['billing_phone'] ).substring(0, 2),
+                            number: removeNonNumeric( checkoutFormDataObj['billing_phone'] ).substring(2),
                             type: 'MOBILE'
                         }
                     ]
@@ -85,13 +85,13 @@ jQuery(document).ready(function($) {
                     currency: 'BRL'
                 },
                 billingAddress: {
-                    street: checkoutFormDataObj['billing_address_1'].replace(/\s+/g, ' '),
-                    number: checkoutFormDataObj['billing_number'].replace(/\s+/g, ' '),
-                    complement: checkoutFormDataObj['billing_neighborhood'].replace(/\s+/g, ' '),
-                    regionCode: checkoutFormDataObj['billing_state'].replace(/\s+/g, ' '),
+                    street: normalizeSpaces( checkoutFormDataObj['billing_address_1'] ),
+                    number: normalizeSpaces( checkoutFormDataObj['billing_number'] ),
+                    complement: normalizeSpaces( checkoutFormDataObj['billing_neighborhood'] ),
+                    regionCode: normalizeSpaces( checkoutFormDataObj['billing_state'] ),
                     country: 'BRA',
-                    city: checkoutFormDataObj['billing_city'].replace(/\s+/g, ' '),
-                    postalCode: checkoutFormDataObj['billing_postcode'].replace(/\D+/g, '')
+                    city: normalizeSpaces( checkoutFormDataObj['billing_city'] ),
+                    postalCode: removeNonNumeric( checkoutFormDataObj['billing_postcode'] )
                 },
                 dataOnly: false
             }
@@ -237,6 +237,14 @@ jQuery(document).ready(function($) {
     }
 
     function removespecialchars(str) {
-        return str.replace(/[^a-zA-ZÀ-ÿ\s^]/g, '');
+        return str.replace(/[^a-zA-ZÀ-ÿ\s^]/g, '').trim();
+    }
+
+    function normalizeSpaces(str) {
+        return str.replace(/\s+/g, ' ').trim();
+    }
+
+    function removeNonNumeric(str) {
+        return str.replace(/\D/g, '');
     }
 });

@@ -16,35 +16,35 @@ trait Virtuaria_PagSeguro_Common {
 	public function get_default_settings() {
 		$options = array(
 			'enabled'     => array(
-				'title'   => __( 'Habilitar', 'virtuaria-pagseguro' ),
+				'title'   => __( 'Enable', 'virtuaria-pagseguro' ),
 				'type'    => 'checkbox',
 				'label'   => sprintf(
 					/* translators: %s: method title */
-					__( 'Habilita o método de Pagamento %s', 'virtuaria-pagseguro' ),
+					__( 'Enable Payment method %s', 'virtuaria-pagseguro' ),
 					$this->method_title
 				),
 				'default' => 'yes',
 			),
 			'title'       => array(
-				'title'       => __( 'Título', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Title', 'virtuaria-pagseguro' ),
 				'type'        => 'text',
-				'description' => __( 'Isto controla o título exibido ao usuário durante o checkout.', 'virtuaria-pagseguro' ),
+				'description' => __( 'This controls the title displayed to the user during checkout.', 'virtuaria-pagseguro' ),
 				'default'     => __( 'PagSeguro', 'virtuaria-pagseguro' ),
 			),
 			'description' => array(
-				'title'       => __( 'Descrição', 'virtuaria-pagseguro' ),
+				'title'       => __( 'Description', 'virtuaria-pagseguro' ),
 				'type'        => 'textarea',
-				'description' => __( 'Controla a descrição exibida ao usuário durante o checkout.', 'virtuaria-pagseguro' ),
-				'default'     => __( 'Pague com PagSeguro.', 'virtuaria-pagseguro' ),
+				'description' => __( 'Controls the description displayed to the user during checkout.', 'virtuaria-pagseguro' ),
+				'default'     => __( 'Pay with PagSeguro.', 'virtuaria-pagseguro' ),
 			),
 		);
 
 		if ( in_array( $this->id, array( 'virt_pagseguro', 'virt_pagseguro_credit' ), true ) ) {
 			$options += array(
 				'comments' => array(
-					'title'       => __( 'Observações', 'virtuaria-pagseguro' ),
+					'title'       => __( 'Observations', 'virtuaria-pagseguro' ),
 					'type'        => 'textarea',
-					'description' => __( 'Exibe suas observações logo abaixo da descrição na tela de finalização da compra.', 'virtuaria-pagseguro' ),
+					'description' => __( 'Display your comments just below the description on the checkout screen.', 'virtuaria-pagseguro' ),
 					'default'     => '',
 				),
 			);
@@ -58,7 +58,7 @@ trait Virtuaria_PagSeguro_Common {
 	public function get_merchan_setting() {
 		return array(
 			'tecvirtuaria' => array(
-				'title' => __( 'Tecnologia Virtuaria', 'virtuaria-pagseguro' ),
+				'title' => __( 'Virtuaria Technology', 'virtuaria-pagseguro' ),
 				'type'  => 'title',
 			),
 		);
@@ -118,7 +118,8 @@ trait Virtuaria_PagSeguro_Common {
 		}
 
 		$title = $this->global_settings['payment_status'] === $order->get_status()
-			? __( 'Cobrança Adicional', 'virtuaria-pagseguro' ) : __( 'Nova Cobrança', 'virtuaria-pagseguro' );
+			? __( 'Additional Charge', 'virtuaria-pagseguro' )
+			: __( 'New Charge', 'virtuaria-pagseguro' );
 
 		add_meta_box(
 			'pagseguro-additional-charge',
@@ -137,12 +138,14 @@ trait Virtuaria_PagSeguro_Common {
 	 */
 	public function display_additional_charge_content( $post ) {
 		?>
-		<label for="additional-value">Informe o valor a ser cobrado (R$):</label>
+		<label for="additional-value">
+			<?php esc_html_e( 'Enter the amount to be charged (R$):', 'virtuaria-pagseguro' ); ?>
+		</label>
 		<input type="number" style="width:calc(100% - 36px)" name="additional_value" id="additional-value" step="0.01" min="0.1"/>
 		<button id="submit-additional-charge" style="padding: 3px 4px;vertical-align:middle;color:green;cursor:pointer">
 			<span class="dashicons dashicons-money-alt"></span>
 		</button>
-		<label for="reason-charge" style="margin-top: 5px;">Motivo:</label>
+		<label for="reason-charge" style="margin-top: 5px;"><?php esc_html_e( 'Reason:', 'virtuaria-pagseguro' ); ?></label>
 		<input type="text" name="credit_charge_reason" id="reason-charge" style="display:block;max-width:219px;">
 		<style>
 			#submit-additional-charge {
@@ -205,11 +208,27 @@ trait Virtuaria_PagSeguro_Common {
 					$this->add_qrcode_in_note( $order, $qr_code );
 					$validate     = $this->format_pix_validate( $this->pix_validate );
 					$amount      /= 100;
-					$charge_title = $amount == $order->get_total() ? 'Nova Cobrança' : 'Cobrança Extra';
+					$charge_title = $amount == $order->get_total()
+						? __( 'New Charge', 'virtuaria-pagseguro' )
+						: __( 'Extra Charge', 'virtuaria-pagseguro' );
+
 					ob_start();
-					echo '<p>Olá, ' . esc_html( $order->get_billing_first_name() ) . '.</p>';
-					echo '<p><strong>Uma ' . esc_html( mb_strtolower( $charge_title ) )
-						. ' está disponível para seu pedido.</strong></p>';
+					echo '<p>' . esc_html(
+						sprintf(
+							/* translators: %s : billing name */
+							__( 'Hello, %s', 'virtuaria-pagseguro' ),
+							$order->get_billing_first_name()
+						)
+					) . '</p>';
+
+					echo '<p><strong>' . esc_html(
+						sprintf(
+							/* translators: %s: charge title */
+							__( 'A %s is available for your order.', 'virtuaria-pagseguro' ),
+							mb_strtolower( $charge_title )
+						)
+					) . '</strong></p>';
+
 					remove_action(
 						'woocommerce_email_after_order_table',
 						array( $this, 'email_instructions' ),
@@ -231,21 +250,39 @@ trait Virtuaria_PagSeguro_Common {
 						10,
 						3
 					);
+
 					if ( $amount != $order->get_total() ) {
-						echo '<p style="color:green"><strong style="display:block;">Valor da Cobrança Extra: R$ '
-						. number_format( $amount, 2, ',', '.' ) . '.</strong>';
+						echo '<p style="color:green"><strong style="display:block;">' . esc_html(
+							sprintf(
+								/* translators: %s: money amount */
+								__( 'Extra Charge Amount: R$ %s', 'virtuaria-pagseguro' ),
+								number_format( $amount, 2, ',', '.' )
+							)
+						) . '.</strong>';
 					}
+
 					if ( isset( $_POST['charge_reason'] ) && ! empty( $_POST['charge_reason'] ) ) {
-						$reason = 'Motivo: ' . esc_html( sanitize_text_field( wp_unslash( $_POST['charge_reason'] ) ) ) . '.';
+						$reason = sprintf(
+							/* translators: %s: Reason */
+							__( 'Reason: %s.', 'virtuaria-pagseguro' ),
+							sanitize_text_field( wp_unslash( $_POST['charge_reason'] ) )
+						);
 					}
+
 					echo wp_kses_post( $reason ) . '</p>';
 					require_once VIRTUARIA_PAGSEGURO_DIR . 'templates/payment-instructions.php';
 					$message = ob_get_clean();
 
 					$this->send_email(
 						$order->get_billing_email(),
-						'[' . get_bloginfo( 'name' ) . '] ' . $charge_title . ' PIX no Pedido #' . $order_id,
-						'Novo Código de Pagamento Disponível para seu Pedido ',
+						sprintf(
+							/* translators: %1$s: site Name %2$s: change title %3$d: order id */
+							__( '[%1$s] %2$s Pix on Order #%3$d', 'virtuaria-pagseguro' ),
+							get_bloginfo( 'name' ),
+							$charge_title,
+							$order_id
+						),
+						__( 'New Payment Code Available for your Order ', 'virtuaria-pagseguro' ),
 						$message
 					);
 				}
@@ -306,7 +343,7 @@ trait Virtuaria_PagSeguro_Common {
 			&& $order->get_meta( '_charge_id', true ) ) {
 			add_meta_box(
 				'fetch-status',
-				__( 'Consultar PagSeguro', 'virtuaria-pagseguro' ),
+				__( 'Check PagSeguro', 'virtuaria-pagseguro' ),
 				array( $this, 'fetch_order_status_content' ),
 				$this->get_meta_boxes_screen(),
 				'side'
@@ -326,10 +363,14 @@ trait Virtuaria_PagSeguro_Common {
 			? $post->ID
 			: $order->get_id()
 		?>
-		<small>Clique para checar o status de pagamento deste pedido no painel do PagSeguro.</small>
-		<small>O resultado da consulta será exibido nas notas(histórico) do pedido.</small>
+		<small>
+			<?php esc_html_e( 'Click to check the payment status of this order on the PagSeguro panel.', 'virtuaria-pagseguro' ); ?>
+		</small>
+		<small>
+		<?php esc_html_e( 'The result of the query will be displayed in the order notes (history).', 'virtuaria-pagseguro' ); ?>
+		</small>
 		<button id="fetch-order-payment" class="button-primary button">
-			Verificar Status<span class="dashicons dashicons-money-alt" style="vertical-align: middle;margin-left:5px"></span>
+			<?php esc_html_e( 'Check Status', 'virtuaria-pagseguro' ); ?><span class="dashicons dashicons-money-alt" style="vertical-align: middle;margin-left:5px"></span>
 		</button>
 		<input type="hidden" name="fetch_order_payment">
 		<script>
@@ -385,43 +426,47 @@ trait Virtuaria_PagSeguro_Common {
 					switch ( $status ) {
 						case 'AUTHORIZED':
 							$translated = __(
-								'Pré-autorizada. O total do pedido está reservado no cartão de crédito do cliente.',
+								"Pre-authorized. The total order is reserved on the customer's credit card.",
 								'virtuaria-pagseguro'
 							);
 							break;
 						case 'PAID':
 							$translated = __(
-								'Paga.',
+								'Paid.',
 								'virtuaria-pagseguro'
 							);
 							break;
 						case 'IN_ANALYSIS':
 							$translated = __(
-								'Em análise. O comprador optou por pagar com um cartão de crédito e o PagSeguro está analisando o risco da transação.',
+								'Under analysis. The buyer chose to pay with a credit card and PagSeguro is analyzing the risk of the transaction.',
 								'virtuaria-pagseguro'
 							);
 							break;
 						case 'DECLINED':
 							$translated = __(
-								'Negada pelo PagSeguro ou Emissor do Cartão de Crédito.',
+								'Denied by PagSeguro or Credit Card Issuer.',
 								'virtuaria-pagseguro'
 							);
 							break;
 						case 'CANCELED':
 							$translated = __(
-								'Cancelada.',
+								'Cancelled.',
 								'virtuaria-pagseguro'
 							);
 							break;
 						case 'WAITING':
 							$translated = __(
-								'Aguardando Pagamento.',
+								'Waiting for Payment.',
 								'virtuaria-pagseguro'
 							);
 							break;
 					}
 					$order->add_order_note(
-						'Consulta PagSeguro: Transação ' . $translated,
+						sprintf(
+							/* translators: %s: message about transactions status */
+							__( 'PagSeguro Query: Transaction %s', 'virtuaria-pagseguro' ),
+							$translated
+						),
 						0,
 						true
 					);
@@ -431,7 +476,10 @@ trait Virtuaria_PagSeguro_Common {
 
 			if ( ! $status && $order ) {
 				$order->add_order_note(
-					'PagSeguro: Não possível consultar o status de pagamento do pedido. Consulte o log para mais detalhes.',
+					__(
+						'PagSeguro: Unable to check the payment status of the order. See the log for more details.',
+						'virtuaria-pagseguro'
+					),
 					0,
 					true
 				);
@@ -513,7 +561,7 @@ trait Virtuaria_PagSeguro_Common {
 					} else {
 						$order->update_status(
 							$payment_status,
-							__( 'PagSeguro: Pagamento aprovado.', 'virtuaria-pagseguro' )
+							__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
 						);
 					}
 				} else {
@@ -538,7 +586,7 @@ trait Virtuaria_PagSeguro_Common {
 					} else {
 						$order->update_status(
 							'on-hold',
-							__( 'PagSeguro: Aguardando confirmação de pagamento.', 'virtuaria-pagseguro' )
+							__( 'PagSeguro: Waiting for payment confirmation.', 'virtuaria-pagseguro' )
 						);
 					}
 				}
@@ -547,15 +595,15 @@ trait Virtuaria_PagSeguro_Common {
 				if ( $payment_method ) {
 					if ( 'PIX' === $payment_method ) {
 						$order->set_payment_method_title(
-							'PagSeguro Pix'
+							__( 'PagSeguro Pix', 'virtuaria-pagseguro' )
 						);
 					} elseif ( 'CREDIT_CARD' === $payment_method ) {
 						$order->set_payment_method_title(
-							'PagSeguro Crédito'
+							__( 'PagSeguro Credit', 'virtuaria-pagseguro' )
 						);
 					} elseif ( 'BOLETO' === $payment_method ) {
 						$order->set_payment_method_title(
-							'PagSeguro Boleto'
+							__( 'PagSeguro Bank Slip', 'virtuaria-pagseguro' )
 						);
 					}
 					$order->save();
@@ -600,16 +648,13 @@ trait Virtuaria_PagSeguro_Common {
 			if ( isset( $_POST['is_block'] )
 				&& 'yes' === $_POST['is_block'] ) {
 				throw new Exception(
-					__(
-						'Não foi possível processar a sua compra. Por favor, tente novamente mais tarde.',
-						'virtuaria-pagseguro'
-					),
+					'Não foi possível processar a sua compra. Por favor, tente novamente mais tarde',
 					401
 				);
 			} else {
 				wc_add_notice(
 					__(
-						'Não foi possível processar a sua compra. Por favor, tente novamente mais tarde.',
+						'We were unable to process your purchase. Please try again later.',
 						'virtuaria-pagseguro'
 					),
 					'error'
@@ -649,7 +694,7 @@ trait Virtuaria_PagSeguro_Common {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: amount */
-						__( 'PagSeguro: Reembolso de R$%s bem sucedido.', 'virtuaria-pagseguro' ),
+						__( 'PagSeguro: Refund of R$%s successful.', 'virtuaria-pagseguro' ),
 						$amount
 					),
 					0,
@@ -663,7 +708,7 @@ trait Virtuaria_PagSeguro_Common {
 			sprintf(
 				/* translators: %s: amount */
 				__(
-					'PagSeguro: Não foi possível reembolsar R$%s. Verifique o status da transação e o valor a ser reembolsado e tente novamente.',
+					'PagSeguro: Unable to refund R$%s. Check the transaction status and the amount to be refunded and try again..',
 					'virtuaria-pagseguro'
 				),
 				$amount
@@ -760,13 +805,13 @@ trait Virtuaria_PagSeguro_Common {
 					: 0,
 			'pix_offer_text'    => method_exists( $this, 'discount_text' )
 				? $this->discount_text(
-					'PIX',
+					__( 'PIX', 'virtuaria-pagseguro' ),
 					$this->id
 				)
 				: '',
 			'ticket_offer_text' => method_exists( $this, 'discount_text' )
 				? $this->discount_text(
-					'Boleto',
+					__( 'Bank Slip', 'virtuaria-pagseguro' ),
 					$this->id
 				)
 			: '',
@@ -1031,7 +1076,9 @@ trait Virtuaria_PagSeguro_Common {
 				? $this->pix_discount
 				: $this->ticket_discount;
 
-			$title .= '<span class="pix-discount">(desconto de <span class="percentage">'
+			$title .= '<span class="pix-discount">('
+				. __( 'discount of', 'virtuaria-pagseguro' )
+				. '<span class="percentage">'
 				. str_replace( '.', ',', $discount ) . '%</span>)';
 
 			if ( isset( $this->global_settings['payment_form'] )
@@ -1039,8 +1086,8 @@ trait Virtuaria_PagSeguro_Common {
 				&& isset( $this->global_settings['layout_checkout'] )
 				&& 'tabs' === $this->global_settings['layout_checkout'] ) {
 				$title .= 'virt_pagseguro_pix' === $gateway_id
-					? ' no Pix'
-					: ' no Boleto';
+					? __( ' on Pix', 'virtuaria-pagseguro' )
+					: __( ' on Bank Slip', 'virtuaria-pagseguro' );
 			}
 			$title .= '</span>';
 		}
@@ -1094,13 +1141,15 @@ trait Virtuaria_PagSeguro_Common {
 					sprintf(
 						/* translators: %s: categories */
 						_nx(
-							'O desconto do %1$s não é válido para produtos da categoria <span class="categories">%2$s</span>.',
-							'O desconto do %1$s não é válido para produtos das categorias <span class="categories">%2$s</span>.',
+							'The %1$s discount is not valid for products in the <span class="categories">%2$s</span> category.',
+							'The %1$s discount is not valid for products in the <span class="categories">%2$s</span> categories.',
 							count( $category_disabled ),
 							'Checkout',
 							'virtuaria-pagseguro'
 						),
-						'pix' === $method ? 'Pix' : 'Boleto',
+						'pix' === $method
+							? __( 'Pix', 'virtuaria-pagseguro' )
+							: __( 'Bank Slip', 'virtuaria-pagseguro' ),
 						implode( ', ', $category_disabled )
 					)
 				) . '</div>';
@@ -1161,7 +1210,9 @@ trait Virtuaria_PagSeguro_Common {
 			$discount -= $discount_reduce;
 			$discount  = $discount * $discount_percentual;
 			if ( $discount > 0 ) {
-				echo '<span class="discount">Desconto: <b style="color:green;">R$ '
+				echo '<span class="discount">'
+					. esc_html( __( 'Discount: ', 'virtuaria-pagseguro' ) )
+					. '<b style="color:green;">R$ '
 				. esc_html( number_format( $discount, 2, ',', '.' ) )
 				. '</b></span>';
 				echo '<span class="total">Novo total: <b style="color:green">R$ '

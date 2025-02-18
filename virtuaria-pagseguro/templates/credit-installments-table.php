@@ -9,19 +9,19 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <div class="pagseguro-installments">
-	<label for="showTable" class="link">Ver parcelas disponíveis</label>
+	<label for="showTable" class="link"><?php esc_html_e( 'View available plots', 'virtuaria-pagseguro' ); ?></label>
 	<input type="checkbox" id="showTable" style="display: none;">
 
 	<div class="overlay">
 		<label for="showTable" class="overlay-background"></label>
 		<div class="table-pagseguro-installments">
-			<h3 class="title">Parcelas disponíveis <label for="showTable" class="close-btn">×</label></h3>
+			<h3 class="title"><?php esc_html_e( 'Available plots', 'virtuaria-pagseguro' ); ?> <label for="showTable" class="close-btn">×</label></h3>
 			<table>
 				<thead>
 					<tr>
-						<th>Prazo</th>
-						<th>Valor Mensal</th>
-						<th>Total</th>
+						<th><?php esc_html_e( 'Term', 'virtuaria-pagseguro' ); ?></th>
+						<th><?php esc_html_e( 'Monthly Value', 'virtuaria-pagseguro' ); ?></th>
+						<th><?php esc_html_e( 'Total', 'virtuaria-pagseguro' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 					if ( $subtotal >= $min_installment ) {
 						printf(
 							'<tr><td>%s</td><td>R$ %s</td><td>R$ %s</td></tr>',
-							esc_html( $installment ) . 'x ' . ( $with_fee ? 'com juros' : 'sem juros' ),
+							esc_html( $installment ) . 'x ' . ( $with_fee ? esc_html__( 'with interest', 'virtuaria-pagseguro' ) : esc_html__( 'interest free', 'virtuaria-pagseguro' ) ),
 							number_format( $subtotal, 2, ',', '.' ),
 							number_format( $subtotal * $installment, 2, ',', '.' )
 						);

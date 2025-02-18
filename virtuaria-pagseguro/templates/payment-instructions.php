@@ -10,21 +10,31 @@ defined( 'ABSPATH' ) || exit;
 $is_android = ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'com.virtuaria.supertem' === $_SERVER['HTTP_X_REQUESTED_WITH'] );
 ?>
 <div class="pix-payment">
-	<h3 class="validate-warning" style="color: green;">Pague com PIX. O código de pagamento tem validade de <?php echo esc_html( $validate ); ?>.</h3>
+	<h3 class="validate-warning" style="color: green;">
+		<?php
+		printf(
+			/* translators: %s: pix validate */
+			esc_html__( 'Pay with PIX. The payment code is valid for %s.', 'virtuaria-pagseguro' ),
+			esc_html( $validate )
+		);
+		?>
+	</h3>
 
-	<h2 class="on-hold-payment" style="display: none;">Aguardando pagamento <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ); ?>../public/images/loading.png" alt="Spinner" /></h2>
+	<h2 class="on-hold-payment" style="display: none;">
+		<?php esc_html_e( 'Waiting for payment', 'virtuaria-pagseguro' ); ?> <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ); ?>../public/images/loading.png" alt="Spinner" />
+	</h2>
 	<strong style="display: block; margin-top: 10px;">
-		Escaneie este código para pagar
+		<?php esc_html_e( 'Scan this code to pay', 'virtuaria-pagseguro' ); ?>
 	</strong>
 	<ol class="scan-instructions">
-		<li>Acesse seu internet Banking ou app de pagamentos</li>
-		<li>Escolha pagar via PIX</li>
-		<li>Use o seguinte QR Code:</li>
+		<li><?php esc_html_e( 'Access your internet banking or payment app', 'virtuaria-pagseguro' ); ?></li>
+		<li><?php esc_html_e( 'Choose to pay via PIX', 'virtuaria-pagseguro' ); ?></li>
+		<li><?php esc_html_e( 'Use the following QR Code:', 'virtuaria-pagseguro' ); ?></li>
 	</ol>
 	<img style="max-width: 150px; display: block;" src="<?php echo esc_html( $qr_code_png ); ?>" alt="Qr code" />
 	<div class="code-area">
 		<span class="code-text">
-			Ou cole o seguinte código QR para fazer o pagamento ( escolha a opção Pix Copia e Cola no seu Internet Banking ).
+			<?php esc_html_e( 'Or paste the following QR code to make the payment (choose the Pix Copy and Paste option in your Internet Banking).', 'virtuaria-pagseguro' ); ?>
 		</span>
 		<?php
 		if ( $is_android ) :
@@ -38,7 +48,7 @@ $is_android = ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'com.virtuaria.sup
 			<div id="pix-code">
 				<span class="pix"><?php echo esc_html( $qr_code ); ?></span>
 			</div>
-			<button class="copy-pix">Copiar código</button>
+			<button class="copy-pix"><?php esc_html_e( 'Copy code', 'virtuaria-pagseguro' ); ?></button>
 			<div class="pix-copied" style="color:green;"></div>
 			<?php
 		endif;
