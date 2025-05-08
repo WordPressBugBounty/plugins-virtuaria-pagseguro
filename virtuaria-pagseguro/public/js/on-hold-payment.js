@@ -1,6 +1,23 @@
 jQuery(document).ready(function() {
-    setTimeout(function(){
-        setInterval(fetch_payment_status, 8000);
+    setTimeout(function() {
+        let delay = 10000;
+        let interaction = 1;
+
+        function fetchAndSchedule() {
+            if ( interaction > 7 ) {
+                return;
+            }
+            fetch_payment_status();
+
+            setTimeout(fetchAndSchedule, delay);
+            delay *= 2;
+
+            console.log( 'Busca de status de pagamento pela ' + interaction + 'vez' );
+
+            ++interaction;
+        }
+
+        fetchAndSchedule();
     }, 20000);
 });
 

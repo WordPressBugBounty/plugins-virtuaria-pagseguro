@@ -343,4 +343,25 @@ trait Virtuaria_PagSeguro_Pix {
 			}
 		}
 	}
+
+	/**
+	 * Schedule a event to confirm payment pix.
+	 *
+	 * @param wc_order $order the order.
+	 */
+	public function confirm_payment_pix( wc_order $order ) {
+		$args = array(
+			$order->get_id(),
+			strtotime( 'now' ) + $this->pix_validate,
+		);
+
+		if ( ! wp_next_scheduled( 'virtuaria_pagseguro_pix_confirm_payment', $args ) ) {
+			wp_schedule_event(
+				strtotime( 'now' ),
+				'every_ten_minutes',
+				'virtuaria_pagseguro_pix_confirm_payment',
+				$args
+			);
+		}
+	}
 }

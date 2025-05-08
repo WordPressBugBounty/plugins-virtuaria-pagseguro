@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.4.4
+ * Version: 3.4.5
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  *

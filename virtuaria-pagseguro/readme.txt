@@ -3,8 +3,8 @@
 Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
-Tested up to: 6.7.1
-Stable tag: 3.4.4
+Tested up to: 6.8
+Stable tag: 3.4.5
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -299,6 +299,68 @@ Atualmente temos as seguintes opções:
 = 20 - Ao utilizar o 3DS, minha loja estará livre de disputas no PagBank?
 O uso da autenticação 3DS não garante a prevenção de disputas em sua loja online. O programa de proteção ao comprador permanece ativo, exigindo que você mantenha registros de entrega em nome do titular do cartão para contestar possíveis reclamações. No entanto, quando uma transação é autenticada, o banco emissor assume a responsabilidade por chargebacks fraudulentos (Liability shift), proporcionando maior segurança. Além disso, a autenticação 3DS aumenta a taxa de aprovação, reduzindo suspeitas de compras não autorizadas. Importante notar que o 3DS aborda apenas casos de fraude, não questões relacionadas à entrega ou direitos do consumidor, como qualidade do produto/serviço.
 
+= 21 = Problemas na confirmação de pagamento Pix
+Sua loja virtual está configurada para receber confirmações automáticas de pagamento do PagSeguro/PagBank através do plugin Virtuaria PagSeguro, mas essas notificações estão sendo bloqueadas pelo servidor de hospedagem antes mesmo de chegarem ao seu site. Isso acontece porque:
+
+O servidor identifica as notificações como "não seguras"
+O PagSeguro envia as notificações usando um identificador técnico (Go-http-client/2.0), que alguns servidores bloqueiam automaticamente.
+
+Firewalls de segurança estão interferindo
+Muitas hospedagens usam sistemas de proteção (como ModSecurity ou CDN) que podem bloquear requisições de formatos específicos.
+
+Como Resolver?
+Passo 1: Entre em Contato com o Suporte da Sua Hospedagem
+Explique que o servidor está bloqueando as notificações do PagSeguro e solicite:
+
+Adicionar à lista de permissões (whitelist):
+✅ /wc-api/WC_Virtuaria_PagSeguro_Gateway  
+✅ Go-http-client/2.0
+
+Desativar bloqueios temporários:
+Peça para verificarem se o firewall ou CDN está bloqueando requisições para o endpoint:
+
+/wc-api/WC_Virtuaria_PagSeguro_Gateway  
+
+O Que Escrever para o Suporte? Use este modelo:
+
+Assunto: Bloqueio de Notificações do PagSeguro
+
+Olá,
+
+Estou com problemas para receber notificações de pagamento do PagSeguro em minha loja através do plugin Virtuaria PagSeguro.
+
+Detalhes técnicos:
+
+Endpoint bloqueado: /wc-api/WC_Virtuaria_PagSeguro_Gateway
+
+Código de erro no servidor: HTTP 406
+
+utilizado: Go-http-client/2.0
+
+Solicito que:
+
+Adicione à whitelist do firewall
+
+Verifiquem se o endpoint acima está liberado
+
+Segue exemplo do log com o erro:
+15.229.10.19 - - [29/Apr/2025:16:45:06 -0300] "POST /wc-api/WC_Virtuaria_PagSeguro_Gateway HTTP/2.0" 406 226 "-" "Go-http-client/2.0" 
+
+Atenciosamente,
+[Seu Nome]
+
+Importante!
+Se você usa Cloudflare ou CDN:
+Desative temporariamente ou configure regras para não bloquear o User-Agent Go-http-client/2.0.
+
+O plugin Virtuaria PagSeguro está funcionando corretamente:
+O problema não é do plugin, mas sim de configurações de segurança externas.
+
+
+
+
+
+
 == Screenshots ==
 
 1. Configurações do plugin;
@@ -330,11 +392,13 @@ O uso da autenticação 3DS não garante a prevenção de disputas em sua loja o
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.4.5 2025-05-08 =
+* Melhoria - Fallback para confirmação de pagamentos Pix.
 = 3.4.4 2025-02-18 =
 * Melhoria - Atualização das traduções do plugin (.pot, .po e .po);
 * Melhoria - Ajuste no envio de dados ao 3DS.
 = 3.4.2 2025-02-14 =
-* Melhoria - Internacionalização das strings do plugin, atualiação dos aquivos: .pot, .pot e .po.
+* Melhoria - Internacionalização das strings do plugin, atualização dos aquivos: .pot, .pot e .po.
 = 3.4.1 2025-02-10 =
 * Melhoria - Registro de falhas de validação no 3DS em log.
 = 3.4.0 2024-12-23 =

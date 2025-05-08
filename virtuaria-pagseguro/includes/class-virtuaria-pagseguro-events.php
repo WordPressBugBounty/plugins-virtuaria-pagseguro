@@ -51,6 +51,9 @@ class Virtuaria_PagSeguro_Events {
 			'wp_ajax_nopriv_virt_pagseguro_3ds_error',
 			array( $this, 'register_3ds_error' )
 		);
+
+		add_filter( 'cron_schedules', array( $this, 'add_custom_cron_interval' ) );
+		add_action( 'virtuaria_pagseguro_pix_confirm_payment', array( $this, 'confirm_payment_pix' ), 10, 2 );
 	}
 
 	/**
@@ -69,11 +72,33 @@ class Virtuaria_PagSeguro_Events {
 				)
 			);
 
-			if ( $order && $payment_status === $order->get_status() ) {
+			if ( $order
+				&& (
+					$payment_status === $order->get_status()
+					|| $this->is_pix_paid( $order )
+				)
+			) {
 				echo 'success';
 			}
 		}
 		wp_die();
+	}
+
+	/**
+	 * Add custom schedules time.
+	 *
+	 * @param array $schedules the current schedules.
+	 * @return array
+	 */
+	public function add_custom_cron_interval( $schedules ) {
+		if ( ! isset( $schedules['every_ten_minutes'] ) ) {
+			$schedules['every_ten_minutes'] = array(
+				'interval' => 10 * MINUTE_IN_SECONDS,
+				'display'  => 'A cada 10 minutos',
+			);
+		}
+
+		return $schedules;
 	}
 
 	/**
@@ -186,7 +211,6 @@ class Virtuaria_PagSeguro_Events {
 				);
 			}
 
-			var_dump( $this->settings['debug'] );
 			if ( isset( $this->settings['debug'] )
 				&& 'yes' === $this->settings['debug'] ) {
 				$log = wc_get_logger();
@@ -205,6 +229,76 @@ class Virtuaria_PagSeguro_Events {
 			echo 'success';
 		}
 		wp_die();
+	}
+
+	/**
+	 * Confirm payment for a PIX order and update its status.
+	 *
+	 * Clears the scheduled event if the expiration date has passed or if the payment
+	 * has been confirmed as 'PAID'. Checks the payment status through the API and
+	 * updates the order status accordingly.
+	 *
+	 * @param int $order_id The ID of the order to confirm payment for.
+	 * @param int $date_expires The timestamp indicating when the PIX payment expires.
+	 */
+	public function confirm_payment_pix( $order_id, $date_expires ) {
+		$order = wc_get_order( $order_id );
+
+		if ( $date_expires <= time() || ( $order && $order->get_meta( '_charge_id' ) ) ) {
+			wp_clear_scheduled_hook(
+				'virtuaria_pagseguro_pix_confirm_payment',
+				array(
+					$order_id,
+					$date_expires,
+				)
+			);
+			return;
+		}
+
+		if ( $order && $this->is_pix_paid( $order ) ) {
+			wp_clear_scheduled_hook(
+				'virtuaria_pagseguro_pix_confirm_payment',
+				array(
+					$order_id,
+					$date_expires,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Checks the status of a PIX payment and updates the order status accordingly.
+	 *
+	 * Requests the status of a PIX payment using the PagSeguro API and updates the order
+	 * status to the value set in the `payment_status` setting if the payment has been
+	 * confirmed as 'PAID'.
+	 *
+	 * @param WC_Order $order The order object.
+	 */
+	public function is_pix_paid( $order ) {
+		$pagbank_order_id = $order->get_meta( '_pagseguro_order_id' );
+		if ( $pagbank_order_id ) {
+			$api = new WC_Virtuaria_PagSeguro_API(
+				'virt_pagseguro_pix' === $order->get_payment_method()
+				? new WC_Virtuaria_PagSeguro_Gateway_Pix()
+				: new WC_Virtuaria_PagSeguro_Gateway()
+			);
+
+			$charge_id = $api->check_payment_pix( $pagbank_order_id );
+
+			if ( $charge_id ) {
+				$order->update_status(
+					$this->settings['payment_status'],
+					__( 'PagBank: Payment approved.', 'virtuaria-pagseguro' )
+				);
+
+				$order->update_meta_data( '_charge_id', $charge_id );
+
+				$order->save();
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

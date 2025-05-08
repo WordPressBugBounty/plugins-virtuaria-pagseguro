@@ -216,6 +216,7 @@ class WC_Virtuaria_PagSeguro_API {
 			}
 		}
 
+		$pix_discount_applied = false;
 		if ( 'pix' === $posted['payment_mode'] ) {
 			$expiration = new DateTime(
 				wp_date(
@@ -235,7 +236,10 @@ class WC_Virtuaria_PagSeguro_API {
 				);
 			}
 
-			$total = 0 !== $total_discounted ? $total_discounted : $total;
+			if ( 0 !== $total_discounted ) {
+				$total                = $total_discounted;
+				$pix_discount_applied = floatval( $this->gateway->pix_discount ) / 100;
+			}
 
 			$data['body']['qr_codes'][] = array(
 				'amount'          => array(
@@ -362,10 +366,15 @@ class WC_Virtuaria_PagSeguro_API {
 				'virtuaria_pagseguro_split_charges',
 				false,
 				$order,
-				$total
+				$total,
+				$pix_discount_applied
 			);
 
 			if ( $split ) {
+				if ( isset( $split['error'] ) ) {
+					return $split;
+				}
+
 				if ( 'pix' === $posted['payment_mode'] ) {
 					$data['body']['qr_codes'][0]['splits'] = $split;
 				} else {
@@ -1237,6 +1246,53 @@ class WC_Virtuaria_PagSeguro_API {
 	}
 
 	/**
+	 * Get public key using client token.
+	 *
+	 * @param string $pagbank_order the order id.
+	 */
+	public function check_payment_pix( $pagbank_order ) {
+		$request = wp_remote_get(
+			"{$this->endpoint}orders/$pagbank_order",
+			array(
+				'headers' => array(
+					'Authorization'  => 'Bearer ' . $this->gateway->token,
+					'Content-Type'   => 'application/json',
+					'Content-Length' => 0,
+				),
+			)
+		);
+
+		if ( $this->debug_on ) {
+			$this->gateway->log->add(
+				$this->tag,
+				'Resposta do servidor ao consultar pagamento pix ' . $pagbank_order . ': ' . wp_json_encode( $request ),
+				WC_Log_Levels::INFO
+			);
+		}
+
+		if ( is_wp_error( $request ) || ! in_array( wp_remote_retrieve_response_code( $request ), array( 200, 201 ), true ) ) {
+			$error_message = is_wp_error( $request )
+				? $request->get_error_message()
+				: wp_remote_retrieve_body( $request );
+			if ( $this->debug_on ) {
+				$this->gateway->log->add(
+					$this->tag,
+					'Falha ao consultar pagamento pix: ' . $error_message,
+					WC_Log_Levels::ERROR
+				);
+			}
+			return false;
+		}
+
+		$request = json_decode( wp_remote_retrieve_body( $request ), true );
+
+		return isset( $request['charges'][0]['status'], $request['charges'][0]['id'] )
+			&& 'PAID' === $request['charges'][0]['status']
+			? $request['charges'][0]['id']
+			: false;
+	}
+
+	/**
 	 * Get the 3DS session from the server.
 	 *
 	 * @param bool $retry Whether to retry if the session retrieval fails.
@@ -1506,6 +1562,19 @@ class WC_Virtuaria_PagSeguro_API {
 
 		if ( ! $order->get_billing_address_2() ) {
 			unset( $data['body']['shipping']['address']['complement'] );
+		}
+
+		if ( class_exists( 'Virtuaria_PagBank_Split' ) ) {
+			$split = apply_filters(
+				'virtuaria_pagseguro_split_subscription_charges',
+				false,
+				$order,
+				$amount
+			);
+
+			if ( $split ) {
+				$data['body']['charges'][0]['splits'] = $split;
+			}
 		}
 
 		if ( $this->debug_on ) {

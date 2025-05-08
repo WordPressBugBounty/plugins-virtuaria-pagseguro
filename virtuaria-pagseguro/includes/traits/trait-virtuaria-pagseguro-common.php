@@ -569,6 +569,10 @@ trait Virtuaria_PagSeguro_Common {
 						$this->check_payment_pix( $order );
 					}
 
+					if ( method_exists( $this, 'confirm_payment_pix' ) ) {
+						$this->confirm_payment_pix( $order );
+					}
+
 					if ( method_exists( $this, 'register_pdf_link_note' ) ) {
 						$this->register_pdf_link_note( $order );
 					}
