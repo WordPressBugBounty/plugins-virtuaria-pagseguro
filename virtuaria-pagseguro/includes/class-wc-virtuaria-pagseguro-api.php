@@ -190,10 +190,6 @@ class WC_Virtuaria_PagSeguro_API {
 			? 'yes' === $this->gateway->global_settings['ignore_shipping_address']
 			: false;
 
-		if ( ! $order->get_meta( '_billing_neighborhood' ) && ! $ignore_address ) {
-			return array( 'error' => __( 'The <b>Neighborhood</b> field is required!', 'virtuaria-pagseguro' ) );
-		}
-
 		if ( $ignore_address ) {
 			unset( $data['body']['shipping'] );
 		}

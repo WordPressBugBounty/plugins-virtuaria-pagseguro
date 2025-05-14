@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.4.5
+ * Version: 3.5.0
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  *
@@ -66,7 +66,7 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				$this->settings = get_option( 'woocommerce_virt_pagseguro_settings' );
 				$this->load_dependecys();
 				add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
-				// add_action( 'woocommerce_blocks_loaded', array( $this, 'virtuaria_pagseguro_woocommerce_block_support' ) );
+				add_action( 'woocommerce_blocks_loaded', array( $this, 'virtuaria_pagseguro_woocommerce_block_support' ) );
 			} else {
 				add_action( 'admin_notices', array( $this, 'missing_dependency' ) );
 			}
@@ -156,7 +156,16 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		 * Load the plugin text domain for translation.
 		 */
 		public function load_plugin_textdomain() {
-			load_plugin_textdomain( 'virtuaria-pagseguro', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+			$current_version  = get_bloginfo( 'version' );
+			$required_version = '6.8';
+
+			if ( version_compare( $current_version, $required_version, '<' ) ) {
+				load_plugin_textdomain(
+					'virtuaria-pagseguro',
+					false,
+					dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+				);
+			}
 		}
 
 		/**
@@ -223,25 +232,40 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		 */
 		public function virtuaria_pagseguro_woocommerce_block_support() {
 			if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
-				require_once 'includes/blocks/class-virtuaria-pagseguro-abstract-block.php';
-				if ( isset( $this->settings['payment_form'] )
-					&& 'separated' === $this->settings['payment_form'] ) {
-					require_once 'includes/blocks/class-virtuaria-pagseguro-credit-block.php';
-				} else {
-					require_once 'includes/blocks/class-virtuaria-pagseguro-unified-block.php';
-				}
+				$this->load_block_dependencies();
 
 				add_action(
 					'woocommerce_blocks_payment_method_type_registration',
-					function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+					function ( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
 						if ( isset( $this->settings['payment_form'] )
 							&& 'separated' === $this->settings['payment_form'] ) {
 							$payment_method_registry->register( new Virtuaria_PagSeguro_Credit_Block() );
+							$payment_method_registry->register( new Virtuaria_PagSeguro_Pix_Block() );
+							$payment_method_registry->register( new Virtuaria_PagSeguro_Ticket_Block() );
 						} else {
 							$payment_method_registry->register( new Virtuaria_PagSeguro_Unified_Block() );
 						}
 					}
 				);
+			}
+		}
+
+		/**
+		 * Loads the dependencies for blocks.
+		 *
+		 * This function is private, to be used only inside the class.
+		 *
+		 * @since 1.0.0
+		 */
+		private function load_block_dependencies() {
+			require_once 'includes/blocks/class-virtuaria-pagseguro-abstract-block.php';
+			if ( isset( $this->settings['payment_form'] )
+				&& 'separated' === $this->settings['payment_form'] ) {
+				require_once 'includes/blocks/class-virtuaria-pagseguro-credit-block.php';
+				require_once 'includes/blocks/class-virtuaria-pagseguro-pix-block.php';
+				require_once 'includes/blocks/class-virtuaria-pagseguro-ticket-block.php';
+			} else {
+				require_once 'includes/blocks/class-virtuaria-pagseguro-unified-block.php';
 			}
 		}
 
@@ -252,7 +276,7 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 			// Check if the required class exists.
 			if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
 				// Declare compatibility for 'cart_checkout_blocks'.
-				// \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 			}
 		}

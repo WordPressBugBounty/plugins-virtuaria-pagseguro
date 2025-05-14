@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.4.5
+Stable tag: 3.5.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -19,6 +19,7 @@ Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso
 ### ✅ **Funcionalidades Principais:**
 
 - **Múltiplos métodos de pagamento**: Suporte a Crédito, Pix e Boleto Bancário;
+- **Compatibilidade com Checkout em Blocos**: Suporte a página de finalização da compra do woocommerce em blocos;
 - **Opções de parcelamento**: Com ou sem juros, configurável no próprio plugin;
 - **Disparo de cobrança extra**: Cobrar um valor adicional do cliente;
 - **Reembolso fácil**: Seja total ou parcial, crédito ou Pix;
@@ -392,6 +393,8 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.5.0 2025-05-14 =
+* Novo - Compatibilidade com checkout em blocos do Woocommerce.
 = 3.4.5 2025-05-08 =
 * Melhoria - Fallback para confirmação de pagamentos Pix.
 = 3.4.4 2025-02-18 =
