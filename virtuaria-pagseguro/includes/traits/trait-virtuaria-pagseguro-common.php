@@ -1184,16 +1184,19 @@ trait Virtuaria_PagSeguro_Common {
 			$discount_percentual  = 0;
 		}
 
-		if ( ( $disabled_with_coupon
-			&& WC()->cart
-			&& count( WC()->cart->get_applied_coupons() ) > 0 )
+		if ( ! isset( WC()->cart )
+			|| ! WC()->cart
+			|| (
+				$disabled_with_coupon
+				&& count( WC()->cart->get_applied_coupons() ) > 0
+			)
 			|| apply_filters( 'virtuaria_pagseguro_disable_discount_by_cart', false, WC()->cart ) ) {
 			return;
 		}
 
 		if ( $discount_percentual > 0 ) {
 			$shipping = 0;
-			if ( isset( WC()->cart ) && WC()->cart->get_shipping_total() > 0 ) {
+			if ( WC()->cart->get_shipping_total() > 0 ) {
 				$shipping = WC()->cart->get_shipping_total();
 			}
 

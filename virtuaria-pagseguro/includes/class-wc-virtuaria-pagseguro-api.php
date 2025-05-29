@@ -102,8 +102,7 @@ class WC_Virtuaria_PagSeguro_API {
 			return array( 'error' => __( '3DS authentication failed, not authorized!', 'virtuaria-pagseguro' ) );
 		}
 
-		$phone = $order->get_billing_phone();
-		$phone = explode( ' ', $phone );
+		$phone = $this->get_array_phone( $order->get_billing_phone() );
 
 		$data = array(
 			'headers' => array(
@@ -118,8 +117,8 @@ class WC_Virtuaria_PagSeguro_API {
 					'tax_id' => preg_replace( '/\D/', '', $order->get_meta( '_billing_cpf' ) ),
 					'phone'  => array(
 						'country' => '55',
-						'area'    => preg_replace( '/\D/', '', $phone[0] ),
-						'number'  => preg_replace( '/\D/', '', $phone[1] ),
+						'area'    => $phone[0],
+						'number'  => $phone[1],
 						'type'    => 'CELLPHONE',
 					),
 				),
@@ -800,6 +799,29 @@ class WC_Virtuaria_PagSeguro_API {
 	}
 
 	/**
+	 * Formats a phone number by separating its components.
+	 *
+	 * This function removes non-digit characters from the input
+	 * phone number and returns an array containing the country code
+	 * and the remaining phone number.
+	 *
+	 * @param string $phone The phone number to format.
+	 *
+	 * @return array An array containing the country code and the remaining phone number.
+	 */
+	private function get_array_phone( $phone ) {
+		$phone = preg_replace(
+			'/\D/',
+			'',
+			$phone
+		);
+
+		$formatted_phone[] = substr( $phone, 0, 2 );
+		$formatted_phone[] = substr( $phone, 2 );
+		return $formatted_phone;
+	}
+
+	/**
 	 * Do additional charge to credit card.
 	 *
 	 * @param wc_order $order  the order.
@@ -846,8 +868,7 @@ class WC_Virtuaria_PagSeguro_API {
 			return;
 		}
 
-		$phone = $order->get_billing_phone();
-		$phone = explode( ' ', $phone );
+		$phone = $this->get_array_phone( $order->get_billing_phone() );
 
 		if ( ! $order->get_meta( '_billing_cpf' ) || 2 == $order->get_meta( '_billing_persontype' ) ) {
 			$tax_id = preg_replace( '/\D/', '', $order->get_meta( '_billing_cnpj' ) );
@@ -868,8 +889,8 @@ class WC_Virtuaria_PagSeguro_API {
 					'tax_id' => $tax_id,
 					'phone'  => array(
 						'country' => '55',
-						'area'    => preg_replace( '/\D/', '', $phone[0] ),
-						'number'  => preg_replace( '/\D/', '', $phone[1] ),
+						'area'    => $phone[0],
+						'number'  => $phone[1],
 						'type'    => 'CELLPHONE',
 					),
 				),
@@ -1413,8 +1434,7 @@ class WC_Virtuaria_PagSeguro_API {
 			return;
 		}
 
-		$phone = $order->get_billing_phone();
-		$phone = explode( ' ', $phone );
+		$phone = $this->get_array_phone( $order->get_billing_phone() );
 
 		if ( ! $order->get_meta( '_billing_cpf' ) || 2 == $order->get_meta( '_billing_persontype' ) ) {
 			$tax_id = preg_replace( '/\D/', '', $order->get_meta( '_billing_cnpj' ) );
@@ -1435,8 +1455,8 @@ class WC_Virtuaria_PagSeguro_API {
 					'tax_id' => $tax_id,
 					'phone'  => array(
 						'country' => '55',
-						'area'    => preg_replace( '/\D/', '', $phone[0] ),
-						'number'  => preg_replace( '/\D/', '', $phone[1] ),
+						'area'    => $phone[0],
+						'number'  => $phone[1],
 						'type'    => 'CELLPHONE',
 					),
 				),

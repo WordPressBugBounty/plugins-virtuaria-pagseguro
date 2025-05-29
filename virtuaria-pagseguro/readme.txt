@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.5.1
+Stable tag: 3.5.3
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -393,6 +393,10 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.5.3 2025–05-29 =
+* Ajuste - Melhoria na aplicação do desconto pix.
+= 3.5.2 2025–05-20 =
+* Melhoria - Formatação do número de telefone.
 = 3.5.1 2025–05-15 =
 * Melhoria - Compatibilidade com carregamento de traduções no Wordpress 6.8+.
 = 3.5.0 2025-05-14 =
