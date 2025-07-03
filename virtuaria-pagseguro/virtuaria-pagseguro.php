@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.5.3
+ * Version: 3.6.0
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  * Text Domain: virtuaria-pagseguro
@@ -38,6 +38,13 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		private $settings;
 
 		/**
+		 * Plugin data.
+		 *
+		 * @var array
+		 */
+		private $plugin_data;
+
+		/**
 		 * Return an instance of this class.
 		 *
 		 * @return object A single instance of this class.
@@ -57,15 +64,15 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		 * @throws Exception Corrupted plugin.
 		 */
 		private function __construct() {
+			$this->plugin_data = $this->get_plugin_data();
 			if ( ! class_exists( 'Extra_Checkout_Fields_For_Brazil' )
 				&& ! class_exists( 'Virtuaria_Correios' ) ) {
 				add_action( 'admin_notices', array( $this, 'missing_extra_checkout_fields' ) );
 			}
 
-			add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+			add_action( 'after_setup_theme', array( $this, 'load_plugin_textdomain' ) );
 			add_action( 'before_woocommerce_init', array( $this, 'declare_compatibilities' ) );
 			if ( class_exists( 'WC_Payment_Gateway' ) ) {
-				$this->settings = get_option( 'woocommerce_virt_pagseguro_settings' );
 				$this->load_dependecys();
 				add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateway' ) );
 				add_action( 'woocommerce_blocks_loaded', array( $this, 'virtuaria_pagseguro_woocommerce_block_support' ) );
@@ -100,6 +107,10 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		 * Load file dependencys.
 		 */
 		private function load_dependecys() {
+			require_once 'includes/virtuaria-auth-sdk.phar';
+			require_once 'includes/class-virtuaria-pagseguro-settings.php';
+			$this->settings = Virtuaria_Pagseguro_Settings::get_settings();
+
 			require_once 'includes/traits/trait-virtuaria-pagseguro-common.php';
 			require_once 'includes/traits/trait-virtuaria-pagseguro-credit.php';
 			require_once 'includes/traits/trait-virtuaria-pagseguro-pix.php';
@@ -114,17 +125,21 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				require_once 'includes/class-wc-virtuaria-pagseguro-gateway.php';
 			}
 
+			if ( \Virtuaria\Plugins\Auth::is_premium(
+				$this->settings['serial'],
+				get_home_url(),
+				'virtuaria-pagseguro',
+				$this->plugin_data['Version']
+			) ) {
+				require_once 'includes/traits/trait-virtuaria-pagseguro-duopay-o.php';
+				require_once 'includes/class-virtuaria-pagseguro-gateway-duopay.php';
+			}
+
 			require_once 'includes/class-virtuaria-pagseguro-handle-notifications.php';
 			require_once 'includes/class-wc-virtuaria-pagseguro-api.php';
-			require_once 'includes/class-virtuaria-pagseguro-settings.php';
 			require_once 'includes/class-virtuaria-pagseguro-events.php';
 			require_once 'includes/class-virtuaria-marketing-page.php';
 
-			if ( ! function_exists( 'get_plugin_data' )
-				&& file_exists( ABSPATH . '/wp-admin/includes/plugin.php' ) ) {
-				require_once ABSPATH . '/wp-admin/includes/plugin.php';
-			}
-			$plugin_data = get_plugin_data( __FILE__, true, false );
 			require_once 'includes/integrity-check.php';
 		}
 
@@ -142,6 +157,11 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 			} else {
 				$methods[] = 'WC_Virtuaria_PagSeguro_Gateway';
 			}
+
+			if ( class_exists( 'Virtuaria_PagSeguro_Gateway_DuoPay' ) ) {
+				$methods[] = 'Virtuaria_PagSeguro_Gateway_DuoPay';
+			}
+
 			return $methods;
 		}
 
@@ -247,6 +267,15 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 						} else {
 							$payment_method_registry->register( new Virtuaria_PagSeguro_Unified_Block() );
 						}
+
+						if ( \Virtuaria\Plugins\Auth::is_premium(
+							$this->settings['serial'],
+							get_home_url(),
+							'virtuaria-pagseguro',
+							$this->plugin_data['Version']
+						) ) {
+							$payment_method_registry->register( new Virtuaria_PagSeguro_DuoPay_Block() );
+						}
 					}
 				);
 			}
@@ -269,6 +298,8 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 			} else {
 				require_once 'includes/blocks/class-virtuaria-pagseguro-unified-block.php';
 			}
+
+			require_once 'includes/blocks/class-virtuaria-pagseguro-duopay-block.php';
 		}
 
 		/**
@@ -281,6 +312,23 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 			}
+		}
+
+		/**
+		 * Retrieves the plugin header data.
+		 *
+		 * If the `get_plugin_data` function does not exist, it will be required from
+		 * the WordPress Core. This is useful for older WordPress versions.
+		 *
+		 * @return array The plugin header data.
+		 */
+		public function get_plugin_data() {
+			if ( ! function_exists( 'get_plugin_data' )
+				&& file_exists( ABSPATH . '/wp-admin/includes/plugin.php' ) ) {
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			}
+
+			return get_plugin_data( __FILE__, true, false );
 		}
 	}
 

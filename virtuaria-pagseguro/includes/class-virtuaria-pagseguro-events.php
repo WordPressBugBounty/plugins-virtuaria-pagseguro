@@ -22,7 +22,7 @@ class Virtuaria_PagSeguro_Events {
 	 * Initialization.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$this->settings = Virtuaria_PagSeguro_Settings::get_settings();
 
 		add_action( 'wp_ajax_fetch_payment_order', array( $this, 'fetch_payment_order' ) );
 		add_action( 'wp_ajax_nopriv_fetch_payment_order', array( $this, 'fetch_payment_order' ) );
@@ -170,7 +170,14 @@ class Virtuaria_PagSeguro_Events {
 			)
 			&& isset( WC()->cart )
 		) {
-			echo esc_html( WC()->cart->total * 100 );
+			if ( isset( $_POST['installments'] ) && ! empty( $_POST['installments'] ) ) {
+				$installments = sanitize_text_field( wp_unslash( $_POST['installments'] ) );
+				echo esc_html( preg_replace( '/\D/', '', $installments ) );
+			} elseif ( ! isset( $_POST['is_duopay'] ) || 'true' !== $_POST['is_duopay'] ) {
+				echo esc_html( WC()->cart->total * 100 );
+			} else {
+				echo esc_html( WC()->session->get( 'virtuaria_pagseguro_duopay_credit_value' ) * 100 );
+			}
 		}
 		wp_die();
 	}
@@ -278,10 +285,16 @@ class Virtuaria_PagSeguro_Events {
 	public function is_pix_paid( $order ) {
 		$pagbank_order_id = $order->get_meta( '_pagseguro_order_id' );
 		if ( $pagbank_order_id ) {
+			if ( 'virt_pagseguro_pix' === $order->get_payment_method() ) {
+				$gateway = new WC_Virtuaria_PagSeguro_Gateway_Pix();
+			} elseif ( 'virt_pagseguro_duopay' === $order->get_payment_method() ) {
+				$gateway = new Virtuaria_PagSeguro_Gateway_DuoPay();
+			} else {
+				$gateway = new WC_Virtuaria_PagSeguro_Gateway();
+			}
+
 			$api = new WC_Virtuaria_PagSeguro_API(
-				'virt_pagseguro_pix' === $order->get_payment_method()
-				? new WC_Virtuaria_PagSeguro_Gateway_Pix()
-				: new WC_Virtuaria_PagSeguro_Gateway()
+				$gateway
 			);
 
 			$charge_id = $api->check_payment_pix( $pagbank_order_id );
@@ -293,6 +306,18 @@ class Virtuaria_PagSeguro_Events {
 				);
 
 				$order->update_meta_data( '_charge_id', $charge_id );
+
+				if ( 'virt_pagseguro_duopay' === $order->get_payment_method() ) {
+					$order->update_meta_data( '_duopay_pix_charge_id', $charge_id );
+
+					$transactions = $order->get_meta( '_duopay_transactions', true );
+
+					$transaction_id = $order->get_meta( '_duopay_pix_transaction_id' );
+					if ( $transactions && $transaction_id ) {
+						$transactions[ $transaction_id ]['charge'] = $charge_id;
+						$order->update_meta_data( '_duopay_transactions', $transactions );
+					}
+				}
 
 				$order->save();
 				return true;

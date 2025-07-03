@@ -35,7 +35,7 @@ abstract class Virtuaria_PagSeguro_Abstract_Block extends AbstractPaymentMethodT
 	 * Initializes the payment method type.
 	 */
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_virt_pagseguro_settings', array() );
+		$this->settings = Virtuaria_PagSeguro_Settings::get_settings();
 		$gateways       = WC()->payment_gateways->payment_gateways();
 		$this->gateway  = $gateways[ $this->name ];
 	}

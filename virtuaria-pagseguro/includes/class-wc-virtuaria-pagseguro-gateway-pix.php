@@ -110,7 +110,7 @@ class WC_Virtuaria_PagSeguro_Gateway_Pix extends WC_Payment_Gateway {
 
 		$this->supports = array( 'products', 'refunds' );
 
-		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$this->global_settings = Virtuaria_PagSeguro_Settings::get_settings();
 
 		// Load the form fields.
 		$this->init_form_fields();

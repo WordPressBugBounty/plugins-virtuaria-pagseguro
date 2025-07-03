@@ -36,7 +36,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 	 * Initialization.
 	 */
 	public function __construct() {
-		$this->settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$this->settings = Virtuaria_PagSeguro_Settings::get_settings();
 		if ( isset( $this->settings['debug'] )
 			&& 'yes' === $this->settings['debug'] ) {
 			if ( function_exists( 'wc_get_logger' ) ) {
@@ -221,8 +221,23 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 									)
 								);
 
+								$is_duopay = 'virt_pagseguro_duopay' === $order->get_payment_method();
+
+								$is_notification_pix = false;
+								if (
+									isset( $request['charges'][0]['payment_method'] )
+									&& 'PIX' === $request['charges'][0]['payment_method']['type']
+								) {
+									$is_notification_pix = true;
+								}
+
 								if ( isset( $this->settings['payment_status'] )
-									&& ! $order->has_status( $this->settings['payment_status'] ) ) {
+									&& ! $order->has_status( $this->settings['payment_status'] )
+									&& (
+										! $is_duopay
+										|| ( $is_duopay && $is_notification_pix )
+									)
+								) {
 									$order->update_status(
 										$this->settings['payment_status'],
 										__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
@@ -248,6 +263,26 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 										'_charge_id',
 										$request['charges'][0]['id']
 									);
+								}
+
+								if ( $is_duopay ) {
+									if ( $is_notification_pix ) {
+										$order->update_meta_data(
+											'_duopay_pix_charge_id',
+											$request['charges'][0]['id']
+										);
+									}
+
+									$transactions = $order->get_meta( '_duopay_transactions', true );
+
+									if (
+										$transactions
+										&& isset( $transactions[ $request['id'] ] )
+										&& ! $transactions[ $request['id'] ]['charge']
+									) {
+										$transactions[ $request['id'] ]['charge'] = $request['charges'][0]['id'];
+										$order->update_meta_data( '_duopay_transactions', $transactions );
+									}
 								}
 
 								if ( ! $is_additional_charge ) {

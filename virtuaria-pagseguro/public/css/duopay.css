@@ -1,0 +1,92 @@
+#virtuaria-pagseguro-duopay-slider.slider-container {
+    margin: 0;
+    padding: 10px 0;
+    font-family: Arial, sans-serif;
+}
+#virtuaria-pagseguro-duopay-slider .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+#virtuaria-pagseguro-duopay-slider .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background-color: #777;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 20px;
+}
+#virtuaria-pagseguro-duopay-slider .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #777;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+#virtuaria-pagseguro-duopay-slider .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #777;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+#virtuaria-pagseguro-duopay-slider .price-display {
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    align-items: center;
+    display: flex;
+    color: #4CAF50;
+}
+.woocommerce-checkout #content #virtuaria-pagseguro-duopay-slider .title {
+    margin: 0px 0 20px;
+    font-size: 16px;
+}
+#pagseguro-payment-virt_pagseguro_duopay .virt-pagseguro-method-form {
+    font-size: 13px;
+}
+#virtuaria-pagseguro-duopay-slider .price-display #price-slider-value {
+    max-width: 90px;
+    color: #4CAF50;
+}
+#virtuaria-pagseguro-duopay-slider .price-display label {
+    margin-bottom: 0;
+    margin-right: 4px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.woocommerce-order .duopay-pix-total {
+    margin-top: 30px;
+    font-size: 22px;
+}
+.woocommerce-order .duopay-pix-total strong {
+    color: green;
+}
+#price-slider-value::-webkit-outer-spin-button,
+#price-slider-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#price-slider-value {
+    -moz-appearance:textfield; /* Firefox */
+}
+.slider-container .title {
+    color: #444;
+    font-size: 17px;
+    margin-bottom: 22px;
+}
+#payment .payment_methods .payment_method_virt_pagseguro_duopay #pagseguro-payment-virt_pagseguro_duopay {
+    margin-top: 10px;
+}
+#payment .payment_methods .payment_method_virt_pagseguro_duopay p {
+    font-size: 17px;
+    margin-bottom: 0;
+}

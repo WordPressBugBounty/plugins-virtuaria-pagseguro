@@ -14,20 +14,22 @@ jQuery(document).ready(function ($) {
 		displayPaymentMethod();
 	});
 
-	$(document).on("click", "#virt-pagseguro-use-other-card", function () {
+	$(document).on("click", "#payment .use-other-card", function () {
 		if ($(this).prop("checked")) {
-			$("#virt-pagseguro-credit-card-form .form-row").removeClass("card-loaded");
+			$(this).parent().parent().find(".form-row").removeClass("card-loaded");
 			$(".card-in-use").hide("fast");
 			$("#pagseguro-payment-virt_pagseguro_credit").removeClass("card-loaded");
+			$("#pagseguro-payment-virt_pagseguro_duopay").removeClass("card-loaded");
 		} else {
-			$("#virt-pagseguro-credit-card-form .form-row").addClass("card-loaded");
+			$(this).parent().parent().find(".form-row").addClass("card-loaded");
 			$(".card-in-use").show("fast");
 			$("#virt-pagseguro-card-installments-field").removeClass("card-loaded");
 			$("#pagseguro-payment-virt_pagseguro_credit").addClass("card-loaded");
+			$("#pagseguro-payment-virt_pagseguro_duopay").addClass("card-loaded");
 		}
 	});
 
-	$(document).on("keyup", "#virt-pagseguro-card-expiry", function () {
+	$(document).on("keyup", ".virt-pagseguro-card-expiry", function () {
 		var v = $(this).val().replace(/\D/g, "");
 
 		v = v.replace(/(\d{2})(\d)/, "$1 / $2");
@@ -35,65 +37,9 @@ jQuery(document).ready(function ($) {
 		$(this).val(v);
 	});
 
-	$(document).on("click", "#place_order", function () {
-		let is_credit_unified   = $('#virt-pagseguro-payment #credit-card:checked').length == 1
-            && $('#payment_method_virt_pagseguro:checked').length == 1;
-		if (
-			encriptation
-			&& ( is_credit_unified
-				|| ( separated.is_separated ) && $('#payment_method_virt_pagseguro_credit').prop('checked') )
-			&& !$("#virt-pagseguro-card-number-field").hasClass("card-loaded")
-		) {
-			var expire = $("#virt-pagseguro-card-expiry").val().split(" / ");
-			try {
-				var card = PagSeguro.encryptCard({
-					publicKey: encriptation.pub_key,
-					holder: $("#virt-pagseguro-card-holder-name").val(),
-					number: $("#virt-pagseguro-card-number").val().replace(/ /g, ""),
-					expMonth: expire[0],
-					expYear: expire[1],
-					securityCode: $("#virt-pagseguro-card-cvc").val(),
-				});
-			} catch (e) {
-				alert("Dados do cartão inválidos.\nVerifique se os dados digitados estão corretos.");
-				return false;
-			}
+	$(document).on("click", "#place_order", tokenizeCard);
 
-			if (card.hasErrors) {
-				let error_codes = [
-					{code: 'INVALID_NUMBER', message: 'Número do cartão inválido'},
-					{
-						code: 'INVALID_SECURITY_CODE',
-						message: 'CVV Inválido. Você deve passar um valor com 3, 4 ou mais dígitos.'
-					},
-					{
-						code: 'INVALID_EXPIRATION_MONTH',
-						message: 'Mês de expiração incorreto. Passe um valor entre 1 e 12.'
-					},
-					{code: 'INVALID_EXPIRATION_YEAR', message: 'Ano de expiração inválido.'},
-					{code: 'INVALID_PUBLIC_KEY', message: 'Chave Pública inválida.'},
-					{code: 'INVALID_HOLDER', message: 'Nome do titular do cartão inválido.'},
-				]
-				//extract error message
-				let error = '';
-				for (let i = 0; i < card.errors.length; i++) {
-					//loop through error codes to find the message
-					for (let j = 0; j < error_codes.length; j++) {
-						if (error_codes[j].code === card.errors[i].code) {
-							error += error_codes[j].message + '\n';
-							break;
-						}
-					}
-				}
-				alert('Erro ao criptografar cartão.\n' + error);
-				return false;
-			}
-
-			$("#virt_pagseguro_encrypted_card").val(card.encryptedCard);
-		}
-	});
-
-	$(document).on('focusout', '#virt-pagseguro-card-expiry', function() {
+	$(document).on('focusout', '#virt-pagseguro-card-expiry, #virt-pagseguro-duopay-card-expiry, #virt-pagseguro-credit-card-expiry', function() {
 		if ( $(this).val().length == 7 ) {
 			var v = $(this).val().replace(/\D/g, "");
 
@@ -104,7 +50,7 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$(document).on('keyup', '#virt-pagseguro-card-number', function() {
+	$(document).on('keyup', '#virt-pagseguro-card-number, #virt-pagseguro-duopay-card-number, #virt-pagseguro-credit-card-number', function() {
 		if ( $(this).val().length > 0 ) {
 			let flag = getCardFlag( $(this).val() );
 
@@ -133,6 +79,7 @@ jQuery(document).ready(function ($) {
 
 function displayPaymentMethod() {
 	jQuery(".virt-pagseguro-method-form").hide();
+	jQuery("#virt-pagseguro-duopay-credit-card-form").show();
 	var method = jQuery(
 		'#virt-pagseguro-payment-methods input[name="payment_mode"]:checked'
 	).val();
@@ -215,3 +162,85 @@ getCardFlag = function(num) {
       }
     }
 };
+
+tokenizeCard = function () {
+	let $ = jQuery.noConflict();
+	let is_credit_unified   = $('#virt-pagseguro-payment #credit-card:checked').length == 1
+		&& $('#payment_method_virt_pagseguro:checked').length == 1;
+	let is_duopay = $('#payment_method_virt_pagseguro_duopay:checked').length == 1;
+	let is_credit_separated = separated.is_separated && $('#payment_method_virt_pagseguro_credit').prop('checked');
+
+	let current_method = '';
+	let is_block = false;
+
+	if ( $('input[name="radio-control-wc-payment-method-options"]:checked').length > 0 ) {
+		current_method = $('input[name="radio-control-wc-payment-method-options"]:checked').val().replaceAll('_', '-') + '-';
+		is_block = true;
+	} else {
+		current_method = $('input[name="payment_method"]:checked').val().replaceAll('_', '-') + '-';
+	}
+
+	if (
+		encriptation
+		&& (
+			is_credit_unified
+			|| is_credit_separated
+			|| is_duopay
+			|| is_block
+		)
+		&& ! $("#" + current_method + "card-number-field").hasClass("card-loaded")
+	) {
+		var expire = $("#" + current_method + "card-expiry").val().split(" / ");
+		try {
+			var card = PagSeguro.encryptCard({
+				publicKey: encriptation.pub_key,
+				holder: $("#" + current_method + "card-holder-name").val(),
+				number: $("#" + current_method + "card-number").val().replace(/ /g, ""),
+				expMonth: expire[0],
+				expYear: expire[1],
+				securityCode: $("#" + current_method + "card-cvc").val(),
+			});
+		} catch (e) {
+			alert("Dados do cartão inválidos.\nVerifique se os dados digitados estão corretos.");
+			return false;
+		}
+
+		if (card.hasErrors) {
+			let error_codes = [
+				{code: 'INVALID_NUMBER', message: 'Número do cartão inválido'},
+				{
+					code: 'INVALID_SECURITY_CODE',
+					message: 'CVV Inválido. Você deve passar um valor com 3, 4 ou mais dígitos.'
+				},
+				{
+					code: 'INVALID_EXPIRATION_MONTH',
+					message: 'Mês de expiração incorreto. Passe um valor entre 1 e 12.'
+				},
+				{code: 'INVALID_EXPIRATION_YEAR', message: 'Ano de expiração inválido.'},
+				{code: 'INVALID_PUBLIC_KEY', message: 'Chave Pública inválida.'},
+				{code: 'INVALID_HOLDER', message: 'Nome do titular do cartão inválido.'},
+			]
+			//extract error message
+			let error = '';
+			for (let i = 0; i < card.errors.length; i++) {
+				//loop through error codes to find the message
+				for (let j = 0; j < error_codes.length; j++) {
+					if (error_codes[j].code === card.errors[i].code) {
+						error += error_codes[j].message + '\n';
+						break;
+					}
+				}
+			}
+			alert('Erro ao criptografar cartão.\n' + error);
+			return false;
+		}
+
+		if ( is_block) {
+			//Blocks
+			$('input[name="radio-control-wc-payment-method-options"]:checked')
+				.parent().parent().find(".virtuaria-pagseguro-token").val(card.encryptedCard);
+		} else {
+			$('input[name="payment_method"]:checked').parent().find(".virtuaria-pagseguro-token").val(card.encryptedCard);
+		}
+	}
+}

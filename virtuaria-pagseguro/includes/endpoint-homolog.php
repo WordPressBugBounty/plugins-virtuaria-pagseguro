@@ -6,7 +6,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-$token = get_option( 'woocommerce_virt_pagseguro_settings' )['token'];
+$token = Virtuaria_PagSeguro_Settings::get_settings()['token'];
 
 if ( isset( $_POST['encriptation_card'] ) && ! empty( $_POST['encriptation_card'] ) ) {
 	$dir      = plugin_dir_path( __FILE__ );

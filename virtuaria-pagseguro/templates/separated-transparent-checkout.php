@@ -13,7 +13,8 @@ defined( 'ABSPATH' ) || exit;
 	<?php
 	switch ( $instance->id ) {
 		case 'virt_pagseguro_credit':
-			require_once 'credit-checkout.php';
+		case 'virt_pagseguro_duopay':
+			require 'credit-checkout.php';
 			break;
 		case 'virt_pagseguro_pix':
 			require_once 'pix-checkout.php';

@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
         }
 
         fetchAndSchedule();
-    }, 20000);
+    }, 10000);
 });
 
 function fetch_payment_status() {

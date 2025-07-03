@@ -139,7 +139,7 @@ class WC_Virtuaria_PagSeguro_Gateway_Credit extends WC_Payment_Gateway {
 			'subscription_amount_changes',
 		);
 
-		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$this->global_settings = Virtuaria_PagSeguro_Settings::get_settings();
 
 		// Load the form fields.
 		$this->init_form_fields();

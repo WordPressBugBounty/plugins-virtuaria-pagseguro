@@ -11,11 +11,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Gateway.
  */
-class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
-	use Virtuaria_PagSeguro_Common,
-	Virtuaria_PagSeguro_Credit,
-	Virtuaria_PagSeguro_Pix,
-	Virtuaria_PagSeguro_Ticket;
+class Virtuaria_PagSeguro_Gateway_DuoPay extends WC_Payment_Gateway {
+	use Virtuaria_PagSeguro_Common;
+	use Virtuaria_PagSeguro_Credit;
+	use Virtuaria_PagSeguro_Pix;
+	use Virtuaria_PagSeguro_DuoPay;
 
 	/**
 	 * Installments.
@@ -53,39 +53,11 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 	public $soft_descriptor;
 
 	/**
-	 * Day to valid payment from ticket.
-	 *
-	 * @var int
-	 */
-	public $ticket_validate;
-
-	/**
 	 * Hours to valid payment from pix.
 	 *
 	 * @var int
 	 */
 	public $pix_validate;
-
-	/**
-	 * True if pix payment is enabled.
-	 *
-	 * @var bool
-	 */
-	public $pix_enable;
-
-	/**
-	 * True if ticket payment is enabled.
-	 *
-	 * @var bool
-	 */
-	public $ticket_enable;
-
-	/**
-	 * True if credit payment is enabled.
-	 *
-	 * @var bool
-	 */
-	public $credit_enable;
 
 	/**
 	 * Percentage from pix discount.
@@ -165,43 +137,57 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 	public $comments;
 
 	/**
-	 * Percentage from ticket discount.
-	 *
-	 * @var float
-	 */
-	public $ticket_discount;
-
-	/**
-	 * True if ticket discount is disabled together coupons.
+	 * Enable credit.
 	 *
 	 * @var bool
 	 */
-	public $ticket_discount_coupon;
+	public $credit_enable;
+
+	/**
+	 * Enable pix.
+	 *
+	 * @var bool
+	 */
+	public $pix_enable;
+
+	/**
+	 * Min percent credit.
+	 *
+	 * @var float
+	 */
+	public $min_percent_credit;
+
+	/**
+	 * Min percent credit.
+	 *
+	 * @var float
+	 */
+	public $max_percent_credit;
 
 	/**
 	 * Constructor for the gateway.
 	 */
 	public function __construct() {
-		$this->id                 = 'virt_pagseguro';
+		$this->id                 = 'virt_pagseguro_duopay';
 		$this->icon               = apply_filters(
 			'woocommerce_pagseguro_virt_icon',
 			VIRTUARIA_PAGSEGURO_URL . '/public/images/pagseguro.png'
 		);
 		$this->has_fields         = true;
-		$this->method_title       = __( 'Virtuaria PagSeguro', 'virtuaria-pagseguro' );
+		$this->method_title       = __( 'Virtuaria PagSeguro Crédito + Pix', 'virtuaria-pagseguro' );
 		$this->method_description = __(
-			'Pay with credit card, pix and bank slip.',
+			'Pay with credit card and pix combined.',
 			'virtuaria-pagseguro'
 		);
 
 		$this->supports = array(
 			'products',
-			'refunds',
-			'subscriptions',
-			'subscription_cancellation',
-			'subscription_suspension',
-			'subscription_reactivation',
-			'subscription_amount_changes',
+			// 'refunds',
+			// 'subscriptions',
+			// 'subscription_cancellation',
+			// 'subscription_suspension',
+			// 'subscription_reactivation',
+			// 'subscription_amount_changes',
 		);
 
 		// Define user set variables.
@@ -212,20 +198,15 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 		$this->min_installment     = $this->get_option( 'min_installment' );
 		$this->fee_from            = $this->get_option( 'fee_from' );
 		$this->soft_descriptor     = $this->get_option( 'soft_descriptor' );
-		$this->ticket_validate     = $this->get_option( 'ticket_validate' );
 		$this->pix_validate        = $this->get_option( 'pix_validate' );
-		$this->pix_enable          = $this->get_option( 'pix_enable' );
-		$this->ticket_enable       = $this->get_option( 'ticket_enable' );
-		$this->credit_enable       = $this->get_option( 'credit_enable' );
 		$this->pix_discount        = $this->get_option( 'pix_discount' );
 		$this->signup_checkout     = 'yes' === get_option( 'woocommerce_enable_signup_and_login_from_checkout' );
 		$this->pix_msg_payment     = $this->get_option( 'pix_msg_payment' );
 		$this->pix_discount_coupon = 'yes' === $this->get_option( 'pix_discount_coupon' );
 		$this->save_card_info      = $this->get_option( 'save_card_info' );
 		$this->comments            = $this->get_option( 'comments' );
-
-		$this->ticket_discount        = $this->get_option( 'ticket_discount' );
-		$this->ticket_discount_coupon = 'yes' === $this->get_option( 'ticket_discount_coupon' );
+		$this->min_percent_credit  = $this->get_option( 'min_percent_credit', 10 ) / 100;
+		$this->max_percent_credit  = $this->get_option( 'max_percent_credit', 10 ) / 100;
 
 		$this->global_settings = Virtuaria_PagSeguro_Settings::get_settings();
 		$this->invoice_prefix  = $this->get_invoice_prefix();
@@ -234,6 +215,10 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 		$this->log = $this->get_log();
 
 		$this->token = $this->get_token();
+
+		$this->credit_enable = true;
+
+		$this->pix_enable = true;
 
 		// Load the form fields.
 		$this->init_form_fields();
@@ -256,18 +241,8 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			array( $this, 'pix_thankyou_page' )
 		);
 		add_action(
-			'woocommerce_thankyou_' . $this->id,
-			array( $this, 'ticket_thankyou_page' )
-		);
-		add_action(
 			'woocommerce_email_after_order_table',
 			array( $this, 'pix_email_instructions' ),
-			10,
-			3
-		);
-		add_action(
-			'woocommerce_email_after_order_table',
-			array( $this, 'ticket_email_instructions' ),
 			10,
 			3
 		);
@@ -280,6 +255,7 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			array( $this, 'public_pix_scripts_styles' )
 		);
 
+		/**
 		// Additional charge.
 		add_action(
 			'add_meta_boxes_' . $this->get_meta_boxes_screen(),
@@ -299,6 +275,7 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			'woocommerce_process_shop_order_meta',
 			array( $this, 'make_pix_payment' )
 		);
+		*/
 
 		add_action(
 			'admin_init',
@@ -311,6 +288,7 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			array( $this, 'billing_neighborhood_required' ),
 			9999
 		);
+		/**
 		add_filter(
 			'virtuaria_pagseguro_disable_discount',
 			array( $this, 'disable_discount_by_product_categoria' ),
@@ -331,21 +309,12 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			array( $this, 'display_total_discounted' )
 		);
 		add_action(
-			'after_virtuaria_ticket_text',
-			array( $this, 'display_total_discounted' )
-		);
-		add_action(
 			'after_virtuaria_pix_validate_text',
 			array( $this, 'info_about_categories' ),
 			20,
 			2
 		);
-		add_action(
-			'after_virtuaria_ticket_text',
-			array( $this, 'info_about_categories' ),
-			20,
-			2
-		);
+		*/
 
 		// Fetch order status.
 		add_action(
@@ -357,6 +326,7 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			array( $this, 'search_order_payment_status' )
 		);
 
+		/**
 		add_action(
 			'woocommerce_single_product_summary',
 			array( $this, 'display_product_installments' )
@@ -379,15 +349,99 @@ class WC_Virtuaria_PagSeguro_Gateway extends WC_Payment_Gateway {
 			10,
 			2
 		);
+		*/
+
+		add_action(
+			'virtuaria_pagseguro_before_credit_card_fields',
+			array( $this, 'displays_choice_total_paid_credit' )
+		);
+
+		add_action(
+			'wp_enqueue_scripts',
+			array( $this, 'add_duopay_styles_and_scripts' )
+		);
+		add_action(
+			'woocommerce_checkout_update_order_review',
+			array( $this, 'save_choose_duopay_credit_total' ),
+			30
+		);
+
+		add_action(
+			'add_meta_boxes_' . $this->get_meta_boxes_screen(),
+			array( $this, 'total_refund_fallbak_transactions_box' ),
+		);
+
+		add_action(
+			'admin_enqueue_scripts',
+			array( $this, 'duopay_admin_scripts' )
+		);
+
+		add_action(
+			'wp_ajax_duopay_fallback_refund_order',
+			array( $this, 'duopay_fallback_refund_order' )
+		);
+
+		add_action(
+			'wp_ajax_choose_duopay_credit_total',
+			array( $this, 'set_choose_duopay_credit_total' )
+		);
+
+		add_action(
+			'woocommerce_thankyou_' . $this->id,
+			array( $this, 'display_pix_current_total' ),
+			9
+		);
 	}
 
 	/**
-	 * Initialise Gateway Settings Form Fields.
+	 * Add styles and scripts for duopay.
+	 *
+	 * @since 1.0.0
 	 */
-	public function init_form_fields() {
-		$this->form_fields = $this->get_default_settings()
-			+ $this->get_credit_default_settings()
-			+ $this->get_ticket_default_settings()
-			+ $this->get_pix_default_settings();
+	public function add_duopay_styles_and_scripts() {
+		wp_enqueue_style(
+			'virtuaria-pagseguro-duopay',
+			VIRTUARIA_PAGSEGURO_URL . 'public/css/duopay.css',
+			array(),
+			filemtime( VIRTUARIA_PAGSEGURO_DIR . 'public/css/duopay.css' )
+		);
+
+		wp_enqueue_script(
+			'virtuaria-pagseguro-duopay',
+			VIRTUARIA_PAGSEGURO_URL . 'public/js/duopay.js',
+			array( 'jquery' ),
+			filemtime( VIRTUARIA_PAGSEGURO_DIR . 'public/js/duopay.js' ),
+			true
+		);
+
+		wp_localize_script(
+			'virtuaria-pagseguro-duopay',
+			'wc_price_formatter_params',
+			array(
+				'currency_format_symbol'       => get_woocommerce_currency_symbol(),
+				'currency_format_decimal_sep'  => esc_attr( wc_get_price_decimal_separator() ),
+				'currency_format_thousand_sep' => esc_attr( wc_get_price_thousand_separator() ),
+				'currency_format_num_decimals' => wc_get_price_decimals(),
+				'currency_format'              => esc_attr(
+					str_replace(
+						array( '%1$s', '%2$s' ),
+						array( '%s', '%v' ),
+						get_woocommerce_price_format()
+					)
+				),
+			)
+		);
+
+		wp_localize_script(
+			'virtuaria-pagseguro-duopay',
+			'virtuaria_pagseguro_installment',
+			array(
+				'tax'       => floatval( str_replace( ',', '.', $this->tax ) ) / 100,
+				'min_value' => $this->min_installment,
+				'max'       => $this->installments,
+				'fee_from'  => $this->fee_from,
+				'ajax_url'  => admin_url( 'admin-ajax.php' ),
+			)
+		);
 	}
 }

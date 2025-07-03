@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.5.3
+Stable tag: 3.6.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -15,6 +15,8 @@ Crédito, Pix e Boleto na sua loja virtual. Mais segurança, menos chargebacks c
 == Description ==
 
 Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso total e parcial, desconto no pix e no boleto, autenticação 3DS, split de pagamento, armazenar método de pagamento, confirmação automática de pagamentos no crédito, pix e boleto, entre muitas outras.
+
+Agora conta com Pagamento Misto, uma modalidade de pagamento que combina o Crédito e Pix para trazer mais flexibilidade e comodidade para as compras online.
 
 ### ✅ **Funcionalidades Principais:**
 
@@ -38,6 +40,10 @@ Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso
 - **Modo de funcionamento**: Permite, via configuração, separar Crédito, Pix e Boleto como métodos de pagamento independentes. Esta opção oferece maior flexibilidade e facilita a integração com sistemas externos e com outros plugins.
 - **Autenticação 3DS** Aumenta a segurança nas transações online com cartão de crédito, reduzindo significativamente os chargebacks ao transferir a responsabilidade para o banco emissor.
 
+## ⭐ PREMIUM
+
+### Pagamento Misto (Crédito + Pix)
+Eleve a experiência de compra da sua loja virtual oferecendo aos cliente a opção de pagamento misto, parte no crédito e parte no pix, em um único pedido, com confirmação automática de ambos os meios de pagamento. Também estão disponíveis opções de reembolsos individuais, parciais ou totais diretamente no painel da sua loja. Configure valores mínimos e máximos para crédito e Pix, garantindo total controle sobre as transações. Além disso, a segurança reforçada com a tecnologia 3DS está mantida, proporcionando proteção avançada para você e seus clientes. Aumente a taxa de conversão do seu ecommerce, adquira a licença premium e ative o Pagamento [Misto em sua loja (link)]( https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
 
 📹 [Playlist do Plugin no Youtube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
 
@@ -51,21 +57,14 @@ Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso
 *Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
 
 
-### ✨ Ativação ###
+### ✨ Conexão Inicial com o PagBank ###
 Este plugin utiliza a API mais moderna Order/Connect de cobrança disponibilizada pelo pagseguro, o que permite configuração e ativação muito mais simples e segura, sem necessidade de gerar chaves via painel do PagSeguro ou abrir chamados.
 
 
 ### 👨🏾‍🎓 Dúvidas & Suporte ###
 - **Veja a nossa lista de dúvidas frequentes em nossa sessão de [FAQ](https://wordpress.org/plugins/virtuaria-pagseguro/#faq);**
 - **Acesse o [fórum do plugin](https://wordpress.org/support/plugin/virtuaria-pagseguro/);**
-- **WhatsApp: +55 79 999312134**
-
-### 🌟 **Suporte Premium** ###
-Mesmo o plugin Virtuaria PagSeguro sendo **gratuito e de código aberto**, entendemos que, às vezes, os usuários podem precisar de assistência especializada. Por isso, oferecemos nosso Suporte Premium.
-
-- **Instalação e configuração completa:** O cliente deverá informar os dados de acesso FTP e Admin da loja onde será feita a instalação/configuração. Caso necessário, poderá ser feita uma conferência via Google Meet previamente agendada. **De ~~R$ 120,00~~ por R$ 80,00 ([Virtuaria Loja de Plugins]( https://virtuaria.com.br/loja/instalacao-e-configuracao/ ))**
-
-- **Suporte Avançado e Desenvolvimento:** Oferecemos desenvolvimento personalizado e suporte técnico especializado para usuários dos nossos plugins, incluindo a personalização de funcionalidades para atender às necessidades específicas do seu negócio. **De ~~R$ 120,00~~ por R$ 80,00 / hora ([Virtuaria Loja de Plugins]( https://virtuaria.com.br/loja/desenvolvimento-e-suporte-plugins-virtuaria/ ))**
+- **Suporte Avançado e Desenvolvimento:** Oferecemos desenvolvimento personalizado e suporte técnico especializado para usuários dos nossos plugins, incluindo a personalização de funcionalidades para atender às necessidades específicas do seu negócio ([Virtuaria Loja de Plugins]( https://virtuaria.com.br/loja/desenvolvimento-e-suporte-plugins-virtuaria/ ))**
 
 ### 💌 **Interessado em algo mais?**
 Contate-nos diretamente em [tecnologia@virtuaria.com.br](mailto:tecnologia@virtuaria.com.br) e garanta uma solução sob medida para suas necessidades.
@@ -178,7 +177,6 @@ Com o plugin instalado acesse o admin do WordPress e entre em "WooCommerce" > "C
 
 = 1 - Qual é a licença do plugin? =
 Este plugin está licenciado como GPLv3. O código é 100% aberto (Open Source). Não disponibilizamos versões PRO com funcionalidades extras.
-
 
 
 = 2 - O que eu preciso para utilizar este plugin? =
@@ -386,13 +384,17 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 20. Layout de finalização em linhas - Pix;
 21. Layout de finalização com métodos separados;
 22. Transações (Virtuaria PagBank Split);
-23. Sellers (Virtuaria PagBank Split).
-24. Autenticação 3DS em ação.
+23. Sellers (Virtuaria PagBank Split);
+24. Autenticação 3DS em ação;
+25. Pagamento com Crédito + Pix.
 
 == Upgrade Notice ==
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.6.0 2025-07-02 =
+* Novo - Suporte a forma de pagamento Duopay;
+* Ajustes - Estabilidade e correção de bugs menores.
 = 3.5.3 2025–05-29 =
 * Ajuste - Melhoria na aplicação do desconto pix.
 = 3.5.2 2025–05-20 =

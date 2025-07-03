@@ -91,7 +91,7 @@ trait Virtuaria_PagSeguro_Common {
 	public function additional_charge_metabox( $post_or_order ) {
 		$order = $this->get_order_from_mixed( $post_or_order );
 
-		$options = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$options = Virtuaria_PagSeguro_Settings::get_settings();
 		$credit  = get_user_meta(
 			$order->get_customer_id(),
 			'_pagseguro_credit_info_store_' . get_current_blog_id(),
@@ -311,11 +311,22 @@ trait Virtuaria_PagSeguro_Common {
 	 * @return string
 	 */
 	private function get_meta_boxes_screen() {
-		return class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' )
+		$screen_id = 'shop_order';
+		if ( class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' )
 			&& wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled()
-			&& function_exists( 'wc_get_page_screen_id' )
-			? wc_get_page_screen_id( 'shop-order' )
-			: 'shop_order';
+		) {
+			if ( ! function_exists( 'wc_get_page_screen_id' ) ) {
+				include_once plugin_dir_path( __FILE__ ) . '../../../woocommerce/includes/admin/wc-admin-functions.php';
+			}
+
+			if ( function_exists( 'wc_get_page_screen_id' ) ) {
+				$screen_id = wc_get_page_screen_id( 'shop-order' );
+			} else {
+				$screen_id = 'woocommerce_page_wc-orders';
+			}
+		}
+
+		return $screen_id;
 	}
 
 	/**
@@ -514,6 +525,45 @@ trait Virtuaria_PagSeguro_Common {
 	}
 
 	/**
+	 * Handle payment failure.
+	 *
+	 * If the checkout block is active, throws an Exception, otherwise, adds
+	 * a notice to the checkout page.
+	 *
+	 * @param string $message The error message.
+	 *
+	 * @return array|string[] The result of the payment, with a `result`
+	 *                        key that is either 'success' or 'fail', and a
+	 *                        `redirect` key that contains the URL to redirect
+	 *                        to.
+	 *
+	 * @throws Exception If the checkout block is active.
+	 */
+	private function handle_payment_failure( $message ) {
+		if ( $this->is_checkout_block() ) {
+			throw new Exception( wp_kses_post( $message ) );
+		}
+
+		wc_add_notice( $message, 'error' );
+		return array(
+			'result'   => 'fail',
+			'redirect' => '',
+		);
+	}
+
+	/**
+	 * Checks if the checkout block is active.
+	 *
+	 * @return boolean true if active, false otherwise.
+	 */
+	private function is_checkout_block() {
+		return WC_Blocks_Utils::has_block_in_page(
+			wc_get_page_id( 'checkout' ),
+			'woocommerce/checkout'
+		);
+	}
+
+	/**
 	 * Process the payment and return the result.
 	 *
 	 * @param int $order_id Order ID.
@@ -521,155 +571,93 @@ trait Virtuaria_PagSeguro_Common {
 	 * @throws Exception Exception in block.
 	 */
 	public function process_payment( $order_id ) {
-		if ( $this->signup_checkout
-			|| $this->valid_checkout_nonce() ) {
-			$order = wc_get_order( $order_id );
-
-			if ( 'virt_pagseguro' !== $this->id ) {
-				switch ( $this->id ) {
-					case 'virt_pagseguro_credit':
-						$_POST['payment_mode'] = 'credit';
-						break;
-					case 'virt_pagseguro_pix':
-						$_POST['payment_mode'] = 'pix';
-						break;
-					case 'virt_pagseguro_ticket':
-						$_POST['payment_mode'] = 'ticket';
-						break;
-				}
-			}
-
-			$paid = $this->api->new_charge( $order, $_POST );
-
-			if ( ! isset( $paid['error'] ) ) {
-				if ( $paid ) {
-					$this->add_installment_fee( $order );
-					$payment_status = isset( $this->global_settings['payment_status'] )
-						? $this->global_settings['payment_status']
-						: 'processing';
-
-					if ( isset( $this->global_settings['process_mode'] )
-						&& 'async' === $this->global_settings['process_mode'] ) {
-						$args = array( $order_id, $payment_status );
-						if ( ! wp_next_scheduled( 'pagseguro_process_update_order_status', $args ) ) {
-							wp_schedule_single_event(
-								strtotime( 'now' ) + 60,
-								'pagseguro_process_update_order_status',
-								$args
-							);
-						}
-					} else {
-						$order->update_status(
-							$payment_status,
-							__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
-						);
-					}
-				} else {
-					if ( method_exists( $this, 'check_payment_pix' ) ) {
-						$this->check_payment_pix( $order );
-					}
-
-					if ( method_exists( $this, 'confirm_payment_pix' ) ) {
-						$this->confirm_payment_pix( $order );
-					}
-
-					if ( method_exists( $this, 'register_pdf_link_note' ) ) {
-						$this->register_pdf_link_note( $order );
-					}
-
-					if ( isset( $this->global_settings['process_mode'] )
-						&& 'async' === $this->global_settings['process_mode'] ) {
-						$args = array( $order_id, 'on-hold' );
-						if ( ! wp_next_scheduled( 'pagseguro_process_update_order_status', $args ) ) {
-							wp_schedule_single_event(
-								strtotime( 'now' ) + 60,
-								'pagseguro_process_update_order_status',
-								$args
-							);
-						}
-					} else {
-						$order->update_status(
-							'on-hold',
-							__( 'PagSeguro: Waiting for payment confirmation.', 'virtuaria-pagseguro' )
-						);
-					}
-				}
-
-				$payment_method = $order->get_meta( '_payment_mode', true );
-				if ( $payment_method ) {
-					if ( 'PIX' === $payment_method ) {
-						$order->set_payment_method_title(
-							__( 'PagSeguro Pix', 'virtuaria-pagseguro' )
-						);
-					} elseif ( 'CREDIT_CARD' === $payment_method ) {
-						$order->set_payment_method_title(
-							__( 'PagSeguro Credit', 'virtuaria-pagseguro' )
-						);
-					} elseif ( 'BOLETO' === $payment_method ) {
-						$order->set_payment_method_title(
-							__( 'PagSeguro Bank Slip', 'virtuaria-pagseguro' )
-						);
-					}
-					$order->save();
-				}
-
-				wc_reduce_stock_levels( $order_id );
-				// Remove cart.
-				WC()->cart->empty_cart();
-
-				return array(
-					'result'   => 'success',
-					'redirect' => $this->get_return_url( $order ),
-				);
-			} else {
-				if ( isset( $_POST['is_block'] )
-					&& 'yes' === $_POST['is_block'] ) {
-					throw new Exception(
-						sprintf(
-							/* translators: %s: error */
-							__( 'PagSeguro: %s', 'virtuaria-pagseguro' ),
-							$paid['error']
-						),
-						401
-					);
-				} else {
-					wc_add_notice(
-						sprintf(
-							/* translators: %s: error */
-							__( 'PagSeguro: %s', 'virtuaria-pagseguro' ),
-							$paid['error']
-						),
-						'error'
-					);
-				}
-
-				return array(
-					'result'   => 'fail',
-					'redirect' => '',
-				);
-			}
-		} else {
-			if ( isset( $_POST['is_block'] )
-				&& 'yes' === $_POST['is_block'] ) {
-				throw new Exception(
-					'Não foi possível processar a sua compra. Por favor, tente novamente mais tarde',
-					401
-				);
-			} else {
-				wc_add_notice(
-					__(
-						'We were unable to process your purchase. Please try again later.',
-						'virtuaria-pagseguro'
-					),
-					'error'
-				);
-			}
-
-			return array(
-				'result'   => 'fail',
-				'redirect' => '',
+		if ( ! $this->signup_checkout
+			&& ! $this->valid_checkout_nonce() ) {
+			return $this->handle_payment_failure(
+				__(
+					'We were unable to process your purchase. Please try again later.',
+					'virtuaria-pagseguro'
+				)
 			);
 		}
+
+		$order = wc_get_order( $order_id );
+		$this->set_payment_mode();
+		$total = $this->get_total_charge( $order );
+
+		// phpcs:ignore
+		$paid = $this->api->new_charge( $order, $_POST, $total );
+
+		if ( isset( $paid['error'] ) ) {
+			return $this->handle_payment_failure(
+				sprintf(
+					/* translators: %s: error */
+					__( 'PagSeguro: %s', 'virtuaria-pagseguro' ),
+					$paid['error']
+				)
+			);
+		}
+
+		if ( $paid ) {
+			$this->add_installment_fee( $order );
+
+			if ( $this->is_duopay_method() ) {
+				$this->set_payment_mode( 'pix' );
+				$paid = $this->api->new_charge(
+					$order,
+					// phpcs:ignore
+					$_POST,
+					$order->get_total() - $total
+				);
+				if ( isset( $paid['error'] ) ) {
+					$refund_value = $total * 100;
+
+					$refunded = $this->process_refund(
+						$order_id,
+						$refund_value,
+						__( 'PagSeguro: Fail pix create order. Do refund to credit payment.', 'virtuaria-pagseguro ' ),
+						'credit'
+					);
+
+					if ( $refunded ) {
+						$order->add_order_note(
+							sprintf(
+								// translators: %s: title.
+								__( '%s: Fail pix create order. Credit payment refunded.', 'virtuaria-pagseguro ' ),
+								$this->title
+							)
+						);
+					}
+
+					return $this->handle_payment_failure(
+						sprintf(
+							/* translators: %s: error */
+							__( 'PagSeguro: %s.', 'virtuaria-pagseguro' ),
+							$paid['error']
+						)
+					);
+				} else {
+					$this->process_unpaid_payment_status( $order );
+				}
+			} else {
+				$this->process_credit_payment_status( $order );
+			}
+		} else {
+			$this->process_unpaid_payment_status( $order );
+		}
+
+		$this->set_payment_method_title( $order );
+
+		wc_reduce_stock_levels( $order_id );
+		// Remove cart.
+		WC()->cart->empty_cart();
+
+		WC()->session->set( 'virtuaria_pagseguro_duopay_credit_value', null );
+
+		return array(
+			'result'   => 'success',
+			'redirect' => $this->get_return_url( $order ),
+		);
 	}
 
 	/**
@@ -678,9 +666,11 @@ trait Virtuaria_PagSeguro_Common {
 	 * @param  int    $order_id Order ID.
 	 * @param  float  $amount Refund amount.
 	 * @param  string $reason Refund reason.
+	 * @param  string $duopay_type Refund duopay type (credit or pix).
+	 * @param  string $chard_id Refund duopay charge id.
 	 * @return boolean True or false based on success, or a WP_Error object.
 	 */
-	public function process_refund( $order_id, $amount = null, $reason = '' ) {
+	public function process_refund( $order_id, $amount = null, $reason = '', $duopay_type = '', $chard_id = '' ) {
 		$order = wc_get_order( $order_id );
 
 		$refundable_status = array(
@@ -689,16 +679,22 @@ trait Virtuaria_PagSeguro_Common {
 			'completed',
 		);
 
+		if ( 'virt_pagseguro_duopay' === $order->get_payment_method() ) {
+			$refundable_status[] = 'on-hold';
+			$refundable_status[] = 'pending'; // Permite o reembolso automático caso haja falha na criação do Pix.
+		}
+
 		if ( $amount
 			&& $amount >= 1
-			&& apply_filters( 'virtuaria_pagseguro_allow_refund', true, $order, $amount )
+			&& apply_filters( 'virtuaria_pagseguro_allow_refund', true, $order, $amount, $reason, $duopay_type )
 			&& in_array( $order->get_status(), $refundable_status, true )
 			&& 'BOLETO' !== $order->get_meta( '_payment_mode' ) ) {
-			if ( $this->api->refund_order( $order_id, $amount ) ) {
+			if ( $this->api->refund_order( $order_id, $amount, $duopay_type, $chard_id ) ) {
 				$order->add_order_note(
 					sprintf(
-						/* translators: %s: amount */
-						__( 'PagSeguro: Refund of R$%s successful.', 'virtuaria-pagseguro' ),
+						/* translators: %1$s: title, %2$s: amount */
+						__( '%1$s: Refund of R$%2$s successful.', 'virtuaria-pagseguro' ),
+						$this->title,
 						$amount
 					),
 					0,
@@ -710,11 +706,12 @@ trait Virtuaria_PagSeguro_Common {
 
 		$order->add_order_note(
 			sprintf(
-				/* translators: %s: amount */
+				/* translators: %1$s: title, %2$s: amount */
 				__(
-					'PagSeguro: Unable to refund R$%s. Check the transaction status and the amount to be refunded and try again..',
+					'%1$s: Unable to refund R$%2$s. Check the transaction status and the amount to be refunded and try again..',
 					'virtuaria-pagseguro'
 				),
+				$this->title,
 				$amount
 			),
 			0,
@@ -745,6 +742,12 @@ trait Virtuaria_PagSeguro_Common {
 		}
 
 		$cart_total = $this->get_order_total();
+		if ( $this->is_duopay_method() ) {
+			$cart_total = $this->get_choose_total_duopay(
+				$this->get_min_credit_value( $cart_total ),
+				$this->get_max_credit_value( $cart_total )
+			);
+		}
 
 		$combo_installments = array();
 		if ( method_exists( $this, 'get_installment_value' ) ) {
@@ -780,6 +783,8 @@ trait Virtuaria_PagSeguro_Common {
 				$card_loaded = true;
 			}
 		}
+
+		$min_value_to_3ds = $this->get_option( '3ds_min_value' );
 
 		$checkou_args = array(
 			'cart_total'        => $cart_total,
@@ -822,14 +827,20 @@ trait Virtuaria_PagSeguro_Common {
 			'card_loaded'       => $card_loaded,
 			'instance'          => $this,
 			'save_card_info'    => isset( $this->save_card_info ) ? $this->save_card_info : false,
+			'method_id'         => $this->id,
+			'is_enabled_3ds'    => 'yes' === $this->get_option( '3ds' )
+				&& ( ! $min_value_to_3ds || $this->get_order_total() >= $min_value_to_3ds ),
 		);
 
 		if ( isset( $this->save_card_info, $pagseguro_card_info ) && $pagseguro_card_info ) {
 			$checkou_args['pagseguro_card_info'] = $pagseguro_card_info;
 		}
 
-		if ( isset( $this->global_settings['payment_form'] )
-			&& 'separated' === $this->global_settings['payment_form'] ) {
+		if (
+			( isset( $this->global_settings['payment_form'] )
+			&& 'separated' === $this->global_settings['payment_form'] )
+			|| 'virt_pagseguro_duopay' === $this->id
+		) {
 			wc_get_template(
 				'separated-transparent-checkout.php',
 				$checkou_args,
@@ -1227,5 +1238,197 @@ trait Virtuaria_PagSeguro_Common {
 				. '</b></span>';
 			}
 		}
+	}
+
+	/**
+	 * Returns the total value of the order, considering the payment method and the number of installments.
+	 *
+	 * @param WC_Order $order the order.
+	 * @return float the total value of the order.
+	 */
+	private function get_total_charge( $order ) {
+		$total        = $order->get_total();
+		$charge_total = method_exists( $this, 'get_choose_total_duopay' )
+			? $this->get_choose_total_duopay(
+				$this->get_min_credit_value( $total ),
+				$this->get_max_credit_value( $total )
+			)
+			: $total;
+
+		if (
+			(
+				$this->signup_checkout
+				|| $this->valid_checkout_nonce()
+			)
+			// phpcs:ignore
+			&& 'credit' === $_POST['payment_mode']
+			// phpcs:ignore
+			&& isset( $_POST[ $this->id . '_installments' ] )
+			// phpcs:ignore
+			&& $this->fee_from <= intval( $_POST[ $this->id . '_installments' ] )
+		) {
+			$total = $this->get_installment_value(
+				$charge_total,
+				// phpcs:ignore
+				intval( $_POST[ $this->id . '_installments' ] )
+			);
+
+			if (
+				method_exists( $this, 'get_choose_total_duopay' )
+				&& ! WC()->session->get( 'virtuaria_pagseguro_duopay_credit_value' )
+			) {
+				WC()->session->set( 'virtuaria_pagseguro_duopay_credit_value', $total );
+			}
+		} else {
+			$total = $charge_total;
+		}
+
+		return $total;
+	}
+
+	/**
+	 * Process credit payment status.
+	 *
+	 * This function is used to set the status of the order based on the payment method.
+	 * If the payment method is credit card, it will set the status to 'processing'.
+	 * If the payment method is not credit card, it will set the status to 'on-hold'.
+	 *
+	 * @param WC_Order $order the order object.
+	 */
+	private function process_credit_payment_status( $order ) {
+		$payment_status = isset( $this->global_settings['payment_status'] )
+			? $this->global_settings['payment_status']
+			: 'processing';
+
+		if ( isset( $this->global_settings['process_mode'] )
+			&& 'async' === $this->global_settings['process_mode'] ) {
+			$args = array( $order->get_id(), $payment_status );
+			if ( ! wp_next_scheduled( 'pagseguro_process_update_order_status', $args ) ) {
+				wp_schedule_single_event(
+					strtotime( 'now' ) + 60,
+					'pagseguro_process_update_order_status',
+					$args
+				);
+			}
+		} else {
+			$order->update_status(
+				$payment_status,
+				__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
+			);
+			$order->save();
+		}
+	}
+
+	/**
+	 * Process unpaid payment status for an order.
+	 *
+	 * This function performs several actions for orders with unpaid status:
+	 * - It checks and confirms payment via PIX if the respective methods are available.
+	 * - It registers a PDF link note for the order if applicable.
+	 * - Updates the order status to 'on-hold' and schedules an event for updating
+	 *   the order status if the process mode is asynchronous.
+	 *
+	 * @param WC_Order $order The order object to process.
+	 */
+	private function process_unpaid_payment_status( $order ) {
+		if ( method_exists( $this, 'check_payment_pix' ) ) {
+			$this->check_payment_pix( $order );
+		}
+
+		if ( method_exists( $this, 'confirm_payment_pix' ) ) {
+			$this->confirm_payment_pix( $order );
+		}
+
+		if ( method_exists( $this, 'register_pdf_link_note' ) ) {
+			$this->register_pdf_link_note( $order );
+		}
+
+		if ( isset( $this->global_settings['process_mode'] )
+			&& 'async' === $this->global_settings['process_mode'] ) {
+			$args = array( $order->get_id(), 'on-hold' );
+			if ( ! wp_next_scheduled( 'pagseguro_process_update_order_status', $args ) ) {
+				wp_schedule_single_event(
+					strtotime( 'now' ) + 60,
+					'pagseguro_process_update_order_status',
+					$args
+				);
+			}
+		} else {
+			$order->update_status(
+				'on-hold',
+				__( 'PagSeguro: Waiting for payment confirmation.', 'virtuaria-pagseguro' )
+			);
+			$order->save();
+		}
+	}
+
+	/**
+	 * Sets the payment method title for the given order.
+	 *
+	 * This is a callback for the `woocommerce_order_get_payment_method_title` filter.
+	 *
+	 * @param WC_Order $order The order object.
+	 */
+	private function set_payment_method_title( $order ) {
+		if ( $this->is_duopay_method() ) {
+			return;
+		}
+
+		$payment_method = $order->get_meta( '_payment_mode', true );
+		if ( $payment_method ) {
+			if ( 'PIX' === $payment_method ) {
+				$order->set_payment_method_title(
+					__( 'PagSeguro Pix', 'virtuaria-pagseguro' )
+				);
+			} elseif ( 'CREDIT_CARD' === $payment_method ) {
+				$order->set_payment_method_title(
+					__( 'PagSeguro Credit', 'virtuaria-pagseguro' )
+				);
+			} elseif ( 'BOLETO' === $payment_method ) {
+				$order->set_payment_method_title(
+					__( 'PagSeguro Bank Slip', 'virtuaria-pagseguro' )
+				);
+			}
+			$order->save();
+		}
+	}
+
+	/**
+	 * Set the payment mode from the given id.
+	 *
+	 * If `$mode` is not empty, it will be used as the payment mode.
+	 * Otherwise, the payment mode will be set based on the payment method id.
+	 *
+	 * @param string $mode The payment mode.
+	 */
+	private function set_payment_mode( $mode = '' ) {
+		if ( $mode ) {
+			$_POST['payment_mode'] = $mode;
+			return;
+		}
+
+		if ( 'virt_pagseguro' !== $this->id ) {
+			switch ( $this->id ) {
+				case 'virt_pagseguro_credit':
+				case 'virt_pagseguro_duopay':
+					$_POST['payment_mode'] = 'credit';
+					break;
+				case 'virt_pagseguro_pix':
+					$_POST['payment_mode'] = 'pix';
+					break;
+				case 'virt_pagseguro_ticket':
+					$_POST['payment_mode'] = 'ticket';
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Check if the current payment method is duopay.
+	 *
+	 * @return bool
+	 */
+	public function is_duopay_method() {
+		return 'virt_pagseguro_duopay' === $this->id;
 	}
 }

@@ -72,17 +72,9 @@ class WC_Virtuaria_PagSeguro_API {
 	 *
 	 * @param wc_order $order  the order.
 	 * @param array    $posted the data to charge.
+	 * @param float    $total  the total to charge.
 	 */
-	public function new_charge( $order, $posted ) {
-		if ( 'credit' === $posted['payment_mode']
-			&& $this->gateway->fee_from <= intval( $posted['virt_pagseguro_installments'] ) ) {
-			$total = $this->gateway->get_installment_value(
-				$order->get_total(),
-				intval( $posted['virt_pagseguro_installments'] )
-			);
-		} else {
-			$total = $order->get_total();
-		}
+	public function new_charge( $order, $posted, $total ) {
 		$total = number_format( $total, 2, '', '' );
 
 		$min_value_to_3ds = floatval(
@@ -96,8 +88,8 @@ class WC_Virtuaria_PagSeguro_API {
 		if ( 'credit' === $posted['payment_mode']
 			&& 'yes' === $this->gateway->get_option( '3ds' )
 			&& ( ! $min_value_to_3ds || ( $total / 100 ) >= $min_value_to_3ds )
-			&& ( ! isset( $posted['virt_pagseguro_auth_3ds'] )
-			|| ! $posted['virt_pagseguro_auth_3ds'] )
+			&& ( ! isset( $posted[ $this->gateway->id . '_auth_3ds' ] )
+			|| ! $posted[ $this->gateway->id . '_auth_3ds' ] )
 			&& 'no' === $this->gateway->get_option( 'confirm_sell' ) ) {
 			return array( 'error' => __( '3DS authentication failed, not authorized!', 'virtuaria-pagseguro' ) );
 		}
@@ -257,7 +249,7 @@ class WC_Virtuaria_PagSeguro_API {
 			);
 
 			if ( 'CREDIT_CARD' === $data['body']['charges'][0]['payment_method']['type'] ) {
-				$data['body']['charges'][0]['payment_method']['installments']    = intval( $posted['virt_pagseguro_installments'] );
+				$data['body']['charges'][0]['payment_method']['installments']    = intval( $posted[ $this->gateway->id . '_installments' ] );
 				$data['body']['charges'][0]['payment_method']['capture']         = true;
 				$data['body']['charges'][0]['payment_method']['soft_descriptor'] = $this->gateway->soft_descriptor;
 
@@ -266,14 +258,14 @@ class WC_Virtuaria_PagSeguro_API {
 				}
 
 				if ( isset( $pagseguro_card_info['token'] )
-					&& ! $posted['virt_pagseguro_use_other_card']
-					&& $posted['virt_pagseguro_save_hash_card'] ) {
+					&& ! $posted[ $this->gateway->id . '_use_other_card' ]
+					&& $posted[ $this->gateway->id . '_save_hash_card' ] ) {
 					$data['body']['charges'][0]['payment_method']['card']['id'] = $pagseguro_card_info['token'];
 				} else {
-					if ( isset( $posted['virt_pagseguro_encrypted_card'] )
-						&& ! empty( $posted['virt_pagseguro_encrypted_card'] ) ) {
+					if ( isset( $posted[ $this->gateway->id . '_encrypted_card' ] )
+						&& ! empty( $posted[ $this->gateway->id . '_encrypted_card' ] ) ) {
 						$data['body']['charges'][0]['payment_method']['card'] = array(
-							'encrypted' => sanitize_text_field( wp_unslash( $posted['virt_pagseguro_encrypted_card'] ) ),
+							'encrypted' => sanitize_text_field( wp_unslash( $posted[ $this->gateway->id . '_encrypted_card' ] ) ),
 						);
 					} else {
 						if ( $this->debug_on ) {
@@ -287,17 +279,17 @@ class WC_Virtuaria_PagSeguro_API {
 						return array( 'error' => __( 'Invalid card data, please check the entered information and try again.', 'virtuaria-pagseguro' ) );
 					}
 
-					if ( $posted['virt_pagseguro_save_hash_card'] ) {
+					if ( $posted[ $this->gateway->id . '_save_hash_card' ] ) {
 						$data['body']['charges'][0]['payment_method']['card']['store'] = true;
 					}
 				}
 				if ( 'yes' === $this->gateway->get_option( '3ds' )
 					&& ( ! $min_value_to_3ds || ( $total / 100 ) >= $min_value_to_3ds )
-					&& isset( $posted['virt_pagseguro_auth_3ds'] )
-					&& $posted['virt_pagseguro_auth_3ds'] ) {
+					&& isset( $posted[ $this->gateway->id . '_auth_3ds' ] )
+					&& $posted[ $this->gateway->id . '_auth_3ds' ] ) {
 					$data['body']['charges'][0]['payment_method']['authentication_method'] = array(
 						'type' => 'THREEDS',
-						'id'   => sanitize_text_field( wp_unslash( $posted['virt_pagseguro_auth_3ds'] ) ),
+						'id'   => sanitize_text_field( wp_unslash( $posted[ $this->gateway->id . '_auth_3ds' ] ) ),
 					);
 				}
 			} else {
@@ -529,6 +521,15 @@ class WC_Virtuaria_PagSeguro_API {
 					$this->apply_discount_fee( $order, 'ticket' );
 				}
 			}
+
+			if ( $this->gateway->is_duopay_method() ) {
+				$order->update_meta_data( '_payment_mode', 'DUOPAY' );
+				$order->update_meta_data( '_duopay_credit_transaction_id', $response['id'] );
+				$order->update_meta_data( '_duopay_credit_charge_id', $response['charges'][0]['id'] );
+				$order->update_meta_data( '_duopay_credit_charge_total', $total / 100 );
+				$this->save_duopay_transaction( $order, $response, $total, 'credit' );
+			}
+
 			$order->set_transaction_id( $response['id'] );
 			$order->update_meta_data( '_charge_id', $response['charges'][0]['id'] );
 			$order->save();
@@ -539,6 +540,7 @@ class WC_Virtuaria_PagSeguro_API {
 				'_payment_mode',
 				'PIX'
 			);
+
 			$order->update_meta_data(
 				'_pagseguro_order_id',
 				$response['id']
@@ -559,6 +561,20 @@ class WC_Virtuaria_PagSeguro_API {
 				$response['qr_codes'][0]['links'][0]['href']
 			);
 
+			if ( $this->gateway->is_duopay_method() ) {
+				$order->update_meta_data( '_payment_mode', 'DUOPAY' );
+				$order->update_meta_data( '_duopay_pix_transaction_id', $response['id'] );
+				$order->update_meta_data( '_duopay_pix_charge_total', $total / 100 );
+				$order->add_order_note(
+					sprintf(
+						// translators: %s: total.
+						__( '%s via Pix', 'virtuaria-pagseguro' ),
+						wc_price( $total / 100 )
+					)
+				);
+
+				$this->save_duopay_transaction( $order, $response, $total, 'pix' );
+			}
 			$order->set_transaction_id( $response['id'] );
 
 			if ( floatval( $this->gateway->pix_discount ) > 0 && $this->discount_enable( $order, 'pix' ) ) {
@@ -568,6 +584,34 @@ class WC_Virtuaria_PagSeguro_API {
 			$order->save();
 		}
 		return false;
+	}
+
+	/**
+	 * Save Duopay transaction data to the order meta.
+	 *
+	 * @param WC_Order $order  The order object.
+	 * @param array    $response The response from PagSeguro.
+	 * @param int      $total The total amount of the transaction.
+	 * @param string   $type The type of transaction.
+	 */
+	private function save_duopay_transaction( &$order, $response, $total, $type ) {
+		$transactions = $order->get_meta( '_duopay_transactions', true );
+
+		if ( ! $transactions ) {
+			$transactions = array();
+		}
+
+		$transactions[ $response['id'] ] = array(
+			'id'          => $response['id'],
+			'charge'      => isset( $response['charges'][0]['id'] )
+				? $response['charges'][0]['id']
+				: null,
+			'total'       => $total / 100,
+			'installment' => $response['charges'][0]['payment_method']['installments'],
+			'type'        => $type,
+			'date'        => wp_date( 'Y-m-d H:i:s' ),
+		);
+		$order->update_meta_data( '_duopay_transactions', $transactions );
 	}
 
 	/**
@@ -653,12 +697,23 @@ class WC_Virtuaria_PagSeguro_API {
 	/**
 	 * Do refund order.
 	 *
-	 * @param int   $order_id the order id.
-	 * @param float $amount   the refund amount.
+	 * @param int    $order_id    the order id.
+	 * @param float  $amount      the refund amount.
+	 * @param string $duopay_type the duopay type.
+	 * @param string $charge_id   the charge id.
 	 */
-	public function refund_order( $order_id, $amount ) {
-		$order  = wc_get_order( $order_id );
-		$charge = $order->get_meta( '_charge_id', true );
+	public function refund_order( $order_id, $amount, $duopay_type = '', $charge_id = '' ) {
+		$order = wc_get_order( $order_id );
+		if ( $charge_id ) {
+			$charge = $charge_id;
+		} elseif ( 'credit' === $duopay_type ) {
+			$charge = $order->get_meta( '_duopay_credit_charge_id', true );
+		} elseif ( 'pix' === $duopay_type ) {
+			$charge = $order->get_meta( '_duopay_pix_charge_id', true );
+		} else {
+			$charge = $order->get_meta( '_charge_id', true );
+		}
+
 		if ( ! $charge ) {
 			if ( $this->debug_on ) {
 				$this->gateway->log->add(

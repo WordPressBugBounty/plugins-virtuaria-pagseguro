@@ -14,7 +14,7 @@ $allowed_plugin_name = array(
 );
 
 if ( ! is_plugin_active( 'virtuaria-pagseguro/virtuaria-pagseguro.php' )
-|| ! in_array( $plugin_data['Name'], $allowed_plugin_name, true )
-|| '<a href="https://virtuaria.com.br/">Virtuaria</a>' !== $plugin_data['Author'] ) {
+|| ! in_array( $this->plugin_data['Name'], $allowed_plugin_name, true )
+|| '<a href="https://virtuaria.com.br/">Virtuaria</a>' !== $this->plugin_data['Author'] ) {
 	wp_die( 'Erro: Plugin corrompido. Favor baixar novamente o código e reinstalar o plugin.' );
 }

@@ -12,9 +12,16 @@ defined( 'ABSPATH' ) || exit;
  */
 class Virtuaria_PagSeguro_Settings {
 	/**
+	 * Plugin main settings.
+	 *
+	 * @var array
+	 */
+	private $settings = array();
+	/**
 	 * Initialize functions.
 	 */
 	public function __construct() {
+		$this->settings = self::get_settings();
 		add_action( 'admin_menu', array( $this, 'add_submenu_pagseguro' ) );
 		add_action( 'in_admin_footer', array( $this, 'display_review_info' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_checkout_scripts' ) );
@@ -53,8 +60,8 @@ class Virtuaria_PagSeguro_Settings {
 			'virtuaria_pagseguro'
 		);
 
-		$options = get_option( 'woocommerce_virt_pagseguro_settings' );
-		if ( isset( $options['payment_form'] ) && 'separated' === $options['payment_form'] ) {
+		if ( isset( $this->settings['payment_form'] )
+			&& 'separated' === $this->settings['payment_form'] ) {
 			add_submenu_page(
 				'virtuaria_pagseguro',
 				__( 'Credit', 'virtuaria-pagseguro' ),
@@ -83,6 +90,16 @@ class Virtuaria_PagSeguro_Settings {
 				__( 'Credit, Pix and Bank Slip', 'virtuaria-pagseguro' ),
 				$capability,
 				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' )
+			);
+		}
+
+		if ( class_exists( 'Virtuaria_PagSeguro_Gateway_DuoPay' ) ) {
+			add_submenu_page(
+				'virtuaria_pagseguro',
+				__( 'Crédito + Pix', 'virtuaria-pagseguro' ),
+				__( 'Crédito + Pix', 'virtuaria-pagseguro' ),
+				$capability,
+				admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_duopay' ),
 			);
 		}
 
@@ -174,6 +191,7 @@ class Virtuaria_PagSeguro_Settings {
 			'virt_pagseguro_credit',
 			'virt_pagseguro_pix',
 			'virt_pagseguro_ticket',
+			'virt_pagseguro_duopay',
 		);
 
 		$allowed_pages = array(
@@ -202,7 +220,6 @@ class Virtuaria_PagSeguro_Settings {
 				filemtime( VIRTUARIA_PAGSEGURO_DIR . 'admin/css/setup.css' )
 			);
 
-			$options = get_option( 'woocommerce_virt_pagseguro_settings' );
 			$section = isset( $_GET['section'] )
 				? sanitize_text_field(
 					wp_unslash( $_GET['section'] )
@@ -214,11 +231,19 @@ class Virtuaria_PagSeguro_Settings {
 				)
 				: '';
 
+			$doupay_section = '';
+			if ( class_exists( 'Virtuaria_PagSeguro_Gateway_DuoPay' ) ) {
+				$doupay_section = '<a class="tablinks '
+					. ( 'virt_pagseguro_duopay' === $section ? 'active' : '' )
+					. '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_duopay' ) . '">' . esc_html( __( 'Crédito + Pix', 'virtuaria-pagseguro' ) )
+					. '</a>';
+			}
+
 			if ( ( 'virtuaria_pagseguro' === $page
 				|| 'virtuaria_pagbank_split' === $page
 				|| 'virt_pagseguro' !== $section )
-				&& isset( $options['payment_form'] )
-				&& 'separated' === $options['payment_form'] ) {
+				&& isset( $this->settings['payment_form'] )
+				&& 'separated' === $this->settings['payment_form'] ) {
 				wp_localize_script(
 					'setup',
 					'navigation',
@@ -228,6 +253,7 @@ class Virtuaria_PagSeguro_Settings {
 							<a class="tablinks ' . ( 'virt_pagseguro_credit' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' ) . '">' . esc_html( __( 'Credit', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks ' . ( 'virt_pagseguro_pix' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' ) . '">' . esc_html( __( 'Pix', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks ' . ( 'virt_pagseguro_ticket' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' ) . '">' . esc_html( __( 'Bank Slip', 'virtuaria-pagseguro' ) ) . '</a>
+							' . $doupay_section . '
 							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">' . esc_html( __( 'Split', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">' . esc_html( __( 'Correios', 'virtuaria-pagseguro' ) ) . '</a>
 						</div>',
@@ -242,6 +268,7 @@ class Virtuaria_PagSeguro_Settings {
 							<a class="tablinks ' . ( 'virtuaria_pagseguro' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro' ) . '">' . esc_html( __( 'Integration', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks ' . ( 'virt_pagseguro' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro' ) . '">' . esc_html( __( 'Payment', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">' . esc_html( __( 'Split', 'virtuaria-pagseguro' ) ) . '</a>
+							' . $doupay_section . '
 							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">' . esc_html( __( 'Correios', 'virtuaria-pagseguro' ) ) . '</a>
 						</div>',
 					)
@@ -270,6 +297,7 @@ class Virtuaria_PagSeguro_Settings {
 			'virt_pagseguro_credit',
 			'virt_pagseguro_pix',
 			'virt_pagseguro_ticket',
+			'virt_pagseguro_duopay',
 		);
 
 		$pages = array(
@@ -300,7 +328,7 @@ class Virtuaria_PagSeguro_Settings {
 	public function save_main_settings() {
 		if ( isset( $_POST['setup_nonce'] )
 			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['setup_nonce'] ) ), 'setup_virtuaria_module' ) ) {
-			$options = get_option( 'woocommerce_virt_pagseguro_settings' );
+			$options = self::get_settings();
 			foreach ( $_POST as $index => $fields ) {
 				if ( strpos( $index, 'woocommerce_virt_pagseguro_' ) !== false ) {
 					$options[ str_replace( 'woocommerce_virt_pagseguro_', '', $index ) ] = sanitize_text_field(
@@ -323,8 +351,7 @@ class Virtuaria_PagSeguro_Settings {
 				unset( $options['ignore_shipping_address'] );
 			}
 
-			update_option(
-				'woocommerce_virt_pagseguro_settings',
+			$this->update_settings(
 				$options
 			);
 
@@ -337,19 +364,40 @@ class Virtuaria_PagSeguro_Settings {
 	}
 
 	/**
+	 * Update the plugin settings.
+	 *
+	 * @param array $settings The settings to save.
+	 */
+	private function update_settings( $settings ) {
+		$this->settings = $settings;
+		update_option(
+			'woocommerce_virt_pagseguro_settings',
+			$settings
+		);
+	}
+
+	/**
+	 * Retrieves the plugin settings.
+	 *
+	 * @return array The plugin settings.
+	 */
+	public static function get_settings() {
+		return get_option(
+			'woocommerce_virt_pagseguro_settings',
+			array()
+		);
+	}
+
+	/**
 	 * Save store token.
 	 */
 	public function save_store_token() {
 		if ( isset( $_GET['page'] )
 			&& ! isset( $_POST['fee_setup_updated'] )
 			&& 'virtuaria_pagseguro' === $_GET['page'] ) {
-			$settings = get_option(
-				'woocommerce_virt_pagseguro_settings'
-			);
-
 			if ( isset( $_GET['token'] ) ) {
 				$this->update_token(
-					$settings,
+					$this->settings,
 					sanitize_text_field(
 						wp_unslash( $_GET['token'] )
 					)
@@ -364,7 +412,7 @@ class Virtuaria_PagSeguro_Settings {
 				&& 'success' === $_GET['access_revoked'] ) {
 
 				$this->update_token(
-					$settings,
+					$this->settings,
 					null
 				);
 				add_action(
@@ -376,7 +424,7 @@ class Virtuaria_PagSeguro_Settings {
 				&& 'failed' === $_GET['proccess'] ) {
 
 				$this->update_token(
-					$settings,
+					$this->settings,
 					null
 				);
 
@@ -403,8 +451,7 @@ class Virtuaria_PagSeguro_Settings {
 			$current['token_production'] = $token;
 		}
 
-		update_option(
-			'woocommerce_virt_pagseguro_settings',
+		$this->update_settings(
 			$current
 		);
 	}
@@ -470,15 +517,10 @@ class Virtuaria_PagSeguro_Settings {
 	 */
 	public function fee_setup_update() {
 		if ( isset( $_POST['fee_setup_updated'] ) ) {
-			$settings = get_option(
-				'woocommerce_virt_pagseguro_settings'
-			);
+			$this->settings['token_production'] = null;
 
-			$settings['token_production'] = null;
-
-			update_option(
-				'woocommerce_virt_pagseguro_settings',
-				$settings
+			$this->update_settings(
+				$this->settings
 			);
 		}
 	}
@@ -513,11 +555,8 @@ class Virtuaria_PagSeguro_Settings {
 	 * Separated payment style and scripts.
 	 */
 	public function add_public_styles_scripts() {
-		$settings = get_option(
-			'woocommerce_virt_pagseguro_settings'
-		);
-		if ( isset( $settings['payment_form'] )
-			&& 'separated' === $settings['payment_form'] ) {
+		if ( isset( $this->settings['payment_form'] )
+			&& 'separated' === $this->settings['payment_form'] ) {
 			wp_enqueue_style(
 				'pagseguro-separated-methods',
 				VIRTUARIA_PAGSEGURO_URL . 'public/css/separated-methods.css',
@@ -534,11 +573,8 @@ class Virtuaria_PagSeguro_Settings {
 	 * @return string The modified or null gateway icon URL
 	 */
 	public function remove_gateway_icon( $icon_url ) {
-		$settings = get_option(
-			'woocommerce_virt_pagseguro_settings'
-		);
-		if ( isset( $settings['logo'] )
-			&& 'only_title' === $settings['logo'] ) {
+		if ( isset( $this->settings['logo'] )
+			&& 'only_title' === $this->settings['logo'] ) {
 			$icon_url = null;
 		}
 		return $icon_url;

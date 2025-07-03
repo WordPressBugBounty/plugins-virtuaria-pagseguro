@@ -19,7 +19,7 @@ if ( get_transient( 'virtuaria_pagseguro_main_setting_saved' ) ) {
 	);
 }
 
-$options = get_option( 'woocommerce_virt_pagseguro_settings' );
+$options = Virtuaria_PagSeguro_Settings::get_settings();
 
 if ( isset( $options['environment'] ) && 'sandbox' === $options['environment'] ) {
 	$app_id     = 'a2c55b69-d66f-4bf0-80f9-21d504ebf559';
@@ -187,7 +187,84 @@ if ( ! isset( $options['payment_form'] ) ) {
 					?>
 				</td>
 			</tr>
-
+			<tr valign="top" class="serial-code">
+				<th scope="row" class="titledesc">
+					<label for="woocommerce_virt_pagseguro_serial">
+						<?php esc_html_e( 'License Code', 'virtuaria-pagseguro' ); ?>
+					</label>
+				</th>
+				<td class="forminp">
+					<fieldset>
+						<legend class="screen-reader-text">
+							<span><?php esc_html_e( 'License Code', 'virtuaria-pagseguro' ); ?></span>
+						</legend>
+						<input
+							type="text"
+							name="woocommerce_virt_pagseguro_serial"
+							id="woocommerce_virt_pagseguro_serial"
+							class="input-text regular-input"
+							value="<?php echo isset( $options['serial'] ) ? esc_attr( $options['serial'] ) : ''; ?>" />
+						<p class="description">
+							<?php
+							echo wp_kses_post( __( 'Enter the license code to access all the <b>premium</b> features of the plugin.', 'virtuaria-pagseguro' ) );
+							?>
+						</p>
+						<?php
+						$plugin_data = Virtuaria_Pagseguro::get_instance()->get_plugin_data();
+						if ( ! isset( $options['serial'] )
+							|| ! $options['serial']
+							|| ! \Virtuaria\Plugins\Auth::is_premium(
+								$options['serial'],
+								get_home_url(),
+								'virtuaria-pagseguro',
+								'1'
+							)
+						) :
+							?>
+							<p class="description">
+								<b><?php esc_html_e( 'Status:', 'virtuaria-pagseguro' ); ?> <span style="color:red"><?php esc_html_e( 'Inactive', 'virtuaria-pagseguro' ); ?></span></b><br>
+								<?php
+								echo wp_kses_post(
+									sprintf(
+										/* translators: 1: Link to purchase, 2: E-mail to contact support. */
+										__( 'You do not yet have a valid License Code. You can purchase one through the link %1$s. If you have any questions, please contact support via email at %2$s.', 'virtuaria-pagseguro' ),
+										'<a href="https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/" target="_blank">https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce</a>',
+										'<a href="mailto:integracaopagseguro@virtuaria.com.br">integracaopagseguro@virtuaria.com.br</a>'
+									)
+								);
+								?>
+							</p>
+							<?php
+						else :
+							?>
+							<p class="description">
+								<b><?php esc_html_e( 'Status:', 'virtuaria-pagseguro' ); ?> <span style="color:green"><?php esc_html_e( 'Active', 'virtuaria-pagseguro' ); ?></span></b><br>
+								<?php
+								echo wp_kses_post(
+									sprintf(
+										/* translators: %s: E-mail to contact support. */
+										__( 'You have a valid access key. If you have any questions, please contact support via email at %s.', 'virtuaria-pagseguro' ),
+										'<a href="mailto:integracaopagseguro@virtuaria.com.br">integracaopagseguro@virtuaria.com.br</a>'
+									),
+								);
+								?>
+							</p>
+							<?php
+						endif;
+						?>
+						<h3 class="premium-title">
+							<?php esc_html_e( '🌟 Premium features', 'virtuaria-pagseguro' ); ?>
+						</h3>
+						<ul class="premium-resources">
+							<li class="premium-resource">
+								<?php
+								echo wp_kses_post( __( '<b>Mixed Payment</b> - Combines credit card and Pix payments to bring more flexibility to the purchasing process.', 'virtuaria-pagseguro' ) );
+								?>
+							</li>
+						</ul>
+					</fieldset>
+				</td>
+			</tr>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
 					<label for="woocommerce_virt_pagseguro_process_mode"><?php esc_html_e( 'Processing mode', 'virtuaria-pagseguro' ); ?></label>

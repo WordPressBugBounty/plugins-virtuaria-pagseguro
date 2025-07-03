@@ -103,7 +103,7 @@ class WC_Virtuaria_PagSeguro_Gateway_Ticket extends WC_Payment_Gateway {
 
 		$this->supports = array( 'products' );
 
-		$this->global_settings = get_option( 'woocommerce_virt_pagseguro_settings' );
+		$this->global_settings = Virtuaria_PagSeguro_Settings::get_settings();
 
 		// Load the form fields.
 		$this->init_form_fields();

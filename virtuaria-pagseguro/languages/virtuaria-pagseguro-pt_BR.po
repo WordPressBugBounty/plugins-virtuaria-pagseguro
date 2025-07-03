@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Virtuaria PagBank / PagSeguro para Woocommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-12 10:27+0000\n"
-"PO-Revision-Date: 2025-02-17 12:47+0000\n"
-"Last-Translator: Sistema\n"
+"PO-Revision-Date: 2025-07-01 17:39+0000\n"
+"Last-Translator: \n"
 "Language-Team: Português do Brasil\n"
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.4; wp-6.2.2\n"
+"X-Loco-Version: 2.8.0; wp-6.8.1; php-8.2.22\n"
 "X-Domain: virtuaria-pagseguro"
 
 #: includes/class-virtuaria-marketing-page.php:76
@@ -76,17 +76,36 @@ msgstr ""
 "Correios tenham custo zero quando o valor mínimo de frete grátis, definido "
 "pelo usuário, for atingido."
 
-#: templates/credit-checkout.php:76
+#: templates/credit-checkout.php:181
 msgid " interest free"
 msgstr "sem juros"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1090
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1105
 msgid " on Bank Slip"
 msgstr "no Boleto Bancário"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1089
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1104
 msgid " on Pix"
 msgstr "no Pix"
+
+#. %1$s: title, %2$s: amount
+#: includes/traits/trait-virtuaria-pagseguro-common.php:696
+#, php-format
+msgid "%1$s: Refund of R$%2$s successful."
+msgstr "%1$s: Reembolso de R$%2$s bem-sucedido."
+
+#. %1$s: title, %2$s: amount
+#: includes/traits/trait-virtuaria-pagseguro-common.php:710
+#, php-format
+#| msgid ""
+#| "PagSeguro: Unable to refund R$%s. Check the transaction status and the "
+#| "amount to be refunded and try again.."
+msgid ""
+"%1$s: Unable to refund R$%2$s. Check the transaction status and the amount "
+"to be refunded and try again.."
+msgstr ""
+"%1$s: Não foi possível reembolsar R$%2$s. Verifique o status da transação e "
+"o valor a ser reembolsado e tente novamente."
 
 #. %1$s: Payment title %2$s: url link %3$s: button text %4$s: barcode
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:188
@@ -105,10 +124,16 @@ msgstr ""
 "Copiar</a>"
 
 #. %s: payment method
-#: includes/class-wc-virtuaria-pagseguro-api.php:580
+#: includes/class-wc-virtuaria-pagseguro-api.php:628
 #, php-format
 msgid "%s discount"
 msgstr "%s de desconto"
+
+#. %s: total.
+#: includes/class-wc-virtuaria-pagseguro-api.php:571
+#, php-format
+msgid "%s via Pix"
+msgstr "%s via Pix"
 
 #: templates/ticket-checkout.php:16
 msgid ""
@@ -201,6 +226,10 @@ msgstr "1 hora"
 msgid "1 hour and 30 minutes"
 msgstr "1 hora e 30 minutos"
 
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:405
+msgid "12 hours"
+msgstr "12 horas"
+
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:108
 msgid "1st Line of Instruction"
 msgstr "1ª Linha de Instrução"
@@ -236,15 +265,27 @@ msgstr "30 minutos"
 msgid "3DS Authentication"
 msgstr "Autenticação 3DS"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:102
+#: includes/class-wc-virtuaria-pagseguro-api.php:94
 msgid "3DS authentication failed, not authorized!"
 msgstr "Falha na autenticação 3DS, não autorizado!"
 
 #. %s: autentication status
-#: includes/class-wc-virtuaria-pagseguro-api.php:487
+#: includes/class-wc-virtuaria-pagseguro-api.php:483
 #, php-format
 msgid "3DS authentication successfully applied. Status: <b>%s</b>"
 msgstr "Autenticação 3DS aplicada com sucesso. Status: <b>%s</b>"
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:404
+msgid "6 hours"
+msgstr "6 horas"
+
+#: templates/main-screen-settings.php:261
+msgid ""
+"<b>Mixed Payment</b> - Combines credit card and Pix payments to bring more "
+"flexibility to the purchasing process."
+msgstr ""
+"<b>Pagamento Misto</b> - Combina pagamentos com cartão de crédito e Pix para "
+"trazer mais flexibilidade ao processo de compra."
 
 #. %1$d: installments number %2$s: money amount %3$s: interest
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:490
@@ -259,7 +300,7 @@ msgstr ""
 "%3$s</span></div>"
 
 #. %s: card itens
-#: templates/credit-checkout.php:93
+#: templates/credit-checkout.php:198
 #, php-format
 msgid ""
 "<span class=\"card-brand\"><img src=\"%1$s\" alt=\"Cartão\" /></i>%2$s</span>"
@@ -290,15 +331,23 @@ msgstr "Uma coluna"
 msgid "Access your internet banking or payment app"
 msgstr "Acesse seu internet banking ou aplicativo de pagamento"
 
+#: templates/refund-fallback-transactions.php:54
+msgid "Actions"
+msgstr "Ações"
+
+#: templates/main-screen-settings.php:241
+msgid "Active"
+msgstr "Ativado"
+
 #: includes/traits/trait-virtuaria-pagseguro-common.php:121
 msgid "Additional Charge"
 msgstr "Cobrança Adicional"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1050
+#: includes/class-wc-virtuaria-pagseguro-api.php:1131
 msgid "Additional charge response: "
 msgstr "Resposta de cobrança adicional:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:837
+#: includes/class-wc-virtuaria-pagseguro-api.php:919
 msgid "Additional charge: missing customer payment method"
 msgstr "Cobrança adicional: método de pagamento do cliente ausente"
 
@@ -310,15 +359,19 @@ msgstr "Adicionado o método de pagamento PagSeguro à sua loja virtual."
 msgid "Allow sale when 3DS is not supported?"
 msgstr "Permitir venda quando o 3DS não for suportado?"
 
+#: templates/refund-fallback-transactions.php:116
+msgid "Already refunded"
+msgstr "Já reembolsado"
+
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:238
 msgid "Always memorize"
 msgstr "Sempre memorizar"
 
-#: templates/credit-checkout.php:12
+#: templates/credit-checkout.php:64
 msgid "as on the card"
 msgstr "como no cartão"
 
-#: templates/main-screen-settings.php:200
+#: templates/main-screen-settings.php:277
 msgid "Asynchronous"
 msgstr "Assíncrono"
 
@@ -338,40 +391,40 @@ msgstr "Cálculo automático de frete"
 msgid "Available plots"
 msgstr "Parcelas disponíveis"
 
-#: includes/class-virtuaria-pagseguro-settings.php:74
-#: includes/class-virtuaria-pagseguro-settings.php:75
-#: includes/class-virtuaria-pagseguro-settings.php:230
-#: includes/class-wc-virtuaria-pagseguro-api.php:586
+#: includes/class-wc-virtuaria-pagseguro-api.php:634
+#: includes/class-virtuaria-pagseguro-settings.php:81
+#: includes/class-virtuaria-pagseguro-settings.php:82
+#: includes/class-virtuaria-pagseguro-settings.php:255
 #: templates/transparent-checkout.php:37
 #: templates/lines-transparent-checkout.php:54
-#: includes/traits/trait-virtuaria-pagseguro-common.php:814
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1152
+#: includes/traits/trait-virtuaria-pagseguro-common.php:823
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1167
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:153
 msgid "Bank Slip"
 msgstr "Boleto Bancário"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:452
+#: includes/traits/trait-virtuaria-pagseguro-common.php:463
 msgid "Cancelled."
 msgstr "Cancelado."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:475
+#: includes/class-wc-virtuaria-pagseguro-api.php:471
 #, php-format
 msgid "Card brand: %1$s<br>%2$s<br>Installments: %3$dx<br>Total: R$ %4$s"
 msgstr "Bandeira do cartão: %1$s<br>%2$s<br>Parcelas: %3$dx<br>Total: R$ %4$s"
 
-#: templates/credit-checkout.php:16
+#: templates/credit-checkout.php:79
 msgid "Card Number"
 msgstr "Número do cartão"
 
-#: templates/credit-checkout.php:12
+#: templates/credit-checkout.php:64
 msgid "Cardholder"
 msgstr "Titular"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:477
+#: includes/class-wc-virtuaria-pagseguro-api.php:473
 msgid "Cardholder: "
 msgstr "Titular:"
 
-#: templates/main-screen-settings.php:203
+#: templates/main-screen-settings.php:280
 msgid ""
 "Changing the order status triggers a series of actions, such as sending "
 "emails, reducing stock, events in plugins, among many others. In "
@@ -389,19 +442,19 @@ msgstr ""
 "a alteração do status do pedido é afetada, pois agora ocorre via agendamento "
 "(cron) em até 5 minutos após o cliente finalizar a compra."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:662
+#: includes/class-wc-virtuaria-pagseguro-api.php:721
 msgid "Charge code not found."
 msgstr "Código de cobrança não encontrado."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:346
+#: includes/traits/trait-virtuaria-pagseguro-common.php:357
 msgid "Check PagSeguro"
 msgstr "Consultar PagSeguro"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:373
+#: includes/traits/trait-virtuaria-pagseguro-common.php:384
 msgid "Check Status"
 msgstr "Verificar status"
 
-#: templates/main-screen-settings.php:333
+#: templates/main-screen-settings.php:410
 msgid ""
 "Check this option to disable sending delivery data (such as city, street, "
 "neighborhood, number, state) to PagBank. This setting is useful for online "
@@ -419,7 +472,7 @@ msgstr ""
 "risco das transações."
 
 #. %s: categories
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1143
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1158
 #, php-format
 msgctxt "Checkout"
 msgid ""
@@ -443,7 +496,7 @@ msgstr "Escolha pagar via PIX"
 msgid "Clear cards (tokens)"
 msgstr "Limpar cartões (tokens)"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:367
+#: includes/traits/trait-virtuaria-pagseguro-common.php:378
 msgid "Click to check the payment status of this order on the PagSeguro panel."
 msgstr ""
 "Clique para verificar o status do pagamento deste pedido no painel do "
@@ -475,8 +528,8 @@ msgstr "Copiar"
 msgid "Copy code"
 msgstr "Copiar código"
 
-#: includes/class-virtuaria-pagseguro-settings.php:232
-#: includes/class-virtuaria-pagseguro-settings.php:245
+#: includes/class-virtuaria-pagseguro-settings.php:258
+#: includes/class-virtuaria-pagseguro-settings.php:272
 msgid "Correios"
 msgstr "Correios"
 
@@ -488,9 +541,10 @@ msgstr ""
 "Os Correios são a principal solução de entrega do Brasil, garantindo que "
 "seus produtos cheguem aos clientes com rapidez e segurança."
 
-#: includes/class-virtuaria-pagseguro-settings.php:60
-#: includes/class-virtuaria-pagseguro-settings.php:61
-#: includes/class-virtuaria-pagseguro-settings.php:228
+#: includes/class-virtuaria-pagseguro-settings.php:67
+#: includes/class-virtuaria-pagseguro-settings.php:68
+#: includes/class-virtuaria-pagseguro-settings.php:253
+#: templates/refund-fallback-transactions.php:81
 msgid "Credit"
 msgstr "Crédito"
 
@@ -510,23 +564,46 @@ msgstr "cartão de crédito"
 msgid "Credit form"
 msgstr "Formulário de crédito"
 
-#: includes/class-virtuaria-pagseguro-settings.php:82
-#: includes/class-virtuaria-pagseguro-settings.php:83
+#: includes/class-virtuaria-pagseguro-settings.php:89
+#: includes/class-virtuaria-pagseguro-settings.php:90
 msgid "Credit, Pix and Bank Slip"
 msgstr "Crédito, Pix e Boleto Bancário"
+
+#: templates/refund-fallback-transactions.php:21
+msgid "Credit:"
+msgstr "Crédito:"
+
+#: includes/class-virtuaria-pagseguro-settings.php:99
+#: includes/class-virtuaria-pagseguro-settings.php:100
+#: includes/class-virtuaria-pagseguro-settings.php:238
+msgid "Crédito + Pix"
+msgstr ""
 
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:237
 msgid "Customer decides on storage"
 msgstr "O cliente decide sobre o armazenamento"
 
-#: templates/credit-checkout.php:26
+#: templates/credit-checkout.php:124
 msgid "CVV"
 msgstr "CVV"
 
-#: templates/main-screen-settings.php:340
-#: templates/main-screen-settings.php:344
+#: templates/refund-fallback-transactions.php:51
+#| msgid "Datw"
+msgid "Date"
+msgstr "Data"
+
+#: templates/main-screen-settings.php:417
+#: templates/main-screen-settings.php:421
 msgid "Debug log"
 msgstr "Log de depuração"
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:424
+msgid "Define the maximum percent to be paid by credit card"
+msgstr "Defina o percentual máximo a ser pago com cartão de crédito"
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:412
+msgid "Define the minimum percent to be paid by credit card"
+msgstr "Defina o percentual mínimo a ser pago com cartão de crédito"
 
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:205
 msgid "Defines from which installment the interest will be applied."
@@ -581,7 +658,7 @@ msgstr ""
 "Define a taxa utilizada na integração com o PagSeguro. O percentual especial "
 "pode ser redefinido a critério do PagSeguro."
 
-#: templates/main-screen-settings.php:245
+#: templates/main-screen-settings.php:322
 msgid ""
 "Defines the status that the order will assume after payment confirmation. "
 "The default status is processing."
@@ -589,8 +666,8 @@ msgstr ""
 "Define o status que o pedido assumirá após a confirmação do pagamento. O "
 "status padrão é processando."
 
-#: templates/main-screen-settings.php:266
-#: templates/main-screen-settings.php:286
+#: templates/main-screen-settings.php:343
+#: templates/main-screen-settings.php:363
 msgid "Defines the visual pattern used on the checkout page."
 msgstr "Define o padrão visual usado na página de checkout."
 
@@ -599,6 +676,8 @@ msgid ""
 "Defines whether it will be possible to memorize the customer's payment "
 "information for future purchases."
 msgstr ""
+"Define se será possível memorizar as informações de pagamento do cliente "
+"para compras futuras."
 
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:160
 msgid ""
@@ -616,7 +695,7 @@ msgstr ""
 "Define se a opção de pagamento com crédito deve estar disponível durante a "
 "finalização da compra."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:446
+#: includes/traits/trait-virtuaria-pagseguro-common.php:457
 msgid "Denied by PagSeguro or Credit Card Issuer."
 msgstr "Negado pelo PagSeguro ou pela administradora do cartão de crédito."
 
@@ -624,7 +703,7 @@ msgstr "Negado pelo PagSeguro ou pela administradora do cartão de crédito."
 msgid "Description"
 msgstr "Descrição"
 
-#: includes/class-virtuaria-pagseguro-settings.php:293
+#: includes/class-virtuaria-pagseguro-settings.php:321
 msgid ""
 "Development, implementation and maintenance of e-commerce and marketplaces "
 "for wholesale and retail. Customized solutions for each client. <a "
@@ -634,22 +713,22 @@ msgstr ""
 "para atacado e varejo. Soluções personalizadas para cada cliente. <a "
 "target=\"_blank\" href=\"https://virtuaria.com.br\">Saiba mais</a>."
 
-#: includes/traits/trait-virtuaria-pagseguro-ticket.php:135
 #: includes/traits/trait-virtuaria-pagseguro-pix.php:101
+#: includes/traits/trait-virtuaria-pagseguro-ticket.php:135
 msgid "Disable discount on coupons"
 msgstr "Desativar desconto em cupons"
 
-#: includes/traits/trait-virtuaria-pagseguro-ticket.php:142
 #: includes/traits/trait-virtuaria-pagseguro-pix.php:108
+#: includes/traits/trait-virtuaria-pagseguro-ticket.php:142
 msgid "Disable discount on products from the following categories"
 msgstr "Desabilitar desconto em produtos das seguintes categorias"
 
-#: templates/main-screen-settings.php:321
-#: templates/main-screen-settings.php:325
+#: templates/main-screen-settings.php:398
+#: templates/main-screen-settings.php:402
 msgid "Disable Sending Delivery Data"
 msgstr "Desativar o envio de dados de entrega"
 
-#: templates/main-screen-settings.php:331
+#: templates/main-screen-settings.php:408
 msgid "Disable sending delivery data to PagBank"
 msgstr "Desativar envio de dados de entrega para a PagBank"
 
@@ -679,20 +758,20 @@ msgstr "Desconecte-se do PagSeguro"
 msgid "Disconnected."
 msgstr "Desconectado."
 
-#: includes/traits/trait-virtuaria-pagseguro-ticket.php:126
 #: includes/traits/trait-virtuaria-pagseguro-pix.php:92
+#: includes/traits/trait-virtuaria-pagseguro-ticket.php:126
 msgid "Discount (%)"
 msgstr "Desconto (%)"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1080
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1095
 msgid "discount of"
 msgstr "desconto de"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1214
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1232
 msgid "Discount: "
 msgstr "Desconto:"
 
-#: templates/main-screen-settings.php:283
+#: templates/main-screen-settings.php:360
 msgid "Display only payment method title"
 msgstr "Exibir apenas o título do método de pagamento"
 
@@ -713,7 +792,7 @@ msgstr ""
 "Pix e Boleto Bancário. Essa abordagem simplifica a experiência do usuário no "
 "checkout e no dashboard, agrupando todas as opções de pagamento PagSeguro."
 
-#: templates/main-screen-settings.php:282
+#: templates/main-screen-settings.php:359
 msgid "Displays payment method title and brand"
 msgstr "Exibe o título e a marca do método de pagamento"
 
@@ -725,7 +804,7 @@ msgstr "Não exibir"
 msgid "Do not memorize (default)"
 msgstr "Não memorizar (padrão)"
 
-#: includes/class-virtuaria-pagseguro-settings.php:289
+#: includes/class-virtuaria-pagseguro-settings.php:317
 msgid ""
 "Do you want to negotiate rates? Use this link to be assisted by a PagBank "
 "specialist: <a target=\"_blank\" href=\"https://pagseguro.uol.com."
@@ -741,7 +820,7 @@ msgstr ""
 msgid "E-mail"
 msgstr "E-mail"
 
-#: includes/class-virtuaria-pagseguro-settings.php:291
+#: includes/class-virtuaria-pagseguro-settings.php:319
 msgid ""
 "Email and website domain will be stored during the authorization process, "
 "for contact and support if necessary. The email field is optional."
@@ -751,9 +830,9 @@ msgstr ""
 "opcional."
 
 #: includes/traits/trait-virtuaria-pagseguro-common.php:19
+#: includes/traits/trait-virtuaria-pagseguro-pix.php:123
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:304
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:158
-#: includes/traits/trait-virtuaria-pagseguro-pix.php:123
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -779,7 +858,7 @@ msgstr ""
 msgid "Enable 3DS authentication"
 msgstr "Habilitar autenticação 3DS"
 
-#: templates/main-screen-settings.php:308
+#: templates/main-screen-settings.php:385
 msgid "Enable order status management in subscriptions."
 msgstr "Habilite o gerenciamento de status de pedidos em assinaturas."
 
@@ -821,6 +900,14 @@ msgstr ""
 "Insira o endereço de e-mail usado para sua conta Pagseguro. Isso é "
 "necessário para confirmar o pagamento."
 
+#: templates/main-screen-settings.php:209
+msgid ""
+"Enter the license code to access all the <b>premium</b> features of the "
+"plugin."
+msgstr ""
+"Digite o código de licença para acessar todos os recursos <b>premium</b> do "
+"plugin."
+
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:282
 msgid "Enter the minimum cart value for 3DS authentication to be used."
 msgstr ""
@@ -831,15 +918,15 @@ msgstr ""
 msgid "Environment"
 msgstr "Ambiente"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:418
+#: includes/class-wc-virtuaria-pagseguro-api.php:414
 msgid "Error creating order: "
 msgstr "Erro ao criar pedido:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1035
+#: includes/class-wc-virtuaria-pagseguro-api.php:1116
 msgid "Error in additional charge: "
 msgstr "Erro na cobrança adicional:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1538
+#: includes/class-wc-virtuaria-pagseguro-api.php:1678
 msgid "Error in recurring charge: "
 msgstr "Erro na cobrança recorrente:"
 
@@ -857,11 +944,11 @@ msgstr ""
 "mais os comerciantes on-line a adaptar suas estratégias de envio às suas "
 "necessidades específicas e perfis de produtos."
 
-#: templates/credit-checkout.php:21
+#: templates/credit-checkout.php:99
 msgid "Expiration Date (MM / YYYY)"
 msgstr "Validade (MM / AAAA)"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1090
+#: includes/class-wc-virtuaria-pagseguro-api.php:1171
 #: includes/traits/trait-virtuaria-pagseguro-common.php:213
 msgid "Extra Charge"
 msgstr "Cobrança Extra"
@@ -872,12 +959,12 @@ msgstr "Cobrança Extra"
 msgid "Extra Charge Amount: R$ %s"
 msgstr "Valor da Cobrança Extra: R$ %s"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1266
+#: includes/class-wc-virtuaria-pagseguro-api.php:1394
 msgid "Failed to obtain 3DS session: "
 msgstr "Falha ao obter sessão 3DS:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:737
-#: includes/class-wc-virtuaria-pagseguro-api.php:784
+#: includes/class-wc-virtuaria-pagseguro-api.php:796
+#: includes/class-wc-virtuaria-pagseguro-api.php:843
 msgid "Failed to obtain public key: "
 msgstr "Falha ao obter a chave pública:"
 
@@ -915,7 +1002,12 @@ msgstr "https://virtuaria.com.br/"
 msgid "https://virtuaria.com.br/virtuaria-pagseguro-plugin/"
 msgstr "https://virtuaria.com.br/virtuaria-pagseguro-plugin/"
 
-#: includes/class-virtuaria-pagseguro-settings.php:123
+#: templates/refund-fallback-transactions.php:49
+#| msgid "ID:"
+msgid "ID"
+msgstr "ID"
+
+#: includes/class-virtuaria-pagseguro-settings.php:140
 msgid ""
 "In most cases, you won’t need to make any adjustments to your theme to "
 "enable an effective multi-store checkout. This allows customers to pay for "
@@ -932,7 +1024,11 @@ msgstr ""
 "varejistas podem dimensionar suas operações de vendas multi-vendedores com o "
 "mínimo de esforço técnico."
 
-#: templates/credit-checkout.php:32
+#: templates/main-screen-settings.php:225
+msgid "Inactive"
+msgstr "Desativado"
+
+#: templates/credit-checkout.php:134
 msgid "Installments"
 msgstr "Parcelas"
 
@@ -940,10 +1036,10 @@ msgstr "Parcelas"
 msgid "Installments with interest"
 msgstr "Parcelamento com juros"
 
-#: includes/class-virtuaria-pagseguro-settings.php:50
-#: includes/class-virtuaria-pagseguro-settings.php:51
-#: includes/class-virtuaria-pagseguro-settings.php:227
-#: includes/class-virtuaria-pagseguro-settings.php:242
+#: includes/class-virtuaria-pagseguro-settings.php:57
+#: includes/class-virtuaria-pagseguro-settings.php:58
+#: includes/class-virtuaria-pagseguro-settings.php:252
+#: includes/class-virtuaria-pagseguro-settings.php:268
 msgid "Integration"
 msgstr "Integração"
 
@@ -956,11 +1052,11 @@ msgstr "sem juros"
 msgid "Interest rate (%)"
 msgstr "Taxa de juro (%)"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:814
+#: includes/class-wc-virtuaria-pagseguro-api.php:896
 msgid "Invalid amount or order not found for additional charge."
 msgstr "Valor inválido ou pedido não encontrado para cobrança adicional."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:288
+#: includes/class-wc-virtuaria-pagseguro-api.php:279
 msgid "Invalid card data, please check the entered information and try again."
 msgstr ""
 "Dados do cartão inválidos, verifique as informações inseridas e tente "
@@ -987,7 +1083,7 @@ msgstr ""
 "CRM, etc.) e também na compatibilidade com plugins de desconto de método de "
 "pagamento."
 
-#: includes/class-virtuaria-pagseguro-settings.php:121
+#: includes/class-virtuaria-pagseguro-settings.php:138
 msgid ""
 "It is a solution that can be used for marketplaces, dropshipping, franchises,"
 " delivery, among others. In other words, any business model that requires "
@@ -1003,8 +1099,8 @@ msgstr ""
 msgid "Label generation"
 msgstr "Geração de rótulos"
 
-#: templates/main-screen-settings.php:256
-#: templates/main-screen-settings.php:260
+#: templates/main-screen-settings.php:333
+#: templates/main-screen-settings.php:337
 msgid "Layout"
 msgstr "Layout"
 
@@ -1012,12 +1108,17 @@ msgstr "Layout"
 msgid "Learn more"
 msgstr "Saber mais"
 
-#: templates/main-screen-settings.php:262
+#: templates/main-screen-settings.php:193
+#: templates/main-screen-settings.php:199
+msgid "License Code"
+msgstr "Código de licença"
+
+#: templates/main-screen-settings.php:339
 msgid "Lines"
 msgstr "Linhas"
 
 #. %s: log url
-#: templates/main-screen-settings.php:351
+#: templates/main-screen-settings.php:428
 #, php-format
 msgid ""
 "Log API communication events and errors. To view click <a href=\"%s\">"
@@ -1030,12 +1131,20 @@ msgstr ""
 msgid "Main Features"
 msgstr "Principais Características"
 
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:422
+msgid "Max percent credit (%)"
+msgstr "Percentual Máximo no Crédito (%)"
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:410
+msgid "Min percent credit (%)"
+msgstr "Percentual Mínimo no Crédito (%)"
+
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:174
 msgid "Minimum installment value (R$)"
 msgstr "Valor mínimo da parcela (R$)"
 
 #. %s: amount
-#: templates/credit-checkout.php:41
+#: templates/credit-checkout.php:143
 #, php-format
 msgid "minimum of R$ %s"
 msgstr "mínimo de R$ %s"
@@ -1044,11 +1153,11 @@ msgstr "mínimo de R$ %s"
 msgid "Minimum order value (R$) for 3DS authentication to be applied"
 msgstr "Valor mínimo do pedido (R$) para autenticação 3DS a ser aplicada"
 
-#: templates/credit-checkout.php:22
+#: templates/credit-checkout.php:107
 msgid "MM / AAAA"
 msgstr "MM / AAAAA"
 
-#: templates/main-screen-settings.php:311
+#: templates/main-screen-settings.php:388
 msgid ""
 "Modifica o status do pedido original com base no resultado das subscrições. "
 "Ex: Cancela o pedido original quando houver falha na cobrança da subscrição."
@@ -1072,7 +1181,7 @@ msgstr ""
 "Negociada com o PagSeguro (se você negociou uma tarifa personalizada com o "
 "PagSeguro)"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1089
+#: includes/class-wc-virtuaria-pagseguro-api.php:1170
 #: includes/traits/trait-virtuaria-pagseguro-common.php:122
 #: includes/traits/trait-virtuaria-pagseguro-common.php:212
 msgid "New Charge"
@@ -1082,7 +1191,11 @@ msgstr "Nova Cobrança"
 msgid "New Payment Code Available for your Order "
 msgstr "Novo Código de Pagamento disponível para seu pedido"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:512
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:659
+msgid "No transactions found."
+msgstr "Nenhuma transação encontrada."
+
+#: includes/class-wc-virtuaria-pagseguro-api.php:508
 msgid "Not authorized, "
 msgstr "Não autorizado,"
 
@@ -1106,16 +1219,20 @@ msgstr ""
 "Ou cole o seguinte QR code para efetuar o pagamento (escolha a opção Pix "
 "Copiar e Colar no seu Internet Banking)."
 
-#: includes/class-virtuaria-pagseguro-settings.php:288
+#: includes/class-virtuaria-pagseguro-settings.php:316
 msgid "PagBank Support"
 msgstr "Suporte PagBank"
+
+#: includes/class-virtuaria-pagseguro-events.php:305
+msgid "PagBank: Payment approved."
+msgstr "PagBank: Pagamento aprovado."
 
 #: includes/traits/trait-virtuaria-pagseguro-common.php:32
 msgid "PagSeguro"
 msgstr "PagSeguro"
 
 #: includes/class-wc-virtuaria-pagseguro-gateway-ticket.php:98
-#: includes/traits/trait-virtuaria-pagseguro-common.php:606
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1389
 #: includes/traits/trait-virtuaria-pagseguro-ticket.php:189
 msgid "PagSeguro Bank Slip"
 msgstr "Boleto Bancário PagSeguro"
@@ -1125,22 +1242,22 @@ msgid ""
 "PagSeguro Bank Slip: the time limit for payment of this order has expired."
 msgstr "Boleto PagSeguro: o prazo para pagamento desta ordem expirou."
 
-#: templates/main-screen-settings.php:276
-#: templates/main-screen-settings.php:280
+#: templates/main-screen-settings.php:353
+#: templates/main-screen-settings.php:357
 msgid "PagSeguro Brand (PagBank)"
 msgstr "Marca PagSeguro (PagBank)"
 
 #: includes/class-wc-virtuaria-pagseguro-gateway-credit.php:126
-#: includes/traits/trait-virtuaria-pagseguro-common.php:602
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1385
 msgid "PagSeguro Credit"
 msgstr "PagSeguro Crédito"
 
-#: includes/traits/trait-virtuaria-pagseguro-credit.php:563
+#: includes/traits/trait-virtuaria-pagseguro-credit.php:572
 msgid "Pagseguro installment payment"
 msgstr "Pagamento parcelado Pagseguro"
 
 #: includes/class-wc-virtuaria-pagseguro-gateway-pix.php:105
-#: includes/traits/trait-virtuaria-pagseguro-common.php:598
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1381
 msgid "PagSeguro Pix"
 msgstr "PagSeguro Pix"
 
@@ -1149,17 +1266,17 @@ msgstr "PagSeguro Pix"
 msgid "PagSeguro Pix Copy and Paste:"
 msgstr "PagSeguro Pix Copiar e Colar:"
 
-#: includes/class-virtuaria-pagseguro-events.php:120
+#: includes/class-virtuaria-pagseguro-events.php:145
 msgid "Pagseguro Pix: the time limit for payment of this order has expired."
 msgstr "Pagseguro Pix: o prazo para pagamento deste pedido expirou."
 
 #. %s: message about transactions status
-#: includes/traits/trait-virtuaria-pagseguro-common.php:467
+#: includes/traits/trait-virtuaria-pagseguro-common.php:478
 #, php-format
 msgid "PagSeguro Query: Transaction %s"
 msgstr "Consulta PagSeguro: Transação %s"
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:427
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:462
 msgid "PagSeguro request not authorized."
 msgstr "Solicitação do PagSeguro não autorizada."
 
@@ -1168,25 +1285,30 @@ msgid "PagSeguro Standard"
 msgstr "Padrão do PagSeguro"
 
 #. %s: error
-#: includes/traits/trait-virtuaria-pagseguro-common.php:626
-#: includes/traits/trait-virtuaria-pagseguro-common.php:635
+#: includes/traits/trait-virtuaria-pagseguro-common.php:595
 #, php-format
 msgid "PagSeguro: %s"
 msgstr "PagSeguro: %s"
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:396
+#. %s: error
+#: includes/traits/trait-virtuaria-pagseguro-common.php:635
+#, php-format
+msgid "PagSeguro: %s."
+msgstr "PagSeguro: %s."
+
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:431
 msgid "PagSeguro: Additional charge cancelled."
 msgstr "PagSeguro: Cobrança adicional cancelada."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:808
+#: includes/class-wc-virtuaria-pagseguro-api.php:890
 msgid "PagSeguro: Additional charge with invalid value."
 msgstr "PagSeguro: Cobrança adicional com valor inválido."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:831
+#: includes/class-wc-virtuaria-pagseguro-api.php:913
 msgid "PagSeguro: Additional charge, missing customer payment method."
 msgstr "PagSeguro: Cobrança adicional, falta de forma de pagamento do cliente."
 
-#: includes/class-virtuaria-pagseguro-events.php:93
+#: includes/class-virtuaria-pagseguro-events.php:118
 msgid "PagSeguro: Awaiting payment confirmation."
 msgstr "PagSeguro: Aguardando confirmação do pagamento."
 
@@ -1196,12 +1318,12 @@ msgstr "PagSeguro: Aguardando confirmação do pagamento."
 msgid "PagSeguro: Charge received R$ %s."
 msgstr "PagSeguro: Cobrança recebida R$ %s."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1332
+#: includes/class-wc-virtuaria-pagseguro-api.php:1460
 msgid "PagSeguro: Invalid amount or order not found for recurring charge."
 msgstr ""
 "PagSeguro: Valor inválido ou pedido não encontrado para cobrança recorrente."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1356
+#: includes/class-wc-virtuaria-pagseguro-api.php:1484
 msgid "PagSeguro: Missing customer payment method during recurrence."
 msgstr "PagSeguro: Método de pagamento do cliente ausente durante recorrência."
 
@@ -1209,21 +1331,21 @@ msgstr "PagSeguro: Método de pagamento do cliente ausente durante recorrência.
 msgid "PagSeguro: O PagSeguro está analisando o risco da transação."
 msgstr "PagSeguro: O PagSeguro está analisando o risco de transação."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:388
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:392
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:423
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:427
 msgid "PagSeguro: Order cancelled."
 msgstr "PagSeguro: Pedido cancelado."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:377
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:412
 msgid "PagSeguro: Order refunded."
 msgstr "PagSeguro: Pedido reembolsado."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:228
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:345
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:361
-#: includes/class-virtuaria-pagseguro-events.php:99
-#: includes/class-virtuaria-pagseguro-events.php:104
-#: includes/traits/trait-virtuaria-pagseguro-common.php:564
+#: includes/class-virtuaria-pagseguro-events.php:124
+#: includes/class-virtuaria-pagseguro-events.php:129
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:243
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:380
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:396
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1316
 msgid "PagSeguro: Payment approved."
 msgstr "PagSeguro: Pagamento aprovado."
 
@@ -1244,7 +1366,7 @@ msgid "PagSeguro: Pix payment simulation failed."
 msgstr "PagSeguro: Falha na simulação de pagamento Pix."
 
 #. %s: amount
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:353
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:388
 #, php-format
 msgid "PagSeguro: R$ %s available in the account."
 msgstr "PagSeguro: R$ %s disponíveis na conta."
@@ -1255,37 +1377,31 @@ msgstr "PagSeguro: R$ %s disponíveis na conta."
 msgid "PagSeguro: R$ %s refunded."
 msgstr "PagSeguro: R$ %s devolvidos."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1588
+#: includes/class-wc-virtuaria-pagseguro-api.php:1728
 msgid "PagSeguro: Recurrence sent R$"
 msgstr "PagSeguro: Recorrência enviada R$"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1325
+#: includes/class-wc-virtuaria-pagseguro-api.php:1453
 msgid "PagSeguro: Recurring charge aborted due to invalid amount."
 msgstr "PagSeguro: Cobrança recorrente cancelada devido a valor inválido."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1349
+#: includes/class-wc-virtuaria-pagseguro-api.php:1477
 msgid "PagSeguro: Recurring charge aborted, missing customer payment method."
 msgstr ""
 "PagSeguro: Cobrança recorrente cancelada, método de pagamento do cliente "
 "ausente."
 
-#. %s: amount
-#: includes/traits/trait-virtuaria-pagseguro-common.php:697
-#, php-format
-msgid "PagSeguro: Refund of R$%s successful."
-msgstr "PagSeguro: Reembolso de R$%s realizado com sucesso."
-
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:407
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:442
 msgid ""
 "PagSeguro: The amount of the additional charge was returned to the buyer."
 msgstr "PagSeguro: O valor do valor adicional foi devolvido ao comprador."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:381
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:416
 msgid ""
 "PagSeguro: The amount of the additional charge was returned to the buyer. "
 msgstr "PagSeguro: O valor do valor adicional foi devolvido ao comprador."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:330
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:365
 msgid ""
 "PagSeguro: The buyer chose to pay with a credit card and PagSeguro is "
 "analyzing the risk of the transaction."
@@ -1293,7 +1409,7 @@ msgstr ""
 "PagSeguro: O comprador optou por pagar com cartão de crédito e o PagSeguro "
 "está analisando o risco da transação."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:322
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:357
 msgid ""
 "PagSeguro: The buyer initiated the transaction, but so far PagSeguro has not "
 "received any information about the payment."
@@ -1301,7 +1417,7 @@ msgstr ""
 "PagSeguro: O comprador iniciou a transação, mas até o momento o PagSeguro "
 "não recebeu nenhuma informação sobre o pagamento."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:413
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:448
 msgid ""
 "PagSeguro: The buyer opened a chargeback request with the credit card "
 "operator."
@@ -1309,7 +1425,7 @@ msgstr ""
 "PagSeguro: O comprador abriu uma solicitação de chargeback junto à operadora "
 "do cartão de crédito."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:367
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:402
 msgid ""
 "PagSeguro: The buyer, within the transaction release period, opened a "
 "dispute. Access the PagSeguro account panel for more details."
@@ -1317,15 +1433,15 @@ msgstr ""
 "PagSeguro: O comprador, dentro do prazo de liberação da transação, abriu uma "
 "disputa. Acesse o painel da conta PagSeguro para mais detalhes."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:403
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:438
 msgid "PagSeguro: The transaction amount has been refunded to the buyer."
 msgstr "PagSeguro: O valor da transação foi reembolsado ao comprador."
 
-#: includes/class-virtuaria-pagseguro-handle-notifications.php:373
+#: includes/class-virtuaria-pagseguro-handle-notifications.php:408
 msgid "PagSeguro: The transaction amount was returned to the buyer. "
 msgstr "PagSeguro: O valor da transação foi devolvido ao comprador."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:479
+#: includes/traits/trait-virtuaria-pagseguro-common.php:490
 msgid ""
 "PagSeguro: Unable to check the payment status of the order. See the log for "
 "more details."
@@ -1333,40 +1449,34 @@ msgstr ""
 "PagSeguro: Não foi possível verificar o status do pagamento do pedido. Veja "
 "o log para mais detalhes."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1040
+#: includes/class-wc-virtuaria-pagseguro-api.php:1121
 msgid "PagSeguro: Unable to create additional charge."
 msgstr "PagSeguro: Não foi possível criar cobrança adicional."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1543
+#: includes/class-wc-virtuaria-pagseguro-api.php:1683
 msgid "PagSeguro: Unable to execute recurrence."
 msgstr "PagSeguro: Não foi possível executar a recorrência."
-
-#. %s: amount
-#: includes/traits/trait-virtuaria-pagseguro-common.php:710
-#, php-format
-msgid ""
-"PagSeguro: Unable to refund R$%s. Check the transaction status and the "
-"amount to be refunded and try again.."
-msgstr ""
-"PagSeguro: Não foi possível reembolsar R$%s. Verifique o status da transação "
-"e o valor a ser reembolsado e tente novamente."
 
 #: includes/class-virtuaria-pagseguro-handle-notifications.php:188
 msgid "PagSeguro: Unauthorized purchase."
 msgstr "PagSeguro: Compra não autorizada."
 
 #. %s: payment response
-#: includes/class-wc-virtuaria-pagseguro-api.php:1103
-#: includes/class-wc-virtuaria-pagseguro-api.php:1597
+#: includes/class-wc-virtuaria-pagseguro-api.php:1184
+#: includes/class-wc-virtuaria-pagseguro-api.php:1737
 #, php-format
 msgid "PagSeguro: Unauthorized, %s."
 msgstr "PagSeguro: Não autorizado, %s."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:589
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1359
 msgid "PagSeguro: Waiting for payment confirmation."
 msgstr "PagSeguro: Aguardando confirmação do pagamento."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:434
+#: templates/refund-fallback-transactions.php:39
+msgid "Paid Transactions List to refund."
+msgstr "Lista de transações pagas a serem reembolsadas."
+
+#: includes/traits/trait-virtuaria-pagseguro-common.php:445
 msgid "Paid."
 msgstr "Pago."
 
@@ -1377,6 +1487,10 @@ msgstr "Pague com cartão de crédito."
 #: includes/class-wc-virtuaria-pagseguro-gateway-ticket.php:99
 msgid "Pay with bank slip."
 msgstr "Pague com boleto bancário."
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:177
+msgid "Pay with credit card and pix combined."
+msgstr "Pague com cartão de crédito e pix combinados."
 
 #: includes/class-wc-virtuaria-pagseguro-gateway.php:192
 msgid "Pay with credit card, pix and bank slip."
@@ -1396,7 +1510,7 @@ msgstr "Pague com pix."
 msgid "Pay with PIX. The payment code is valid for %s."
 msgstr "Pague com PIX. O código de pagamento é válido para %s."
 
-#: includes/class-virtuaria-pagseguro-settings.php:243
+#: includes/class-virtuaria-pagseguro-settings.php:269
 msgid "Payment"
 msgstr "Pagamento"
 
@@ -1404,13 +1518,13 @@ msgstr "Pagamento"
 msgid "Payment confirmed"
 msgstr "Pagamento confirmado"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:449
-#: includes/class-wc-virtuaria-pagseguro-api.php:1064
-#: includes/class-wc-virtuaria-pagseguro-api.php:1567
+#: includes/class-wc-virtuaria-pagseguro-api.php:445
+#: includes/class-wc-virtuaria-pagseguro-api.php:1145
+#: includes/class-wc-virtuaria-pagseguro-api.php:1707
 msgid "Payment not authorized."
 msgstr "Pagamento não autorizado."
 
-#: includes/class-virtuaria-pagseguro-settings.php:124
+#: includes/class-virtuaria-pagseguro-settings.php:141
 msgid ""
 "Payments can be made flexibly and securely, using Credit Card, Pix or Bank "
 "Slip."
@@ -1419,16 +1533,17 @@ msgstr ""
 "de Crédito, Pix ou Boleto Bancário."
 
 #: templates/transparent-checkout.php:28
-#: includes/traits/trait-virtuaria-pagseguro-common.php:808
+#: includes/traits/trait-virtuaria-pagseguro-common.php:817
 #: includes/traits/trait-virtuaria-pagseguro-pix.php:119
 msgid "PIX"
 msgstr "PIX"
 
-#: includes/class-virtuaria-pagseguro-settings.php:67
-#: includes/class-virtuaria-pagseguro-settings.php:68
-#: includes/class-virtuaria-pagseguro-settings.php:229
-#: includes/class-wc-virtuaria-pagseguro-api.php:585
-#: includes/traits/trait-virtuaria-pagseguro-common.php:1151
+#: includes/class-wc-virtuaria-pagseguro-api.php:633
+#: includes/class-virtuaria-pagseguro-settings.php:74
+#: includes/class-virtuaria-pagseguro-settings.php:75
+#: includes/class-virtuaria-pagseguro-settings.php:254
+#: templates/refund-fallback-transactions.php:83
+#: includes/traits/trait-virtuaria-pagseguro-common.php:1166
 msgid "Pix"
 msgstr "Pix"
 
@@ -1440,24 +1555,28 @@ msgstr "Validade do Código PIX"
 msgid "Pix Payment"
 msgstr "Pagamento Pix"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1161
+#: includes/class-wc-virtuaria-pagseguro-api.php:1242
 msgid "Pix payment simulation successfully completed."
 msgstr "Simulação de pagamento Pix concluída com sucesso."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1167
+#: includes/class-wc-virtuaria-pagseguro-api.php:1248
 msgid "Pix payment simulation:"
 msgstr "Simulação de pagamento Pix:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:453
+#: templates/refund-fallback-transactions.php:25
+msgid "Pix:"
+msgstr "Pix:"
+
+#: includes/class-wc-virtuaria-pagseguro-api.php:449
 msgid "Please check the entered data and try again."
 msgstr "Verifique os dados inseridos e tente novamente."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1068
-#: includes/class-wc-virtuaria-pagseguro-api.php:1571
+#: includes/class-wc-virtuaria-pagseguro-api.php:1149
+#: includes/class-wc-virtuaria-pagseguro-api.php:1711
 msgid "Please check the submitted data and try again."
 msgstr "Verifique os dados enviados e tente novamente."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:428
+#: includes/traits/trait-virtuaria-pagseguro-common.php:439
 msgid ""
 "Pre-authorized. The total order is reserved on the customer's credit card."
 msgstr ""
@@ -1475,12 +1594,12 @@ msgstr "Imprimir Boleto Bancário"
 msgid "Print the bank slip"
 msgstr "Imprima o boleto bancário"
 
-#: includes/class-virtuaria-pagseguro-settings.php:290
+#: includes/class-virtuaria-pagseguro-settings.php:318
 msgid "Privacy"
 msgstr "Privacidade"
 
-#: templates/main-screen-settings.php:193
-#: templates/main-screen-settings.php:197
+#: templates/main-screen-settings.php:270
+#: templates/main-screen-settings.php:274
 msgid "Processing mode"
 msgstr "Modo de processamento"
 
@@ -1492,12 +1611,12 @@ msgstr "Cálculo da página do produto"
 msgid "Production"
 msgstr "Produção"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:519
+#: includes/class-wc-virtuaria-pagseguro-api.php:515
 #, php-format
 msgid "R$ %s via Bank Slip"
 msgstr "R$ %s via Boleto Bancário"
 
-#: includes/class-virtuaria-pagseguro-settings.php:286
+#: includes/class-virtuaria-pagseguro-settings.php:314
 msgid "Rate our work ⭐"
 msgstr "Avalie nosso trabalho ⭐"
 
@@ -1511,17 +1630,29 @@ msgstr "Razão:"
 msgid "Reason: %s."
 msgstr "Motivo: %s."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1553
+#: includes/class-wc-virtuaria-pagseguro-api.php:1693
 msgid "Recurring charge response: "
 msgstr "Resposta de cobrança recorrente:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:687
+#: templates/refund-fallback-transactions.php:117
+msgid "Refund"
+msgstr "Reembolsar"
+
+#: includes/class-wc-virtuaria-pagseguro-api.php:746
 msgid "Refund for order "
 msgstr "Reembolso para pedido"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:702
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:701
+msgid "Refund Request"
+msgstr "Solicitação de Reembolso"
+
+#: includes/class-wc-virtuaria-pagseguro-api.php:761
 msgid "Refund response: "
 msgstr "Resposta de reembolso:"
+
+#: templates/refund-fallback-transactions.php:53
+msgid "Refunded"
+msgstr "Reembolsado"
 
 #: includes/traits/trait-virtuaria-pagseguro-credit.php:364
 msgid "Remove ALL cards"
@@ -1543,7 +1674,7 @@ msgstr "Solicitação de pedido"
 msgid "Sandbox"
 msgstr "Sandbox"
 
-#: templates/main-screen-settings.php:363
+#: templates/main-screen-settings.php:440
 msgid "Save changes"
 msgstr "Salvar alterações"
 
@@ -1551,7 +1682,7 @@ msgstr "Salvar alterações"
 msgid "Save payment details?"
 msgstr "Salvar método de pagamento?"
 
-#: templates/credit-checkout.php:131
+#: templates/credit-checkout.php:256
 msgid "Save payment method for future purchases?"
 msgstr "Salvar método de pagamento para compras futuras?"
 
@@ -1559,7 +1690,7 @@ msgstr "Salvar método de pagamento para compras futuras?"
 msgid "Scan this code to pay"
 msgstr "Escaneie este código para pagar"
 
-#: templates/credit-checkout.php:25
+#: templates/credit-checkout.php:116
 msgid "Security Code"
 msgstr "Código de Segurança"
 
@@ -1585,19 +1716,19 @@ msgid ""
 msgstr ""
 "Selecione a forma de exibir o pagamento parcelado na listagem de produtos."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1020
+#: includes/class-wc-virtuaria-pagseguro-api.php:1101
 msgid "Sending additional charge: "
 msgstr "Envio de cobrança adicional:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:401
+#: includes/class-wc-virtuaria-pagseguro-api.php:397
 msgid "Sending new order: "
 msgstr "Enviando novo pedido:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1523
+#: includes/class-wc-virtuaria-pagseguro-api.php:1663
 msgid "Sending recurrence: "
 msgstr "Enviando recorrência:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1093
+#: includes/class-wc-virtuaria-pagseguro-api.php:1174
 #| msgid " sent R$"
 msgid "sent R$"
 msgstr "enviada R$"
@@ -1606,15 +1737,15 @@ msgstr "enviada R$"
 msgid "Separate"
 msgstr "Separado"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:747
+#: includes/class-wc-virtuaria-pagseguro-api.php:806
 msgid "Server response when trying to obtain a public key: "
 msgstr "Resposta do servidor ao tentar obter uma chave pública:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:428
+#: includes/class-wc-virtuaria-pagseguro-api.php:424
 msgid "Server response while trying to create a new order: "
 msgstr "Resposta do servidor ao tentar criar um novo pedido:"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1276
+#: includes/class-wc-virtuaria-pagseguro-api.php:1404
 msgid "Server response while trying to obtain a 3DS session: "
 msgstr "Resposta do servidor ao tentar obter uma sessão 3DS:"
 
@@ -1694,14 +1825,14 @@ msgstr ""
 "mesmo que o cartão não suporte esta funcionalidade ou que a obtenção da "
 "sessão 3D Secure com o PagBank não seja bem-sucedida."
 
-#: includes/class-virtuaria-pagseguro-settings.php:92
-#: includes/class-virtuaria-pagseguro-settings.php:93
-#: includes/class-virtuaria-pagseguro-settings.php:231
-#: includes/class-virtuaria-pagseguro-settings.php:244
+#: includes/class-virtuaria-pagseguro-settings.php:109
+#: includes/class-virtuaria-pagseguro-settings.php:110
+#: includes/class-virtuaria-pagseguro-settings.php:257
+#: includes/class-virtuaria-pagseguro-settings.php:270
 msgid "Split"
 msgstr "Split"
 
-#: includes/class-virtuaria-pagseguro-settings.php:120
+#: includes/class-virtuaria-pagseguro-settings.php:137
 msgid ""
 "Split Payment is a payment method in which the total purchase amount is "
 "automatically divided between two or more PagBank (PagSeguro) accounts."
@@ -1709,17 +1840,22 @@ msgstr ""
 "O Parcelamento é uma forma de pagamento em que o valor total da compra é "
 "dividido automaticamente entre duas ou mais contas do PagBank (PagSeguro)."
 
-#: templates/main-screen-settings.php:224
-#: templates/main-screen-settings.php:228
+#: templates/main-screen-settings.php:301
+#: templates/main-screen-settings.php:305
 msgid "Status after confirmation"
 msgstr "Status após confirmação"
 
-#: includes/traits/trait-virtuaria-pagseguro-credit.php:696
+#: templates/main-screen-settings.php:225
+#: templates/main-screen-settings.php:241
+msgid "Status:"
+msgstr "Status:"
+
+#: includes/traits/trait-virtuaria-pagseguro-credit.php:705
 msgid "Subscription payment completed successfully."
 msgstr "Pagamento da assinatura concluído com sucesso."
 
 #. %s: admin log URL.
-#: includes/traits/trait-virtuaria-pagseguro-credit.php:673
+#: includes/traits/trait-virtuaria-pagseguro-credit.php:682
 #, php-format
 msgid ""
 "Subscription payment failed. Please see the log for more details by clicking "
@@ -1728,8 +1864,8 @@ msgstr ""
 "O pagamento da assinatura falhou. Veja o log para mais detalhes clicando <a "
 "href=\"%s\">aqui</a>."
 
-#: templates/main-screen-settings.php:296
-#: templates/main-screen-settings.php:300
+#: templates/main-screen-settings.php:373
+#: templates/main-screen-settings.php:377
 msgid "Subscriptions Order Status"
 msgstr "Status do pedido de assinaturas"
 
@@ -1741,7 +1877,7 @@ msgstr "Suporte para serviços adicionais dos Correios"
 msgid "Support for all contracted delivery methods"
 msgstr "Suporte para todos os métodos de entrega contratados"
 
-#: includes/class-virtuaria-pagseguro-settings.php:287
+#: includes/class-virtuaria-pagseguro-settings.php:315
 msgid ""
 "Support our work. If you liked the plugin, leave a positive review by "
 "clicking <a href=\"https://wordpress.org/support/plugin/virtuaria-"
@@ -1753,11 +1889,11 @@ msgstr ""
 "pagseguro/reviews?rate=5#new-post \" target=\"_blank\">aqui</a>. Adradecemos "
 "antecipadamente."
 
-#: templates/main-screen-settings.php:199
+#: templates/main-screen-settings.php:276
 msgid "Synchronous"
 msgstr "Síncrono"
 
-#: templates/main-screen-settings.php:263
+#: templates/main-screen-settings.php:340
 msgid "Tabs"
 msgstr "Abas"
 
@@ -1773,10 +1909,6 @@ msgstr ""
 "Texto exibido no extrato do cartão para identificar a loja (máximo <b>17 "
 "caracteres</b>, não deve conter caracteres especiais ou espaços em branco)."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:194
-msgid "The <b>Neighborhood</b> field is required!"
-msgstr "O campo <b>Bairro</b> é obrigatório!"
-
 #: templates/main-screen-settings.php:186
 msgid ""
 "The connection is valid indefinitely. The plugin will display an alert if "
@@ -1789,7 +1921,7 @@ msgstr ""
 msgid "The order will be confirmed only after payment confirmation."
 msgstr "O pedido será confirmado somente após a confirmação do pagamento."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:370
+#: includes/traits/trait-virtuaria-pagseguro-common.php:381
 msgid "The result of the query will be displayed in the order notes (history)."
 msgstr "O resultado da consulta será exibido nas notas do pedido (histórico)."
 
@@ -1806,7 +1938,7 @@ msgid "This controls the title displayed to the user during checkout."
 msgstr ""
 "Isso controla o título exibido ao usuário durante a finalização da compra."
 
-#: templates/main-screen-settings.php:217
+#: templates/main-screen-settings.php:294
 msgid ""
 "This prefix is ​​used to define the order identifier. If you need to use the "
 "same PagSeguro account in more than one online store, you will need to "
@@ -1822,7 +1954,7 @@ msgstr ""
 msgid "Title"
 msgstr "Título"
 
-#: includes/class-virtuaria-pagseguro-settings.php:124
+#: includes/class-virtuaria-pagseguro-settings.php:141
 msgid ""
 "To use this feature, install the latest version of the Virtuaria PagSeguro "
 "Split plugin by clicking</b> <a href=\"https://wordpress."
@@ -1832,16 +1964,29 @@ msgstr ""
 "PagSeguro Split clicando</b> <a href=\"https://wordpress."
 "org/plugins/virtuaria-pagbank-split/\" target=\"_blank\">aqui</a>."
 
+#: templates/refund-fallback-transactions.php:52
 #: templates/credit-installments-table.php:24
 msgid "Total"
 msgstr "Total"
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:801
+msgid "Total do Pix"
+msgstr ""
+
+#: templates/refund-fallback-transactions.php:29
+msgid "Total Refunded:"
+msgstr "Total Reembolsado:"
+
+#: templates/refund-fallback-transactions.php:18
+msgid "Total Sold"
+msgstr "Total Vendido"
 
 #: includes/class-virtuaria-marketing-page.php:63
 msgid "Tracking"
 msgstr "Rastreamento"
 
-#: templates/main-screen-settings.php:210
-#: templates/main-screen-settings.php:214
+#: templates/main-screen-settings.php:287
+#: templates/main-screen-settings.php:291
 msgid "Transaction Prefix"
 msgstr "Prefixo de transação"
 
@@ -1849,15 +1994,19 @@ msgstr "Prefixo de transação"
 msgid "Two columns"
 msgstr "Duas colunas"
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:283
+#: templates/refund-fallback-transactions.php:50
+msgid "Type"
+msgstr "Tipo"
+
+#: includes/class-wc-virtuaria-pagseguro-api.php:274
 msgid "Unable to encrypt the credit card."
 msgstr "Não é possível criptografar o cartão de crédito."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:457
+#: includes/class-wc-virtuaria-pagseguro-api.php:453
 msgid "Unable to process your purchase. Please try again later."
 msgstr "Não foi possível processar sua compra. Tente novamente mais tarde."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:440
+#: includes/traits/trait-virtuaria-pagseguro-common.php:451
 msgid ""
 "Under analysis. The buyer chose to pay with a credit card and PagSeguro is "
 "analyzing the risk of the transaction."
@@ -1873,7 +2022,7 @@ msgstr "Unificado"
 msgid "Unified:"
 msgstr "Unificado:"
 
-#: templates/credit-checkout.php:113
+#: templates/credit-checkout.php:220
 msgid "Use another card?"
 msgstr "Usar outro cartão?"
 
@@ -1902,6 +2051,10 @@ msgstr ""
 msgid "Validity"
 msgstr "Validade"
 
+#: templates/refund-fallback-transactions.php:105
+msgid "Value"
+msgstr "Valor"
+
 #: templates/credit-installments-table.php:12
 msgid "View available plots"
 msgstr "Ver parcelas disponíveis"
@@ -1923,19 +2076,19 @@ msgstr "Virtuaria Marketing"
 msgid "Virtuaria PagBank / PagSeguro para Woocommerce"
 msgstr "Virtuaria PagBank / PagSeguro para Woocommerce"
 
-#: includes/class-virtuaria-pagseguro-settings.php:40
-#: includes/class-virtuaria-pagseguro-settings.php:41
 #: includes/class-wc-virtuaria-pagseguro-gateway.php:191
+#: includes/class-virtuaria-pagseguro-settings.php:47
+#: includes/class-virtuaria-pagseguro-settings.php:48
 #: templates/main-screen-settings.php:51
 msgid "Virtuaria PagSeguro"
 msgstr "Virtuaria PagSeguro"
 
-#: includes/class-virtuaria-pagseguro-settings.php:440
+#: includes/class-virtuaria-pagseguro-settings.php:487
 msgid "Virtuaria PagSeguro - Operation processing failed!"
 msgstr "Virtuaria PagSeguro - Falha no processamento da operação!"
 
 #. %s: setting url
-#: includes/class-virtuaria-pagseguro-settings.php:457
+#: includes/class-virtuaria-pagseguro-settings.php:504
 #, php-format
 msgid ""
 "Virtuaria PagSeguro - Your connection to the PagSeguro API is being denied, "
@@ -1948,7 +2101,7 @@ msgstr ""
 "Tente reconectar o plugin pela página <a href=\"%s\">configuração</a> para "
 "renovar a autorização. Para mais detalhes, veja o log do plugin."
 
-#: virtuaria-pagseguro.php:92
+#: virtuaria-pagseguro.php:101
 msgid ""
 "Virtuaria PagSeguro cannot be used at the same time as \"Claudio Sanches - "
 "PagSeguro for WooCommerce\""
@@ -1956,20 +2109,24 @@ msgstr ""
 "Virtuaria PagSeguro não pode ser utilizado ao mesmo tempo que \"Claudio "
 "Sanches - PagSeguro para WooCommerce\""
 
-#: includes/class-virtuaria-pagseguro-settings.php:418
+#: includes/class-virtuaria-pagseguro-settings.php:465
 msgid "Virtuaria PagSeguro Connected!"
 msgstr "Virtuaria PagSeguro Conectado!"
 
-#: includes/class-virtuaria-pagseguro-settings.php:429
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:176
+msgid "Virtuaria PagSeguro Crédito + Pix"
+msgstr ""
+
+#: includes/class-virtuaria-pagseguro-settings.php:476
 msgid "Virtuaria PagSeguro Disconnected!"
 msgstr "Virtuaria PagSeguro Desconectado!"
 
-#: virtuaria-pagseguro.php:81
+#: virtuaria-pagseguro.php:90
 msgid "Virtuaria PagSeguro needs Woocommerce 4.0+ to work!"
 msgstr "O Virtuaria PagSeguro precisa do Woocommerce 4.0+ para funcionar!"
 
 #. %1$s: plugin link
-#: virtuaria-pagseguro.php:205
+#: virtuaria-pagseguro.php:233
 #, php-format
 msgid ""
 "Virtuaria PagSeguro requires the <a href=\"%1$s\" target=\"_blank\">"
@@ -1980,6 +2137,11 @@ msgstr ""
 "Virtuaria Correios</a> na versão 1.5.6+ ou o <a href=\"%2$s\" "
 "target=\"_blank\">Brazilian Market on WooCommerce</a> 3.7 ou superior para "
 "funcionar!."
+
+#: includes/class-virtuaria-pagseguro-gateway-duopay.php:632
+#| msgid "Virtuaria PagSeguro: Full Refund"
+msgid "Virtuaria PagSeguro: Refunds"
+msgstr "Virtuaria PagSeguro: Reembolso"
 
 #: templates/main-screen-settings.php:89
 msgid ""
@@ -1997,7 +2159,7 @@ msgstr ""
 "Virtuaria Especial 02: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | "
 "Boleto R$ 2,99"
 
-#: includes/class-virtuaria-pagseguro-settings.php:292
+#: includes/class-virtuaria-pagseguro-settings.php:320
 #: includes/traits/trait-virtuaria-pagseguro-common.php:61
 msgid "Virtuaria Technology"
 msgstr "Tecnologia Virtuaria"
@@ -2006,27 +2168,27 @@ msgstr "Tecnologia Virtuaria"
 msgid "Waiting for payment"
 msgstr "Aguardando pagamento"
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:458
+#: includes/traits/trait-virtuaria-pagseguro-common.php:469
 msgid "Waiting for Payment."
 msgstr "Aguardando Pagamento."
 
-#: includes/traits/trait-virtuaria-pagseguro-credit.php:649
+#: includes/traits/trait-virtuaria-pagseguro-credit.php:658
 msgid "Waiting for subscription payment."
 msgstr "Aguardando pagamento da assinatura."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1575
+#: includes/class-wc-virtuaria-pagseguro-api.php:1715
 msgid "We were unable to process your charge."
 msgstr "Não foi possível processar sua cobrança."
 
-#: includes/class-wc-virtuaria-pagseguro-api.php:1072
+#: includes/class-wc-virtuaria-pagseguro-api.php:1153
 msgid "We were unable to process your charge. Please try again later."
 msgstr "Não conseguimos processar sua cobrança. Tente novamente mais tarde."
 
-#: includes/traits/trait-virtuaria-pagseguro-common.php:656
+#: includes/traits/trait-virtuaria-pagseguro-common.php:577
 msgid "We were unable to process your purchase. Please try again later."
 msgstr "Não conseguimos processar sua compra. Tente novamente mais tarde."
 
-#: includes/class-virtuaria-pagseguro-settings.php:122
+#: includes/class-virtuaria-pagseguro-settings.php:139
 msgid ""
 "What sets our Split Payment plugin apart is its ease of adoption when "
 "compared to other solutions on the market. We have worked hard to develop an "
@@ -2038,7 +2200,7 @@ msgstr ""
 "desenvolver uma solução inovadora que garante integração suave com lojas "
 "online baseadas em WooCommerce."
 
-#: templates/credit-checkout.php:123
+#: templates/credit-checkout.php:242
 msgid ""
 "When completing the purchase, I allow the store to save this payment method."
 msgstr ""
@@ -2048,6 +2210,28 @@ msgstr ""
 msgid "with interest"
 msgstr "com juros"
 
+#. 1: Link to purchase, 2: E-mail to contact support.
+#: templates/main-screen-settings.php:230
+#, php-format
+msgid ""
+"You do not yet have a valid License Code. You can purchase one through the "
+"link %1$s. If you have any questions, please contact support via email at "
+"%2$s."
+msgstr ""
+"Você ainda não possui um Código de Licença válido. Você pode adquirir um "
+"através do link %1$s. Em caso de dúvidas, entre em contato com o suporte "
+"pelo e-mail %2$s."
+
+#. %s: E-mail to contact support.
+#: templates/main-screen-settings.php:246
+#, php-format
+msgid ""
+"You have a valid access key. If you have any questions, please contact "
+"support via email at %s."
+msgstr ""
+"Você possui uma chave de acesso válida. Caso tenha alguma dúvida, entre em "
+"contato com o suporte pelo e-mail %s."
+
 #: includes/traits/trait-virtuaria-pagseguro-pix.php:89
 msgid "Your payment has been approved!"
 msgstr "Seu pagamento foi aprovado!"
@@ -2055,3 +2239,7 @@ msgstr "Seu pagamento foi aprovado!"
 #: templates/main-screen-settings.php:14
 msgid "Your settings have been saved."
 msgstr "Suas configurações foram salvas."
+
+#: templates/main-screen-settings.php:256
+msgid "🌟 Premium features"
+msgstr "🌟 Recursos premium"

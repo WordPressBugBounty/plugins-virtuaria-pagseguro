@@ -113,7 +113,7 @@ trait Virtuaria_PagSeguro_Credit {
 				$confirm_sell_no_3ds = $this->get_option( 'confirm_sell', 'no' );
 				wp_localize_script(
 					'3ds-autentication',
-					'auth_3ds',
+					$this->id . '_auth_3ds',
 					array(
 						'order_total' => $this->get_order_total() * 100,
 						'session'     => $session_3d,
@@ -554,16 +554,25 @@ trait Virtuaria_PagSeguro_Credit {
 		$charge_amount = $order->get_meta(
 			'_charge_amount',
 			true
-		);
+		) / 100;
+
+		$order_total = $order->get_total();
+		if (
+			'virt_pagseguro_duopay' === $this->id
+			&& WC()->session->get( 'virtuaria_pagseguro_duopay_credit_value' )
+		) {
+			$order_total = WC()->session->get( 'virtuaria_pagseguro_duopay_credit_value' );
+		}
+
 		if ( $this->tax
 			&& intval( $charge_amount ) > 0
-			&& ( ( $charge_amount / 100 ) - $order->get_total() ) > 0 ) {
+			&& ( $charge_amount - $order_total ) > 0 ) {
 			$fee = new WC_Order_Item_Fee();
 			$fee->set_name(
 				__( 'Pagseguro installment payment', 'virtuaria-pagseguro' )
 			);
 			$fee->set_total(
-				( $charge_amount / 100 ) - $order->get_total()
+				$charge_amount - $order_total
 			);
 
 			$order->add_item( $fee );

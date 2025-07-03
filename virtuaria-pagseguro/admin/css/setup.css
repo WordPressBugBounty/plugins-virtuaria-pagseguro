@@ -138,6 +138,7 @@ span.read-more {
 }
 .navigation-tab {
     display: flex;
+    align-items: center;
 }
 .navigation-tab .tablinks:hover,
 .navigation-tab .tablinks.active {
@@ -194,11 +195,11 @@ h1.main-title {
     border: 1px solid #ccc;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 14px 13px;
     transition: 0.3s;
-    font-size: 16px;
+    font-size: 14px;
     position: relative;
-    min-width: 130px;
+    min-width: 115px;
     font-family: Arial, sans-serif;
     font-weight: bold;
     color: #333;
