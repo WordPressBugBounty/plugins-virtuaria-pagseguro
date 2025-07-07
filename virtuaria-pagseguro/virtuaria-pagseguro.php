@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.6.0
+ * Version: 3.6.1
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  * Text Domain: virtuaria-pagseguro
@@ -107,7 +107,10 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		 * Load file dependencys.
 		 */
 		private function load_dependecys() {
-			require_once 'includes/virtuaria-auth-sdk.phar';
+			if ( ! class_exists( '\Virtuaria\Plugins\Auth' ) ) {
+				require_once 'includes/virtuaria-auth-sdk.phar';
+			}
+
 			require_once 'includes/class-virtuaria-pagseguro-settings.php';
 			$this->settings = Virtuaria_Pagseguro_Settings::get_settings();
 

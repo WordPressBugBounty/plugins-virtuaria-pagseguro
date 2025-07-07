@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.6.0
+Stable tag: 3.6.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -47,15 +47,6 @@ Eleve a experiência de compra da sua loja virtual oferecendo aos cliente a opç
 
 📹 [Playlist do Plugin no Youtube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
 
-### ⭐ **Descontos nas Taxas do PagBank:**
-
-– **Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
-– **Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
-– **Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
-– **Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
-
-*Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
-
 
 ### ✨ Conexão Inicial com o PagBank ###
 Este plugin utiliza a API mais moderna Order/Connect de cobrança disponibilizada pelo pagseguro, o que permite configuração e ativação muito mais simples e segura, sem necessidade de gerar chaves via painel do PagSeguro ou abrir chamados.
@@ -68,7 +59,6 @@ Este plugin utiliza a API mais moderna Order/Connect de cobrança disponibilizad
 
 ### 💌 **Interessado em algo mais?**
 Contate-nos diretamente em [tecnologia@virtuaria.com.br](mailto:tecnologia@virtuaria.com.br) e garanta uma solução sob medida para suas necessidades.
-WhatsApp: +55 79 999312134
 
 ## Recursos
 
@@ -130,15 +120,22 @@ Conecte sua loja virtual Woocommerce aos Correios com eficiência e confiabilida
 ## Observações:
 - [PagSeguro](https://pagseguro.uol.com.br/) é uma plataforma de pagamento brasileira desenvolvida pela UOL. Este plugin foi desenvolvido sem nenhum incentivo do PagSeguro ou da UOL, a partir da [documentação oficial do PagSeguro] e utiliza a última versão ( 4.0 ) da API de cobranças. Nenhum dos desenvolvedores deste plugin possui vínculos com o Pagseguro ou UOL.
 
-- Os prints foram feitos em um painel wordpress/woocommerce personalizado pela Virtuaria objetivando otimizar o uso em lojas virtuais, por isso o fundo verde, mas o plugin é 100% compatível com o painel padrão do Wordpress.
-
 - **Para mais informações, acesse** [virtuaria.com.br - desenvolvimento de plugins, criação e hospedagem de lojas virtuais](https://virtuaria.com.br/) ou envie um email para tecnologia@virtuaria.com.br
 
 
 = Compatibilidade =
-Este plugin necessita do [WooCommerce Extra Checkout Fields for Brazil](http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/) para funcionar corretamente.
+Este plugin necessita de um plugin que adiciona campos brasileiros no checkout para funcionar corretamente. Exemplos de plugins compatíveis:
+- [Virtuaria Correios](https://wordpress.org/plugins/virtuaria-correios/)
+- [WooCommerce Extra Checkout Fields for Brazil](http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/)
+É necessário instalar apenas 1 destes plugins.
 
-Compatível com Woocommerce 5.8.0 ou superior
+### ⭐ **Descontos nas Taxas do PagBank:**
+– **Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
+– **Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
+– **Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
+– **Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
+
+*Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
 
 = Contribuição =
 
@@ -392,6 +389,8 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.6.1 2025-07-07 =
+* Melhoria - Performance e pequenos bugs.
 = 3.6.0 2025-07-02 =
 * Novo - Suporte a forma de pagamento Duopay;
 * Ajustes - Estabilidade e correção de bugs menores.
