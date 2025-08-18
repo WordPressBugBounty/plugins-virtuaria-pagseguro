@@ -240,7 +240,11 @@ tokenizeCard = function () {
 			$('input[name="radio-control-wc-payment-method-options"]:checked')
 				.parent().parent().find(".virtuaria-pagseguro-token").val(card.encryptedCard);
 		} else {
-			$('input[name="payment_method"]:checked').parent().find(".virtuaria-pagseguro-token").val(card.encryptedCard);
+			let token_elem = $('input[name="payment_method"]:checked').parent().find(".virtuaria-pagseguro-token");
+			if ( token_elem.length == 0 ) {
+				token_elem = $('input[name="payment_method"]:checked').parent().parent().find(".virtuaria-pagseguro-token");
+			}
+			token_elem.val(card.encryptedCard);
 		}
 	}
 }

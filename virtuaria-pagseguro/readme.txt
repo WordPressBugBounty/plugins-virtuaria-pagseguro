@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.6.1
+Stable tag: 3.6.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -389,6 +389,9 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.6.2 2025-08-12 =
+* Melhoria - Compatibilidade com o checkout do tema Maxcoach;
+* Melhoria - Compatibiliadade com status customizados no duopay.
 = 3.6.1 2025-07-07 =
 * Melhoria - Performance e pequenos bugs.
 = 3.6.0 2025-07-02 =

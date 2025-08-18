@@ -75,6 +75,7 @@ class Virtuaria_PagSeguro_Events {
 			if ( $order
 				&& (
 					$payment_status === $order->get_status()
+					|| $this->is_order_paid( $order )
 					|| $this->is_pix_paid( $order )
 				)
 			) {
@@ -251,7 +252,7 @@ class Virtuaria_PagSeguro_Events {
 	public function confirm_payment_pix( $order_id, $date_expires ) {
 		$order = wc_get_order( $order_id );
 
-		if ( $date_expires <= time() || ( $order && $order->get_meta( '_charge_id' ) ) ) {
+		if ( $date_expires <= time() || $this->is_order_paid( $order ) ) {
 			wp_clear_scheduled_hook(
 				'virtuaria_pagseguro_pix_confirm_payment',
 				array(
@@ -287,7 +288,7 @@ class Virtuaria_PagSeguro_Events {
 		if ( $pagbank_order_id ) {
 			if ( 'virt_pagseguro_pix' === $order->get_payment_method() ) {
 				$gateway = new WC_Virtuaria_PagSeguro_Gateway_Pix();
-			} elseif ( 'virt_pagseguro_duopay' === $order->get_payment_method() ) {
+			} elseif ( $this->is_duopay( $order ) ) {
 				$gateway = new Virtuaria_PagSeguro_Gateway_DuoPay();
 			} else {
 				$gateway = new WC_Virtuaria_PagSeguro_Gateway();
@@ -297,7 +298,7 @@ class Virtuaria_PagSeguro_Events {
 				$gateway
 			);
 
-			$charge_id = $api->check_payment_pix( $pagbank_order_id );
+			$charge_id = $api->check_payment_pix( $pagbank_order_id, $order );
 
 			if ( $charge_id ) {
 				$order->update_status(
@@ -307,7 +308,7 @@ class Virtuaria_PagSeguro_Events {
 
 				$order->update_meta_data( '_charge_id', $charge_id );
 
-				if ( 'virt_pagseguro_duopay' === $order->get_payment_method() ) {
+				if ( $this->is_duopay( $order ) ) {
 					$order->update_meta_data( '_duopay_pix_charge_id', $charge_id );
 
 					$transactions = $order->get_meta( '_duopay_transactions', true );
@@ -324,6 +325,30 @@ class Virtuaria_PagSeguro_Events {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Checks if the given order is using the Duopay payment method.
+	 *
+	 * @param WC_Order $order The order object.
+	 * @return bool True if the order is using Duopay, false otherwise.
+	 */
+	private function is_duopay( $order ) {
+		return $order && 'virt_pagseguro_duopay' === $order->get_payment_method();
+	}
+
+	/**
+	 * Checks if the given order is paid.
+	 *
+	 * @param WC_Order $order The order object.
+	 * @return bool True if the order is paid, false otherwise.
+	 */
+	private function is_order_paid( $order ) {
+		$is_duopay = $this->is_duopay( $order );
+		return $order && (
+			! $is_duopay && $order->get_meta( '_charge_id' )
+			|| $is_duopay && $order->get_meta( '_duopay_pix_charge_id' )
+		);
 	}
 }
 
