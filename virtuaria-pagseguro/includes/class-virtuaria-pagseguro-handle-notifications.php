@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
  * Handle notifications.
  */
 class Virtuaria_PagSeguro_Handle_Notifications {
+	use Virtuaria_PagSeguro_Split;
+
 	/**
 	 * Log instance.
 	 *
@@ -293,6 +295,8 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 										$body
 									);
 								}
+
+								$this->set_split_id( $request, $order );
 							}
 						}
 						break;

@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.6.2
+ * Version: 3.6.4
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  * Text Domain: virtuaria-pagseguro
@@ -129,7 +129,9 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 			}
 
 			if ( \Virtuaria\Plugins\Auth::is_premium(
-				$this->settings['serial'],
+				isset( $this->settings['serial'] )
+					? $this->settings['serial']
+					: '',
 				get_home_url(),
 				'virtuaria-pagseguro',
 				$this->plugin_data['Version']
@@ -138,10 +140,20 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				require_once 'includes/class-virtuaria-pagseguro-gateway-duopay.php';
 			}
 
+			require_once 'includes/traits/trait-virtuaria-pagseguro-split.php';
 			require_once 'includes/class-virtuaria-pagseguro-handle-notifications.php';
 			require_once 'includes/class-wc-virtuaria-pagseguro-api.php';
 			require_once 'includes/class-virtuaria-pagseguro-events.php';
 			require_once 'includes/class-virtuaria-marketing-page.php';
+
+			require_once 'includes/interfaces/interface-virtuaria-pagseguro-token-api.php';
+			require_once 'includes/class-virtuaria-pagseguro-token-api.php';
+			require_once 'includes/class-virtuaria-pagseguro-token.php';
+
+			new Virtuaria_PagSeguro_Token(
+				$this->settings,
+				new Virtuaria_PagSeguro_Token_API()
+			);
 
 			require_once 'includes/integrity-check.php';
 		}
@@ -272,7 +284,9 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 						}
 
 						if ( \Virtuaria\Plugins\Auth::is_premium(
-							$this->settings['serial'],
+							isset( $this->settings['serial'] )
+								? $this->settings['serial']
+								: '',
 							get_home_url(),
 							'virtuaria-pagseguro',
 							$this->plugin_data['Version']

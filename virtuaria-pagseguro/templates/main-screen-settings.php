@@ -160,7 +160,7 @@ if ( ! isset( $options['payment_form'] ) ) {
 						&& 'yes' === $options['split_enabled'] ) {
 						$auth .= '+payments.split.read';
 					}
-					$auth .= '&state=' . $origin;
+					$auth .= '&state=' . $origin . 'virtuariapb';
 					if ( $fee_setup ) {
 						$auth .= '--' . $fee_setup;
 					}

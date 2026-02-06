@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, cartão, pix, boleto
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 3.6.2
+Stable tag: 3.6.4
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -41,6 +41,8 @@ Agora conta com Pagamento Misto, uma modalidade de pagamento que combina o Créd
 - **Autenticação 3DS** Aumenta a segurança nas transações online com cartão de crédito, reduzindo significativamente os chargebacks ao transferir a responsabilidade para o banco emissor.
 
 ## ⭐ PREMIUM
+
+#### 💎 Recursos exclusivos para quem deseja o máximo desempenho e controle. Adquira a versão Premium em: [https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/](https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
 
 ### Pagamento Misto (Crédito + Pix)
 Eleve a experiência de compra da sua loja virtual oferecendo aos cliente a opção de pagamento misto, parte no crédito e parte no pix, em um único pedido, com confirmação automática de ambos os meios de pagamento. Também estão disponíveis opções de reembolsos individuais, parciais ou totais diretamente no painel da sua loja. Configure valores mínimos e máximos para crédito e Pix, garantindo total controle sobre as transações. Além disso, a segurança reforçada com a tecnologia 3DS está mantida, proporcionando proteção avançada para você e seus clientes. Aumente a taxa de conversão do seu ecommerce, adquira a licença premium e ative o Pagamento [Misto em sua loja (link)]( https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
@@ -389,6 +391,10 @@ O problema não é do plugin, mas sim de configurações de segurança externas.
 Nenhuma atualização disponível
 
 == Changelog ==
+= 3.6.4 2025-12-15 =
+* Ajuste - Melhoria na Segurança da conexão oauth.
+= 3.6.3 2025-10-20 =
+* Ajuste - Pagamento pix no checkout em blocos.
 = 3.6.2 2025-08-12 =
 * Melhoria - Compatibilidade com o checkout do tema Maxcoach;
 * Melhoria - Compatibiliadade com status customizados no duopay.

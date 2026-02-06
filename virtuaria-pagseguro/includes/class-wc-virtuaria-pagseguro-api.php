@@ -12,6 +12,8 @@ defined( 'ABSPATH' ) || exit;
  * Definition.
  */
 class WC_Virtuaria_PagSeguro_API {
+	use Virtuaria_PagSeguro_Split;
+
 	/**
 	 * Instance from gateway.
 	 *
@@ -503,6 +505,8 @@ class WC_Virtuaria_PagSeguro_API {
 					}
 
 					$order->save();
+
+					$this->set_split_id( $response, $order );
 				}
 			} elseif ( 'DECLINED' === $response['charges'][0]['status'] ) {
 				return array( 'error' => __( 'Not authorized, ', 'virtuaria-pagseguro' ) . $response['charges'][0]['payment_response']['message'] . '.' );
@@ -1321,8 +1325,9 @@ class WC_Virtuaria_PagSeguro_API {
 	 * Get public key using client token.
 	 *
 	 * @param string $pagbank_order the order id.
+	 * @param wc_order $order the order.
 	 */
-	public function check_payment_pix( $pagbank_order ) {
+	public function check_payment_pix( $pagbank_order, $order ) {
 		$request = wp_remote_get(
 			"{$this->endpoint}orders/$pagbank_order",
 			array(
@@ -1357,6 +1362,8 @@ class WC_Virtuaria_PagSeguro_API {
 		}
 
 		$request = json_decode( wp_remote_retrieve_body( $request ), true );
+
+		$this->set_split_id( $request, $order );
 
 		return isset( $request['charges'][0]['status'], $request['charges'][0]['id'] )
 			&& 'PAID' === $request['charges'][0]['status']
@@ -1742,5 +1749,72 @@ class WC_Virtuaria_PagSeguro_API {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Releases custody of a split.
+	 *
+	 * Releases custody of a split for a given set of account IDs.
+	 *
+	 * @param string $split_id The split ID to release custody.
+	 * @param array  $account_ids (optional) The account IDs to release custody for.
+	 *
+	 * @return bool True on success, false otherwise.
+	 */
+	public function release_custody( $split_id, $account_ids = array() ) {
+		$args = array(
+			'headers' => array(
+				'Authorization'  => 'Bearer ' . $this->gateway->token,
+				'Content-Type'   => 'application/json',
+				'Content-Length' => 0,
+			),
+		);
+
+		if ( $account_ids ) {
+			$formatted_account = array(
+				'receivers' => array(),
+			);
+			foreach ( $account_ids as $account_id ) {
+				$formatted_account['receivers'][] = array(
+					'account' => array(
+						'id' => $account_id,
+					),
+				);
+			}
+
+			unset( $args['headers']['Content-Length'] );
+			$args['body'] = wp_json_encode( $formatted_account );
+		}
+
+		$request = wp_remote_post(
+			"{$this->endpoint}splits/$split_id/custody/release",
+			$args
+		);
+
+		if ( $this->debug_on ) {
+			unset( $args['headers']['Authorization'] );
+
+			$this->gateway->log->add(
+				$this->tag,
+				'Solicitação de liberação de custodia do split ' . $split_id . ': ' . wp_json_encode( $args ),
+				WC_Log_Levels::INFO
+			);
+
+			$this->gateway->log->add(
+				$this->tag,
+				'Resposta do servidor ao liberar custodia do split ' . $split_id . ': ' . wp_json_encode( $request ),
+				WC_Log_Levels::INFO
+			);
+		}
+
+		if ( is_wp_error( $request ) ) {
+			return false;
+		}
+
+		return in_array(
+			wp_remote_retrieve_response_code( $request ),
+			array( 200, 201, 202 ),
+			true
+		);
 	}
 }

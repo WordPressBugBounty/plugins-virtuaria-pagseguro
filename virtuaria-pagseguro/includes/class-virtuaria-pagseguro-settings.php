@@ -27,11 +27,8 @@ class Virtuaria_PagSeguro_Settings {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_checkout_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_public_styles_scripts' ), 20 );
 		add_action( 'init', array( $this, 'save_main_settings' ) );
-		add_action( 'admin_init', array( $this, 'redirect_old_save_token' ), 9 );
-		add_action( 'admin_init', array( $this, 'save_store_token' ) );
-		add_action( 'admin_notices', array( $this, 'virtuaria_pagseguro_not_authorized' ) );
-		add_action( 'admin_init', array( $this, 'fee_setup_update' ), 20 );
 		add_filter( 'woocommerce_pagseguro_virt_icon', array( $this, 'remove_gateway_icon' ) );
+		add_action( 'virtuaria_pagseguro_settings_updated', array( $this, 'update_local_settings' ) );
 	}
 
 	/**
@@ -351,7 +348,7 @@ class Virtuaria_PagSeguro_Settings {
 				unset( $options['ignore_shipping_address'] );
 			}
 
-			$this->update_settings(
+			self::update_settings(
 				$options
 			);
 
@@ -368,12 +365,22 @@ class Virtuaria_PagSeguro_Settings {
 	 *
 	 * @param array $settings The settings to save.
 	 */
-	private function update_settings( $settings ) {
-		$this->settings = $settings;
+	public static function update_settings( $settings ) {
 		update_option(
 			'woocommerce_virt_pagseguro_settings',
 			$settings
 		);
+
+		do_action( 'virtuaria_pagseguro_settings_updated', $settings );
+	}
+
+	/**
+	 * Update local settings.
+	 *
+	 * @param array $settings The settings to save.
+	 */
+	public function update_local_settings( $settings ) {
+		$this->settings = $settings;
 	}
 
 	/**
@@ -386,169 +393,6 @@ class Virtuaria_PagSeguro_Settings {
 			'woocommerce_virt_pagseguro_settings',
 			array()
 		);
-	}
-
-	/**
-	 * Save store token.
-	 */
-	public function save_store_token() {
-		if ( isset( $_GET['page'] )
-			&& ! isset( $_POST['fee_setup_updated'] )
-			&& 'virtuaria_pagseguro' === $_GET['page'] ) {
-			if ( isset( $_GET['token'] ) ) {
-				$this->update_token(
-					$this->settings,
-					sanitize_text_field(
-						wp_unslash( $_GET['token'] )
-					)
-				);
-
-				add_action(
-					'admin_notices',
-					array( $this, 'virtuaria_pagseguro_connected' )
-				);
-				delete_option( 'virtuaria_pagseguro_not_authorized' );
-			} elseif ( isset( $_GET['access_revoked'] )
-				&& 'success' === $_GET['access_revoked'] ) {
-
-				$this->update_token(
-					$this->settings,
-					null
-				);
-				add_action(
-					'admin_notices',
-					array( $this, 'virtuaria_pagseguro_disconnected' )
-				);
-				delete_option( 'virtuaria_pagseguro_not_authorized' );
-			} elseif ( isset( $_GET['proccess'] )
-				&& 'failed' === $_GET['proccess'] ) {
-
-				$this->update_token(
-					$this->settings,
-					null
-				);
-
-				delete_option( 'virtuaria_pagseguro_not_authorized' );
-				add_action(
-					'admin_notices',
-					array( $this, 'virtuaria_pagseguro_failed' )
-				);
-			}
-		}
-	}
-
-	/**
-	 * Update token from main settins.
-	 *
-	 * @param array $current current settings.
-	 * @param mixed $token token.
-	 */
-	private function update_token( $current, $token ) {
-		if ( isset( $current['environment'] )
-			&& 'sandbox' === $current['environment'] ) {
-			$current['token_sanbox'] = $token;
-		} else {
-			$current['token_production'] = $token;
-		}
-
-		$this->update_settings(
-			$current
-		);
-	}
-
-	/**
-	 * Message from token generate success.
-	 */
-	public function virtuaria_pagseguro_connected() {
-		?>
-		<div class="notice notice-success is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro Connected!', 'virtuaria-pagseguro' ); ?></p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Message from token revoked success.
-	 */
-	public function virtuaria_pagseguro_disconnected() {
-		?>
-		<div class="notice notice-success is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro Disconnected!', 'virtuaria-pagseguro' ); ?></p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Message from fail.
-	 */
-	public function virtuaria_pagseguro_failed() {
-		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php esc_attr_e( 'Virtuaria PagSeguro - Operation processing failed!', 'virtuaria-pagseguro' ); ?></p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Message from fail.
-	 */
-	public function virtuaria_pagseguro_not_authorized() {
-		if ( get_option( 'virtuaria_pagseguro_not_authorized' ) ) {
-			?>
-			<div class="notice notice-warning is-dismissible">
-				<p>
-					<?php
-					echo wp_kses_post(
-						sprintf(
-							/* translators: %s: setting url */
-							__( 'Virtuaria PagSeguro - Your connection to the PagSeguro API is being denied, preventing transactions from being completed (payment, refund, etc.). Try reconnecting the plugin via the <a href="%s">configuration</a> page to renew authorization. For more details, see the plugin log.', 'virtuaria-pagseguro' ),
-							admin_url( 'admin.php?page=virtuaria_pagseguro' )
-						)
-					);
-					?>
-				</p>
-			</div>
-			<?php
-		}
-	}
-
-	/**
-	 * Fee setup change.
-	 */
-	public function fee_setup_update() {
-		if ( isset( $_POST['fee_setup_updated'] ) ) {
-			$this->settings['token_production'] = null;
-
-			$this->update_settings(
-				$this->settings
-			);
-		}
-	}
-
-	/**
-	 * Redirect store token to new main settings page.
-	 */
-	public function redirect_old_save_token() {
-		$token_update = isset( $_GET['token'] )
-			|| isset( $_GET['proccess'] )
-			|| isset( $_GET['access_revoked'] );
-
-		if ( isset( $_GET['section'], $_GET['page'] )
-			&& ! isset( $_POST['fee_setup_updated'] )
-			&& 'virt_pagseguro' === $_GET['section']
-			&& $token_update
-			&& 'virtuaria_pagseguro' !== $_GET['page'] ) {
-			unset( $_GET['page'] );
-
-			if ( wp_safe_redirect(
-				admin_url(
-					'admin.php?page=virtuaria_pagseguro&'
-						. http_build_query( $_GET )
-				)
-			) ) {
-				exit;
-			}
-		}
 	}
 
 	/**
