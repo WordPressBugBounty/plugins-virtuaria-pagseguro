@@ -12,6 +12,11 @@ defined( 'ABSPATH' ) || exit;
  */
 class Virtuaria_PagSeguro_Token {
 	/**
+	 * Payment link reconnection required option.
+	 */
+	private const PAYMENT_LINK_RECONNECT_OPTION = 'virtuaria_pagseguro_payment_link_reconnect_required';
+
+	/**
 	 * Plugin main settings.
 	 *
 	 * @var array
@@ -140,6 +145,11 @@ class Virtuaria_PagSeguro_Token {
 		} else {
 			$this->settings['token_production'] = $token;
 		}
+
+		update_option(
+			self::PAYMENT_LINK_RECONNECT_OPTION,
+			empty( $token )
+		);
 
 		Virtuaria_PagSeguro_Settings::update_settings(
 			$this->settings

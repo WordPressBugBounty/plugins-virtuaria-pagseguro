@@ -470,6 +470,7 @@ class WC_Virtuaria_PagSeguro_API {
 
 					$order->add_order_note(
 						sprintf(
+							/* translators: %1$s: card brand, %2$s: card holder, %3$s: installments, %4$s: amount */
 							__( 'Card brand: %1$s<br>%2$s<br>Installments: %3$dx<br>Total: R$ %4$s', 'virtuaria-pagseguro' ),
 							strtoupper( $response['charges'][0]['payment_method']['card']['brand'] ),
 							__( 'Cardholder: ', 'virtuaria-pagseguro' ) . $card_holder,
@@ -516,6 +517,7 @@ class WC_Virtuaria_PagSeguro_API {
 				$order->update_meta_data( '_pdf_link', $response['charges'][0]['links'][0]['href'] );
 				$order->add_order_note(
 					sprintf(
+						/* translators: %s: amount */
 						__( 'R$ %s via Bank Slip', 'virtuaria-pagseguro' ),
 						number_format( $response['charges'][0]['amount']['value'] / 100, 2, ',', '.' )
 					)
@@ -1324,7 +1326,7 @@ class WC_Virtuaria_PagSeguro_API {
 	/**
 	 * Get public key using client token.
 	 *
-	 * @param string $pagbank_order the order id.
+	 * @param string   $pagbank_order the order id.
 	 * @param wc_order $order the order.
 	 */
 	public function check_payment_pix( $pagbank_order, $order ) {
@@ -1615,6 +1617,14 @@ class WC_Virtuaria_PagSeguro_API {
 			if ( ! $order->get_billing_address_2() ) {
 				unset( $data['body']['shipping']['address']['complement'] );
 			}
+		}
+
+		$ignore_address = isset( $this->gateway->global_settings['ignore_shipping_address'] )
+			? 'yes' === $this->gateway->global_settings['ignore_shipping_address']
+			: false;
+
+		if ( $ignore_address ) {
+			unset( $data['body']['shipping'] );
 		}
 
 		$data['body']['charges'] = array(

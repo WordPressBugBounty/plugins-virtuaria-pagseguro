@@ -241,7 +241,7 @@ trait Virtuaria_PagSeguro_Credit {
 			'display'             => array(
 				'title'       => __( 'Credit form', 'virtuaria-pagseguro' ),
 				'type'        => 'select',
-				'description' => __( 'Defines how the checkout fields will be displayed.' ),
+				'description' => __( 'Defines how the checkout fields will be displayed.', 'virtuaria-pagseguro' ),
 				'default'     => 'two',
 				'options'     => array(
 					'one' => __( 'A column', 'virtuaria-pagseguro' ),
@@ -693,6 +693,12 @@ trait Virtuaria_PagSeguro_Credit {
 				);
 			}
 
+			$order->update_status(
+				isset( $this->global_settings['payment_status'] )
+					? $this->global_settings['payment_status']
+					: 'processing',
+				__( 'Subscription payment completed successfully.', 'virtuaria-pagseguro' )
+			);
 			WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
 
 			if ( isset( $this->global_settings['status_order_subscriptions'] )

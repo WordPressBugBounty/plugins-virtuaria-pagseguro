@@ -141,15 +141,23 @@ class Virtuaria_PagSeguro_Events {
 	public function check_order_paid( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( $order && ! $order->get_meta( '_charge_id' ) ) {
+		if (
+			$order
+			&& ! $this->is_order_paid( $order )
+			&& ! $this->is_pix_paid( $order )
+		) {
 			$order->add_order_note(
 				__( 'Pagseguro Pix: the time limit for payment of this order has expired.', 'virtuaria-pagseguro' ),
 			);
-			$order->update_status( 'cancelled' );
+
+			if ( in_array( $order->get_status(), array( 'pending', 'on-hold' ), true ) ) {
+				$order->update_status( 'cancelled' );
+			}
+
 			if ( 'yes' === $this->settings['debug'] ) {
 				wc_get_logger()->add(
 					'virtuaria-pagseguro',
-					'Pedido #' . $order->get_order_number() . ' mudou para o status cancelado.',
+					'Pedido #' . $order->get_order_number() . '- tempo limite de ficou pagamento excedido.',
 					WC_Log_Levels::INFO
 				);
 			}

@@ -154,7 +154,7 @@ if ( ! isset( $options['payment_form'] ) ) {
 
 					$auth  = 'https://connect.' . $auth . 'pagseguro.uol.com.br/oauth2/authorize';
 					$auth .= '?response_type=code&client_id=' . $app_id . '&redirect_uri=' . $app_url;
-					$auth .= '&scope=payments.read+payments.create+payments.refund+accounts.read';
+					$auth .= '&scope=payments.read+payments.create+payments.refund+accounts.read+checkout.create+checkout.view+checkout.update';
 					if ( class_exists( 'Virtuaria_PagBank_Split' )
 						&& isset( $options['split_enabled'] )
 						&& 'yes' === $options['split_enabled'] ) {
@@ -213,12 +213,15 @@ if ( ! isset( $options['payment_form'] ) ) {
 						$plugin_data = Virtuaria_Pagseguro::get_instance()->get_plugin_data();
 						if ( ! isset( $options['serial'] )
 							|| ! $options['serial']
+						/*
+						Old code.
 							|| ! \Virtuaria\Plugins\Auth::is_premium(
 								$options['serial'],
 								get_home_url(),
 								'virtuaria-pagseguro',
 								'1'
 							)
+						*/
 						) :
 							?>
 							<p class="description">

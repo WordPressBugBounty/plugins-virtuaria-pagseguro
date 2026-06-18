@@ -357,7 +357,7 @@ h1.main-title {
     .navigation-tab .tablinks {
         width: 100%;
     }
-    .navigation-tab {
+.navigation-tab {
         flex-wrap: wrap;
     }
 }

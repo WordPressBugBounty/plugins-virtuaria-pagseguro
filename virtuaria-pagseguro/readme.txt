@@ -1,624 +1,650 @@
-=== Virtuaria PagBank / PagSeguro para Woocommerce ===
+=== Virtuaria PagBank / PagSeguro for WooCommerce ===
 
 Contributors: tecnologiavirtuaria
-Tags: pagbank, pagseguro, cartão, pix, boleto
-Requires at least: 4.7
-Tested up to: 6.8
-Stable tag: 3.6.4
+Tags: pagbank, pagseguro, card, pix, boleto
+Requires at least: 5.3
+Tested up to: 7.0
+Stable tag: 3.6.5
 Requires PHP: 7.4
-License: GPLv3 or later
+License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-
-Crédito, Pix e Boleto na sua loja virtual. Mais segurança, menos chargebacks com 3DS. Descontos nas taxas do PagBank.
+Credit, Pix, and Boleto in your online store. More security, fewer chargebacks with 3DS. Discounts on PagBank fees.
 
 == Description ==
 
-Fácil de instalar e configurar, permite disparo de cobranças extras, reembolso total e parcial, desconto no pix e no boleto, autenticação 3DS, split de pagamento, armazenar método de pagamento, confirmação automática de pagamentos no crédito, pix e boleto, entre muitas outras.
+Easy to install and configure, allows for extra charges, full and partial refunds, discounts on Pix and Boleto, 3DS authentication, payment splitting, storing payment methods, automatic payment confirmation for credit, Pix, and Boleto, among many others.
 
-Agora conta com Pagamento Misto, uma modalidade de pagamento que combina o Crédito e Pix para trazer mais flexibilidade e comodidade para as compras online.
+Now featuring Mixed Payment, a payment method that combines Credit and Pix to bring more flexibility and convenience to online shopping.
 
-### ✅ **Funcionalidades Principais:**
+### ✅ **Main Features:**
 
-- **Múltiplos métodos de pagamento**: Suporte a Crédito, Pix e Boleto Bancário;
-- **Compatibilidade com Checkout em Blocos**: Suporte a página de finalização da compra do woocommerce em blocos;
-- **Opções de parcelamento**: Com ou sem juros, configurável no próprio plugin;
-- **Disparo de cobrança extra**: Cobrar um valor adicional do cliente;
-- **Reembolso fácil**: Seja total ou parcial, crédito ou Pix;
-- **Otimize o checkout**: Modos síncrono e assíncrono;
-- **Salvar método de pagamento**: Para acelerar as próximas compras (sem armazenar dados do cartão);
-- **Boleto**: Com prazo de validade configurável, também permite aplicação de descontos percentuais e exclusão de descontos para categorias específicas ou cupons;
-- **Atualizações de status**: Mudança automática dos status dos pedidos (aprovado, negado, cancelado, etc) em tempo real, via Webhook;
-- **Checkout transparente**: Permite fazer o pagamento sem sair da tela de sua loja virtual;
-- **Log detalhado**: Para consulta a detalhes de transações, incluindo erros;
-- **Identificação na fatura**: Para pagamentos via cartão (exibir na fatura);
-- **Detalhamento das operações**: Acompanhe nas notas dos pedidos, as operações ocorridas durante a comunicação com o PagSeguro (reembolsos, parcelamentos, mudanças de status e valores recebidos/cobrados);
-- **Use a mesma conta PagSeguro**: Em múltiplas lojas virtuais;
-- **Status pagamento confirmado**: Permite definir via configuração, qual status identifica o pagamento confirmado;
-- **Consulta status no PagSeguro**: Permite consultar o status atual da transação no PagSeguro a qualquer momento;
-- **Exibição do Parcelamento**: Permite, via configuração, exibir o parcelamento na página do produto e listagens como catálogo e pesquisa;
-- **Modo de funcionamento**: Permite, via configuração, separar Crédito, Pix e Boleto como métodos de pagamento independentes. Esta opção oferece maior flexibilidade e facilita a integração com sistemas externos e com outros plugins.
-- **Autenticação 3DS** Aumenta a segurança nas transações online com cartão de crédito, reduzindo significativamente os chargebacks ao transferir a responsabilidade para o banco emissor.
+- **Multiple payment methods**: Supports Credit, Pix, and Bank Slip;
+
+- **Compatibility with Block Checkout**: Supports WooCommerce checkout page in blocks;
+
+- **Installment options**: With or without interest, configurable within the plugin;
+
+- **Extra charge trigger**: Charge an additional amount to the customer;
+
+- **Easy refund**: Full or partial, credit or Pix;
+
+- **Optimize checkout**: Synchronous and asynchronous modes;
+
+- **Save payment method**: To speed up future purchases (without storing card data);
+
+- **Bank Slip**: With configurable expiration date, it also allows the application of percentage discounts and exclusion of discounts for specific categories or coupons;
+- **Status Updates**: Automatic change of order statuses (approved, denied, canceled, etc.) in real time, via Webhook;
+- **Transparent Checkout**: Allows you to make payments without leaving your online store screen;
+- **Detailed Log**: For viewing transaction details, including errors;
+- **Invoice Identification**: For card payments (display on invoice);
+- **Detailed Transactions**: Track the operations that occurred during communication with PagSeguro in the order notes (refunds, installments, status changes, and amounts received/charged);
+- **Use the same PagSeguro account**: In multiple online stores;
+- **Payment Confirmed Status**: Allows you to define, via configuration, which status identifies a confirmed payment;
+
+- **Check Status on PagSeguro**: Allows you to check the current transaction status on PagSeguro at any time;
+
+- **Installment Display**: Allows, via configuration, displaying installments on the product page and listings such as catalog and search;
+
+- **Operating Mode**: Allows, via configuration, separating Credit, Pix, and Boleto as independent payment methods. This option offers greater flexibility and facilitates integration with external systems and other plugins.
+
+- **3DS Authentication**: Increases security in online credit card transactions, significantly reducing chargebacks by transferring responsibility to the issuing bank.
 
 ## ⭐ PREMIUM
 
-#### 💎 Recursos exclusivos para quem deseja o máximo desempenho e controle. Adquira a versão Premium em: [https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/](https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
+#### 💎 Exclusive features for those who want maximum performance and control. Get the Premium version at: [https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/](https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
 
-### Pagamento Misto (Crédito + Pix)
-Eleve a experiência de compra da sua loja virtual oferecendo aos cliente a opção de pagamento misto, parte no crédito e parte no pix, em um único pedido, com confirmação automática de ambos os meios de pagamento. Também estão disponíveis opções de reembolsos individuais, parciais ou totais diretamente no painel da sua loja. Configure valores mínimos e máximos para crédito e Pix, garantindo total controle sobre as transações. Além disso, a segurança reforçada com a tecnologia 3DS está mantida, proporcionando proteção avançada para você e seus clientes. Aumente a taxa de conversão do seu ecommerce, adquira a licença premium e ative o Pagamento [Misto em sua loja (link)]( https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/)
-
-📹 [Playlist do Plugin no Youtube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
+### Mixed Payment (Credit + Pix)
+Elevate your online store's shopping experience by offering customers the option of mixed payment, partly by credit and partly by Pix, in a single order, with automatic confirmation of both payment methods. Individual, partial, or total refund options are also available directly in your store's dashboard. Configure minimum and maximum values ​​for credit and Pix, ensuring total control over transactions. Furthermore, enhanced security with 3DS technology is maintained, providing advanced protection for you and your customers. Increase your e-commerce conversion rate, purchase the premium license and activate Mixed Payment in your store (link)( https://virtuaria.com.br/loja/virtuaria-pagbank-pagseguro-para-woocommerce/ )
 
 
-### ✨ Conexão Inicial com o PagBank ###
-Este plugin utiliza a API mais moderna Order/Connect de cobrança disponibilizada pelo pagseguro, o que permite configuração e ativação muito mais simples e segura, sem necessidade de gerar chaves via painel do PagSeguro ou abrir chamados.
+📹 [Plugin Playlist on YouTube](https://www.youtube.com/playlist?list=PLeNNwWpOYbbxVd-Wva6s8YRcBFTLZIUIK) 📹
 
+### ✨ Initial Connection with PagBank ###
+This plugin uses the most modern Order/Connect billing API provided by PagSeguro, allowing for much simpler and more secure configuration and activation, without the need to generate keys via the PagSeguro panel or open support tickets.
 
-### 👨🏾‍🎓 Dúvidas & Suporte ###
-- **Veja a nossa lista de dúvidas frequentes em nossa sessão de [FAQ](https://wordpress.org/plugins/virtuaria-pagseguro/#faq);**
-- **Acesse o [fórum do plugin](https://wordpress.org/support/plugin/virtuaria-pagseguro/);**
-- **Suporte Avançado e Desenvolvimento:** Oferecemos desenvolvimento personalizado e suporte técnico especializado para usuários dos nossos plugins, incluindo a personalização de funcionalidades para atender às necessidades específicas do seu negócio ([Virtuaria Loja de Plugins]( https://virtuaria.com.br/loja/desenvolvimento-e-suporte-plugins-virtuaria/ ))**
+### 👨🏾‍🎓 Questions & Support ###
+- **See our list of frequently asked questions in our [FAQ](https://wordpress.org/plugins/virtuaria-pagseguro/#faq);**
+- **Access the [plugin forum](https://wordpress.org/support/plugin/virtuaria-pagseguro/);**
+- **Advanced Support and Development:** We offer customized development and specialized technical support for users of our plugins, including the customization of functionalities to meet the specific needs of your business ([Virtuaria Plugin Store](https://virtuaria.com.br/loja/desenvolvimento-e-suporte-plugins-virtuaria/))**
 
-### 💌 **Interessado em algo mais?**
-Contate-nos diretamente em [tecnologia@virtuaria.com.br](mailto:tecnologia@virtuaria.com.br) e garanta uma solução sob medida para suas necessidades.
+### 💌 **Interested in something else?**
+Contact us directly at [tecnologia@virtuaria.com.br](mailto:tecnologia@virtuaria.com.br) and guarantee a solution tailored to your needs.
 
-## Recursos
+## Features
 
 ### 🚀 **Pix**
-* Confirmação automática do pagamento, semelhante a cartão de crédito;
-* Atualizações de status em tempo real para seus pedidos. Mudança automática dos status (aprovado, negado, cancelado, etc) via Webhook de retorno de dados dos status no Pagseguro;
-* Reembolso total e parcial;
-* Tempo limite para pagamento configurável;
-* “Nova Cobrança Pix”, muito útil para cobrança de valores extras ou nos casos onde o cliente perde o tempo limite de pagamento;
-* Pagamento por QR Code ou link Copia e Cola;
-* Exibe os dados de pagamento no e-mail enviado e na tela de confirmação do pedido;
-* Desconto percentual configurável para pagamento no Pix;
-* Confirmação automática de pagamento na tela do pedido "[ver mais](https://teravirt.s3-accelerate.amazonaws.com/uploads/sites/107/2023/05/Finalizar-compras-_-SUPER-COMPRAS-loja-para-testes-Os-melhores-produtos-084027.gif)".
+* Automatic payment confirmation, similar to a credit card;
 
-⚠️ Atenção:  É obrigatório que exista uma chave Pix cadastrada na sua conta de vendedor no painel do PagSeguro. Qualquer chave Pix, não precisa criar uma exclusiva para este plugin. [Mais informações](https://blog.pagseguro.uol.com.br/passo-a-passo-para-cadastrar-sua-chave-aleatoria-e-vender-com-pix-nas-maquininhas-pagseguro/)
+* Real-time status updates for your orders. Automatic status changes (approved, denied, canceled, etc.) via webhook data return from PagSeguro;
 
-### 🖥️ **Modo de funcionamento**
-A partir da versão 3.0,  nosso plugin oferece uma nova configuração que permite tratar Crédito, Pix e Boleto como métodos de pagamento independentes no painel do WooCommerce e Checkout. Este recurso facilita a identificação das formas de pagamento em integrações com sistemas externos (CRM, ERP, etc), facilitando o gerenciamento financeiro. Além disso, métodos separados tornam possível que plugins de terceiros realizem ações específicas em cada forma de pagamento, como a aplicação de descontos, por exemplo.
+* Full and partial refunds;
 
-Continuamos a oferecer a opção de operar com formas de pagamento unificadas para simplicidade e conveniência dos usuários que preferem este formato. Isto garante total compatibilidade para quem usa versões anteriores do plugin e deseja atualizar.
+* Configurable payment deadline;
 
-### 💳 **Salvar Método de Pagamento**
-Para compras futuras mais ágeis, o plugin permite uma configuração para ativar o “Salvar Método de Pagamento”. Este recurso não armazena os dados do cartão de crédito do comprador, mas sim um código (token) de compra do cartão, o que é suficiente para o cliente realizar compras futuras sem precisar digitar os dados do cartão novamente.
+* “New Pix Charge”, very useful for charging extra amounts or in cases where the customer misses the payment deadline;
 
-### 💰 **Cobrança Extra**
-O plugin conta com a funcionalidade “Cobrança Extra” que permite cobrar um valor extra em pedidos feitos com cartão de crédito. Esta função pode ser útil, por exemplo, para vendas de produtos no peso, pois neste caso o valor final quase sempre é diferente do inicialmente solicitado, algo muito comum em supermercados. Também é útil para os casos onde o cliente solicita a inclusão de novos itens no pedido. Para realizar cobranças extras, é necessário que a função de armazenar dados do pagamento esteja ativa.
+* Payment by QR Code or Copy and Paste link;
 
-### ⚡ **Otimização do Checkout**
-O plugin possui uma configuração para ativar o modo de processamento assíncrono do pedido. Isso permite que algumas das atualizações de status que ocorrem durante a finalização da compra, sejam feitas em segundo plano e de forma assíncrona, acelerando significativamente o checkout. Recomendamos ativar somente se seus clientes costumam comprar muitos itens de uma vez e isto esteja deixando o seu checkout lento.
+* Displays payment details in the email sent and on the order confirmation screen;
 
-### ⚡ **Autenticação 3DS**
-O Protocolo 3D Secure (3DS) é um mecanismo de autenticação para transações de e-commerce que busca aumentar a segurança e confiabilidade, beneficiando tanto vendedores quanto consumidores, reduzindo fraudes e chargebacks. Ao finalizar a compra, a autenticação 3DS é ativada automaticamente, podendo ser direta ou exigir validação adicional, como SMS ou app do banco/cartão.
+* Configurable percentage discount for Pix payments;
 
-A principal vantagem do 3DS é a redução de chargebacks, pois ao autenticar uma transação, a responsabilidade por chargebacks é transferida para o banco emissor do cartão.
+* Automatic payment confirmation on the order screen "[see more](https://teravirt.s3-accelerate.amazonaws.com/uploads/sites/107/2023/05/Finalizar-compras-_-SUPER-COMPRAS-loja-para-testes-Os-melhores-produtos-084027.gif)".
 
-O plugin permite configuração para ativar ou não o 3DS, além de ser possível especificar um valor mínimo do pedido, para sua aplicação. Também existe a possibilidade de permitir compras mesmo via cartões sem suporte ao 3DS, garantindo uma maior taxa de conversão.
+⚠️ Attention: It is mandatory to have a Pix key registered in your seller account in the PagSeguro panel. Any Pix key will work; you don't need to create a separate one for this plugin. [More information](https://blog.pagseguro.uol.com.br/passo-a-passo-para-cadastrar-sua-chave-aleatoria-e-vender-com-pix-nas-maquininhas-pagseguro/)
 
-### 🌟 **NOVIDADE 01: Split de Pagamento PagBank para WooCommerce** 🌟
-Ideal para lojas virtuais com múltiplos vendedores, esta solução GRATUITA permite que o valor total de uma compra seja automaticamente dividido(Split) entre diversas contas do PagBank. Uma solução de fácil adoção que, na grande maioria das vezes, não necessita de nenhuma alteração no tema para habilitar um checkout multilojas eficaz.
-Compatível com pagamentos via Cartão de Crédito, Pix ou Boleto, essa funcionalidade oferece flexibilidade e eficiência. Perfeito para uma variedade de modelos de negócios como marketplaces, dropshipping e franquias, o Virtuaria PagBank Split é a solução ideal para otimizar suas vendas e pagamentos multivendedor.
+### 🖥️ **How ​​it works**
+Starting with version 3.0, our plugin offers a new configuration that allows you to treat Credit, Pix, and Boleto as independent payment methods in the WooCommerce and Checkout panel. This feature facilitates the identification of payment methods in integrations with external systems (CRM, ERP, etc.), making financial management easier. Furthermore, separate methods allow third-party plugins to perform specific actions on each payment method, such as applying discounts.
 
-📥  [**Mais Informações e Download do Plugin Virtuaria Split**](https://wordpress.org/plugins/virtuaria-pagbank-split/) 📥
+We continue to offer the option to operate with unified payment methods for the simplicity and convenience of users who prefer this format. This ensures full compatibility for those using previous versions of the plugin who wish to update.
 
-📹 [**Assista o vídeo sobre o Split de Pagamentos**](https://youtu.be/enk46WlUDsM) 📹
+### 💳 **Save Payment Method**
+For faster future purchases, the plugin allows you to configure the "Save Payment Method" feature. This feature does not store the buyer's credit card data, but rather a purchase code (token) for the card, which is sufficient for the customer to make future purchases without having to enter their card details again.
 
+## 💰 **Extra Charge**
+The plugin has an "Extra Charge" functionality that allows you to charge an extra amount on orders made with a credit card. This function can be useful, for example, for sales of products by weight, as in this case the final value is almost always different from the initially requested amount, something very common in supermarkets. It is also useful in cases where the customer requests the inclusion of new items in the order. To make extra charges, the function to store payment data must be active.
 
-### 🌟 **NOVIDADE 02: Integração Correios – Frete, Etiqueta e Rastreio** 🌟
+### ⚡ **Checkout Optimization**
+The plugin has a setting to activate asynchronous order processing mode. This allows some of the status updates that occur during checkout to be done in the background and asynchronously, significantly speeding up checkout. We recommend activating this only if your customers usually buy many items at once and this is slowing down your checkout.
 
-Conecte sua loja virtual Woocommerce aos Correios com eficiência e confiabilidade. O Plugin oferece gratuitamente:
+## ⚡ **3DS Authentication**
+The 3D Secure (3DS) protocol is an authentication mechanism for e-commerce transactions that seeks to increase security and reliability, benefiting both sellers and consumers, reducing fraud and chargebacks. Upon completing the purchase, 3DS authentication is automatically activated, and can be direct or require additional validation, such as SMS or bank/card app.
 
-- 🏷️ **Geração Automática de Etiquetas:** Simplifique sua logística com a criação de etiquetas diretamente do seu painel;
-- 📊 **Cálculo Automático de Frete:** Exibe valores e prazos de entrega diretamente no CARRINHO, CHECKOUT e PÁGINA DO PRODUTO;
-- 🚚 **Rastreamento de Encomendas:** Tanto gestores quanto clientes podem acompanhar o status da entrega diretamente pela loja virtual;
-- 🖊️ **Autopreenchimento:** Preenchimento automático das informações de endereço do cliente, com base no CEP;
-- 🌐 **Compatibilidade Completa:** Suporta todos os serviços dos Correios, como Declaração de Valor, Mãos Próprias e Aviso de Recebimento, além de todas as modalidades de entrega contratadas;
-- 📥  [**Mais Informações e Download do Plugin Virtuaria Correios**](https://wordpress.org/plugins/virtuaria-correios/) 📥
-- 📹 [**Assista o vídeo sobre a integração com Correios**](https://youtu.be/oy0H-KOh3Gc) 📹
+The main advantage of 3DS is the reduction of chargebacks, because when authenticating a transaction, the responsibility for chargebacks is transferred to the card issuer bank.
 
-## Observações:
-- [PagSeguro](https://pagseguro.uol.com.br/) é uma plataforma de pagamento brasileira desenvolvida pela UOL. Este plugin foi desenvolvido sem nenhum incentivo do PagSeguro ou da UOL, a partir da [documentação oficial do PagSeguro] e utiliza a última versão ( 4.0 ) da API de cobranças. Nenhum dos desenvolvedores deste plugin possui vínculos com o Pagseguro ou UOL.
+The plugin allows configuration to enable or disable 3DS, and it's also possible to specify a minimum order value for its application. It also allows purchases even via cards without 3DS support, guaranteeing a higher conversion rate.
 
-- **Para mais informações, acesse** [virtuaria.com.br - desenvolvimento de plugins, criação e hospedagem de lojas virtuais](https://virtuaria.com.br/) ou envie um email para tecnologia@virtuaria.com.br
+### 🌟 **NEW FEATURE 01: PagBank Payment Split for WooCommerce** 🌟
+Ideal for online stores with multiple sellers, this FREE solution allows the total value of a purchase to be automatically split between several PagBank accounts. An easy-to-adopt solution that, in most cases, does not require any theme changes to enable an effective multi-store checkout.
 
+Compatible with payments via Credit Card, Pix, or Boleto, this functionality offers flexibility and efficiency. Perfect for a variety of business models such as marketplaces, dropshipping, and franchises, Virtuaria PagBank Split is the ideal solution to optimize your sales and multi-seller payments.
 
-= Compatibilidade =
-Este plugin necessita de um plugin que adiciona campos brasileiros no checkout para funcionar corretamente. Exemplos de plugins compatíveis:
+📥 [**More Information and Download of the Virtuaria Split Plugin**](https://wordpress.org/plugins/virtuaria-pagbank-split/) 📥
+
+📹 [**Watch the video about Payment Splitting**](https://youtu.be/enk46WlUDsM) 📹
+
+### 🌟 **NEW FEATURE 02: Correios Integration – Shipping, Labels and Tracking** 🌟
+
+Connect your WooCommerce online store to Correios efficiently and reliably. The plugin offers for free:
+
+- 🏷️ **Automatic Label Generation:** Simplify your logistics by creating labels directly from your panel;
+
+- 📊 **Automatic Shipping Calculation:** Displays values ​​and delivery times directly in the CART, CHECKOUT and PRODUCT PAGE;
+
+- 🚚 **Order Tracking:** Both managers and customers can track the delivery status directly through the online store;
+
+- 🖊️ **Auto-fill:** Automatic filling of the customer's address information, based on the ZIP code;
+
+- 🌐 **Full Compatibility:** Supports all postal services, such as Value Declaration, Personal Delivery, and Proof of Delivery, in addition to all contracted delivery methods;
+- 📥 [**More Information and Download of the Virtuaria Correios Plugin**](https://wordpress.org/plugins/virtuaria-correios/) 📥
+- 📹 [**Watch the video about the integration with Correios**](https://youtu.be/oy0H-KOh3Gc) 📹
+
+## Notes:
+
+- [PagSeguro](https://pagseguro.uol.com.br/) is a Brazilian payment platform developed by UOL. This plugin was developed without any incentive from PagSeguro or UOL, based on the [official PagSeguro documentation] and uses the latest version (4.0) of the billing API. None of the developers of this plugin have any ties to PagSeguro or UOL.
+
+- **For more information, visit** [virtuaria.com.br - plugin development, creation and hosting of online stores](https://virtuaria.com.br/) or send an email to tecnologia@virtuaria.com.br
+
+= Compatibility =
+This plugin requires a plugin that adds Brazilian fields to the checkout to function correctly. Examples of compatible plugins:
 - [Virtuaria Correios](https://wordpress.org/plugins/virtuaria-correios/)
 - [WooCommerce Extra Checkout Fields for Brazil](http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/)
-É necessário instalar apenas 1 destes plugins.
+Only one of these plugins needs to be installed.
 
-### ⭐ **Descontos nas Taxas do PagBank:**
-– **Especial Virtuaria 01**: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
-– **Especial Virtuaria 02**: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
-– **Negociada PagSeguro**: Caso já tenha negociado com o PagSeguro uma taxa personalizada melhor;
-– **Padrão do PagSeguro**: Taxas padrão da plataforma PagSeguro.
+### ⭐ **Discounts on PagBank Fees:**
+– **Virtuaria Special 01**: Credit 3.79% (receipt in 30 days) | Pix 0.99% | Boleto R$ 2.99;
 
-*Obs.: Caso já esteja usando o plugin, é preciso refazer a conexão para ativar o desconto.*
+– **Virtuaria Special 02**: Credit 4.39% (receipt in 14 days) | Pix 0.99% | Boleto R$ 2.99;
 
-= Contribuição =
+– **Negotiated PagSeguro Rate**: If you have already negotiated a better personalized rate with PagSeguro;
 
-Se desejar contribuir com o desenvolvimento do plugin, nos envie um pull request no [Github](https://github.com/Virtuaria/pagsegurowoocommerce).
+– **PagSeguro Standard Rate**: Standard rates of the PagSeguro platform.
+
+*Note: If you are already using the plugin, you need to re-establish the connection to activate the discount.*
+
+= Contribution =
+
+If you wish to contribute to the plugin's development, please send us a pull request on [Github](https://github.com/Virtuaria/pagsegurowoocommerce).
 
 == Installation ==
 
-= Instalação do plugin: =
+= Plugin Installation: =
 
-* 1. Envie os arquivos do plugin para a pasta wp-content/plugins, ou instale usando o instalador de plugins do WordPress.
+* 1. Upload the plugin files to the wp-content/plugins folder, or install using the WordPress plugin installer.
+* 2. Activate the plugin.
+* 3. Navigate to WooCommerce -> Settings -> Payments, choose “PagSeguro”, select the environment (production or sandbox), optionally fill in the email address of your PagSeguro account and click save;
+* 4. Click connect;
+* 5. Grant permissions and click save again;
 
-* 2. Ative o plugin.
+**With just this, it's already possible to receive payments and automatically return data.**
 
-* 3. Navegue para Woocommerce -> Configurações -> Pagamentos, escolha o “Pagseguro”,escolha o ambiente (produção ou sandbox), opcionalmente, preencha o email da sua conta no PagSeguro e clique em salvar;
+= Requirements: =
 
-* 4. Clique em conectar;
+1- Account on [PagSeguro](http://pagseguro.uol.com.br/) and have [WooCommerce](http://wordpress.org/plugins/woocommerce/) installed;
 
-* 5. Conceda as permissões e clique em salvar novamente;
+2- Plugin [WooCommerce Extra Checkout Fields for Brazil] (http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/).
 
-**Apenas com isso, já é possível receber os pagamentos e fazer o retorno automático de dados.**
+<blockquote>Attention: It is not necessary to configure any URL in "Redirect page" or "Transaction notification", as the plugin works directly with the PagSeguro API.</blockquote>
 
-= Requerimentos: =
+= Plugin configuration screen: =
 
-1- Conta no [PagSeguro](http://pagseguro.uol.com.br/) e ter instalado o [WooCommerce](http://wordpress.org/plugins/woocommerce/);
-
-2 - Plugin [WooCommerce Extra Checkout Fields for Brazil] (http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/).
-
-<blockquote>Atenção: Não é necessário configurar qualquer URL em "Página de redirecionamento" ou "Notificação de transação", pois o plugin trabalha diretamente com a API do PagSeguro.</blockquote>
-
-
-= Tela de configuração do Plugin: =
-
-Com o plugin instalado acesse o admin do WordPress e entre em "WooCommerce" > "Configurações" > "Pagamentos" > "PagSeguro".
+With the plugin installed, access the WordPress admin and go to "WooCommerce" > "Settings" > "Payments" > "PagSeguro".
 
 == Frequently Asked Questions ==
 
-= 1 - Qual é a licença do plugin? =
-Este plugin está licenciado como GPLv3. O código é 100% aberto (Open Source). Não disponibilizamos versões PRO com funcionalidades extras.
+= 1 - What is the plugin's license? =
+This plugin is licensed under GPLv3. The code is 100% open source. We do not offer PRO versions with extra features.
 
+= 2 - What do I need to use this plugin? =
 
-= 2 - O que eu preciso para utilizar este plugin? =
+* Have a current version of the WooCommerce plugin installed.
+* Have a current version of the WooCommerce Extra Checkout Fields for Brazil plugin installed.
+* Have a PagSeguro account.
+* If you wish to use Pix payments, you need to register a random key in your PagSeguro seller panel.
 
-* Ter instalado uma versão atual do plugin WooCommerce.
+= 3 - From which countries does PagSeguro accept payments? =
+Currently, PagSeguro only accepts payments from Brazil and uses the Real as currency.
 
-* Ter instalado uma versão atual do plugin WooCommerce Extra Checkout Fields for Brazil.
+We have configured the plugin to only accept payments from users who selected Brazil in their payment information during checkout.
 
-* Possuir uma conta no PagSeguro.
+= 4 - What payment methods does the plugin accept? Credit card, Pix, and bank slip payments are accepted; however, you need to activate them in your account.
 
-* Caso deseje utilizar pagamentos com Pix, é preciso cadastrar uma chave aleatória em seu painel de vendedor no PagSeguro.
+Check the [payment and installment methods](https://pagseguro.uol.com.br/para_voce/meios_de_pagamento_e_parcelamento.jhtml#rmcl).
 
-= 3 - PagSeguro recebe pagamentos de quais países? =
-No momento o PagSeguro recebe pagamentos apenas do Brasil e utilizando o real como moeda.
-Configuramos o plugin para receber pagamentos apenas de usuários que selecionaram o Brasil nas informações de pagamento durante o checkout.
+= 5 - How does the plugin integrate with PagSeguro? =
+We integrate based on the official PagSeguro documentation, which can be found in the "[integration guides](https://dev.pagseguro.uol.com.br/reference/order-intro)" using the latest version of the payment API.
 
-= 4 - Quais são os meios de pagamento que o plugin aceita? =
-São aceitos pagamentos com cartão de crédito, pix e boleto bancário, entretanto você precisa ativá-los na sua conta.
-Confira os [meios de pagamento e parcelamento](https://pagseguro.uol.com.br/para_voce/meios_de_pagamento_e_parcelamento.jhtml#rmcl).
+= 6 - Is it possible to send the "Number", "Neighborhood", and "CPF" data to PagSeguro? =
+Yes, it is possible, just use the plugin "[WooCommerce Extra Checkout Fields for Brazil](http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/)".
 
-= 5 - Como que o plugin faz integração com PagSeguro? =
-Fazemos a integração baseada na documentação oficial do PagSeguro que pode ser encontrada nos "[guias de integração](https://dev.pagseguro.uol.com.br/reference/order-intro)" utilizando a última versão da API de pagamentos.
+= 7 - The order was paid and the status is "processing" instead of "completed", is this correct? =
+Yes, by default, in paid purchases the order status automatically changes to processing, meaning you can ship your order. However, setting the status to "completed" is the merchant's responsibility at the end of the sales and delivery process.
 
-= 6 - É possível enviar os dados de "Número", "Bairro" e "CPF" para o PagSeguro? =
-Sim é possível, basta utilizar o plugin "[WooCommerce Extra Checkout Fields for Brazil](http://wordpress.org/plugins/woocommerce-extra-checkout-fields-for-brazil/)".
+For downloadable products, the default WooCommerce setting is to allow access only when the order has the status "Completed". However, in the WooCommerce settings, under the *Products* tab, it's possible to enable the option **"Grant access to download the product after payment"**, thus allowing the download when the order status is "processing".
 
-= 7 - O pedido foi pago e ficou com o status de "processando" e não como "concluído", isto está certo? =
-Sim, por padrão em compras pagas o status do pedido muda automaticamente para processando, significa que pode enviar sua encomenda. Porém, definir o status como "concluído" é atribuição do lojista ao final do processo de venda e entrega.
+If the data is correct, you should access the "WooCommerce > System Status" page and check if **fsockopen** and **cURL** are active. You need to seek help from your hosting provider if you have **fsockopen** and/or **cURL** disabled.
 
-Para produtos baixáveis a configuração padrão do WooCommerce é permitir o acesso apenas quando o pedido tem o status "Concluído", entretanto nas configurações do WooCommerce na aba *Produtos* é possível ativar a opção **"Conceder acesso para download do produto após o pagamento"** e assim liberar o download quando o status do pedido está como "processando".
+Finally, you can enable the **Debug Log** option in the plugin settings and try closing an order again (you must try closing an order for the log to record the error). With the log, you can find out exactly what is going wrong with your installation.
 
+If you don't understand the log content, that's okay, you can open a "[topic in the plugin forum](https://wordpress.org/support/plugin/virtuaria-pagseguro#postform)" with the log link (use [pastebin.com](http://pastebin.com).
 
-Se os dados estão corretos, você deve acessar a página "WooCommerce > Status do Sistema" e verificar se **fsockopen** e **cURL** estão ativos. É necessário procurar ajuda do seu provedor de hospedagem caso você tenha o **fsockopen** e/ou o **cURL** desativados.
+= 8 - Is there automatic payment confirmation? Is the order status changed automatically? =
+Yes, the status is changed automatically using the PagSeguro status change notification API.
 
-Por último é possível ativar a opção de **Log de depuração** nas configurações do plugin e tentar novamente fechar um pedido (você deve tentar fechar um pedido para que o log grave o erro). Com o log é possível saber exatamente o que está dando errado com a sua instalação.
+= 9 - Common situations for blocking PagSeguro notifications received by the plugin =
+The most common reason is a security plugin, firewall, or tool on the server where the store is running that is blocking notifications. In this case, simply disable the blocking or add an exception to not block notifications originating from PagSeguro.
 
-Caso você não entenda o conteúdo do log não tem problema, você pode me abrir um "[tópico no fórum do plugin](https://wordpress.org/support/plugin/virtuaria-pagseguro#postform)" com o link do log (utilize o [pastebin.com](http://pastebin.com).
+Examples:
 
-= 8 - Tem confirmação automática dos pagamentos? O status do pedido é alterado automaticamente? =
-Sim, o status é alterado automaticamente usando a API de notificações de mudança de status do PagSeguro.
+* Site with CloudFlare, as by default any communication from other servers to yours will be blocked. This can be resolved by unblocking the IP list. Regarding PagSeguro.
+* Security plugin like "iThemes Security" with the option to add the HackRepair.com list to the site's .htaccess file. The problem is that the PagSeguro user-agent is in the middle of the list and will block any communication. You can remove it from the list; just find where it blocks the "jakarta" user-agent and delete it, or create a rule to accept PagSeguro IPs.
+* `mod_security` enabled; in this case, the same thing will happen as with CloudFlare, blocking any communication from other servers to yours. As a solution, you can disable or allow PagSeguro IPs.
 
-= 9 - Situações comuns para bloqueio no recebimento de notificações do PagSeguro pelo plugin =
-O motivo mais comum é algum plugin de segurança, firewall ou ferramenta no servidor onde a loja está rodando estar bloqueando as notificações. Neste caso, basta desativar o bloqueio ou incluir uma exceção para não barrar as notificações que tem o PagSeguro como origem.
+= 10 - Does it work with the PagSeguro Sandbox? =
+Yes, it works, and you just need to activate it in the plugin options, in addition to configuring your "[test email](https://sandbox.pagseguro.uol.com.br/vendedor/configuracoes.html)"
 
-Exemplos:
+Remember that, if you are testing in the Sandbox, instability is common, and this may cause PagSeguro not to send status updates to the plugin.
 
-* Site com CloudFlare, pois por padrão serão bloqueadas quaisquer comunicações de outros servidores com o seu. É possível resolver isso desbloqueando a lista de IPs do PagSeguro.
+= 11 - Which URLs should I use to configure "Transaction Notification" and "Redirect Page"? =
+It is not necessary to configure any URL for "Transaction Notification" or "Redirect Page," the plugin already tells PagSeguro which URLs will be used.
+= 12 - Difficulties using the Sandbox =
+In conversation with the PagSeguro integration team, we were informed that the Orders API is not 100% updated with the Sandbox. Therefore, it is possible that some of the problems below may occur:
 
-* Plugin de segurança como o "iThemes Security" com a opção para adicionar a lista do HackRepair.com no .htaccess do site. Acontece que o user-agent do PagSeguro está no meio da lista e vai bloquear qualquer comunicação. Você pode remover isso da lista, basta encontrar onde bloquea o user-agent "jakarta" e deletar ou criar uma regra para aceitar os IPs do PagSeguro).
-
-* `mod_security` habilitado, neste caso vai acontecer igual com o CloudFlare bloqueando qualquer comunicação de outros servidores com o seu. Como solução você pode desativar ou permitir os IPs do PagSeguro.
-
-= 10 - Funciona com o Sandbox do PagSeguro? =
-Sim, funciona e basta você ativar isso nas opções do plugin, além de configurar o seu "[e-mail de testes](https://sandbox.pagseguro.uol.com.br/vendedor/configuracoes.html)"
-
-Lembrando que, se estiver fazendo testes na Sandbox, é comum ocorrerem instabilidades e isto pode fazer com que o PagSeguro não envie até o plugin as atualizações de status.
-
-= 11 - Quais URLs eu devo usar para configurar "Notificação de transação" e "Página de redirecionamento"? =
-Não é necessário configurar qualquer URL para "Notificação de transação" ou para "Página de redirecionamento", o plugin já diz para o PagSeguro quais URLs serão utilizadas.
-
-= 12 - Dificuldades ao usar a Sandbox =
-Em conversa com a equipe de integração do PagSeguro, nos foi informado que a API Orders não é 100% atualizada com a Sandbox. Portanto, é possível que algum dos problemas abaixo aconteça:
-
-* Transação não aparece no painel sandbox apesar de retorno da API correto;
-* Notificações de mudança de status não chegam à loja;
-* Falha ao reembolsar;
-* Dificuldades ao fazer login no painel da sandbox;
+* Transaction does not appear in the sandbox panel despite correct API return;
+* Status change notifications do not reach the store;
+* Refund failure;
+* Difficulties logging into the sandbox panel;
 * Internal Server Error;
 * Transaction is not found;
 * Operation timed out;
 * Bad Gateway;
 * External service error.
 
-= 13 - Quais valores meus clientes podem pagar com este plugin?  =
-Não há valores máximos para as vendas, porém existem valores mínimo a serem transacionados com o pagseguro, segue lista:
+= 13 - What values ​​can my customers pay with this plugin? = There are no maximum values ​​for sales, however there are minimum values ​​to be transacted with PagSeguro, as listed below:
 
-Método   |   Bandeira   |  Valor Mínimo (R$)  |  Parcela Mínima (R$)
-Crédito  |  Visa              | 1,00          | 5,00
-Crédito  |  Mastercard        | 0,20          | 5,00
-Crédito  |  American Express  | 0,20          | 5,00
-Crédito  |  Demais bandeiras  | 0,20          | 5,00
-Boleto   |  –                 | 0,20          | –
-Pix      |  –                 | 1,00          | –
+Method | Card Brand | Minimum Value (R$) | Minimum Installment (R$)
+Credit | Visa | 1.00 | 5.00
+Credit | Mastercard | 0.20 | 5.00
+Credit | American Express | 0.20 | 5.00
+Credit | Other brands | 0.20 | 5.00
+Bank slip | - | 0.20 | -
+Pix | - | 1.00 | -
 
+= 14 - Does this plugin allow full and partial refunds? =
+Yes, you can refund orders with a processing status by going directly to the order page in WooCommerce and clicking on Refund -> Refund via PagSeguro and setting the amount, whether full or partial.
 
+= 15 - Is there a minimum refund amount? =
+Yes, the minimum refund amount via the online store is R$ 1.00.
 
-= 14 - Este plugin permite o reembolso total e parcial da venda? =
-Sim, você pode reembolsar pedidos com status processando indo direto a página do pedido no woocommerce e clicar em Reembolso -> Reembolso via Pagseguro e setar o valor seja ele total ou parcial.
+= 16 - Where can I find the plugin log? = In the menu “WooCommerce > Status > Logs”.
 
-= 15 - Tem valor mínimo para reembolso? =
-Sim, o valor mínimo para reembolso via loja virtual é R$ 1,00.
+It is also possible to generate a detailed system report in the "WooCommerce > Status" menu, via the "Get System Report" button.
 
-= 16 - Onde encontro o log do plugin ? =
-No menu “Woocommerce > Status > Logs”.
+= 17 - What is the correct format for the "Name on Invoice" field on the card? =
+PagSeguro does not allow the "Name on Invoice" field to have more than 17 characters. It also does not allow the use of special characters or spaces. This may generate the message "PagSeguro: Check the data entered and try again". From version 2.3.0 onwards, the plugin configuration does not allow the character limit to be exceeded, so if you filled in this field in an older version and the name is out of standard, simply adjust the field and save the configuration.
 
-Também é possível gerar um relatório detalhado do sistema no menu "Woocommerce > Status", através do botão “Obter Relatório do Sistema”.
+= 18 - Pix Orders Being Cancelled =
+When a purchase is made via Pix payment, an order with the status "Awaiting" is created in the panel, however, if the Pix payment is not identified by the time limit, the order will automatically change to the status "Cancelled". The time limit is defined in the “PIX Code Validity” field on the plugin settings screen (there is a 30-minute tolerance beyond the time limit).
 
-= 17 - Qual o formato correto do campo "Nome na Fatura" do cartão?  =
-O PagSeguro não permite que o campo “Nome na Fatura” possua mais de 17 caracteres. Também não permite o uso de caracteres especiais ou espaços em branco. Isso pode gerar a mensagem "PagSeguro: Verifique os dados digitados e tente novamente". A partir da versão 2.3.0, a configuração do plugin não permite que o limite de caracteres seja excedido, então, caso tenha preenchido este campo em uma versão antiga e o nome esteja fora do padrão, basta ajustar o campo e salvar a configuração.
+If the payment was made but not identified by the plugin, some guidance can be found in topic 9 of this FAQ.
 
-= 18 - Pedidos no Pix sendo Cancelado =
-Quando uma compra é feita via pagamento com Pix, é criado um pedido com status “Aguardando” no painel, porém, caso o pagamento do Pix não seja identificado até o tempo limite, o pedido mudará para o status “Cancelado” automaticamente. O tempo limite é definido no campo “Validade do Código PIX” na tela de configurações do plugin (existe uma tolerância de 30 min, além do tempo limite).
+= 19 - How to activate special rates?
 
-Se o pagamento foi feito, mas não identificado pelo plugin, algumas orientações podem ser encontradas no tópico 9 desta FAQ.
+From version 2.5.0 onwards, Virtuaria, in partnership with PagSeguro, offers special conditions related to the rate charged to merchants using the plugin. To enable these new rates, it is necessary to disconnect the plugin and reconnect it using one of the special rates provided on the plugin settings screen.
 
-= 19 - Como ativar as taxas especiais?
-A partir da versão 2.5.0 a Virtuaria em parceria com o PagSeguro, disponibilizam condições especiais relacionadas a taxa cobrada dos lojistas usuários do plugin. Para habilitar estas novas taxas é necessário desconectar o plugin e reconectá-lo utilizando uma das taxas especiais fornecidas na tela de configuração do plugin.
+Currently we have the following options:
 
-Atualmente temos as seguintes opções:
+* Virtuaria Special 01: Credit 3.79% (receipt in 30 days) | Pix 0.99% | Boleto R$ 2.99;
 
-* Especial Virtuaria 01: Crédito 3,79% (recebimento em 30 dias) | Pix 0,99% | Boleto R$ 2,99;
-* Especial Virtuaria 02: Crédito 4,39% (recebimento em 14 dias) | Pix 0,99% | Boleto R$ 2,99;
-* Negociada PagSeguro (caso tenha negociado com o PagSeguro uma taxa personalizada);
-* Padrão do PagSeguro.
+* Virtuaria Special 02: Credit 4.39% (receipt in 14 days) | Pix 0.99% | Bank slip R$ 2.99;
 
-**Observação:** As taxas podem ser alteradas a critério do PagSeguro.
+* Negotiated PagSeguro (if you have negotiated a personalized rate with PagSeguro);
 
-= 20 - Ao utilizar o 3DS, minha loja estará livre de disputas no PagBank?
-O uso da autenticação 3DS não garante a prevenção de disputas em sua loja online. O programa de proteção ao comprador permanece ativo, exigindo que você mantenha registros de entrega em nome do titular do cartão para contestar possíveis reclamações. No entanto, quando uma transação é autenticada, o banco emissor assume a responsabilidade por chargebacks fraudulentos (Liability shift), proporcionando maior segurança. Além disso, a autenticação 3DS aumenta a taxa de aprovação, reduzindo suspeitas de compras não autorizadas. Importante notar que o 3DS aborda apenas casos de fraude, não questões relacionadas à entrega ou direitos do consumidor, como qualidade do produto/serviço.
+* PagSeguro standard.
 
-= 21 = Problemas na confirmação de pagamento Pix
-Sua loja virtual está configurada para receber confirmações automáticas de pagamento do PagSeguro/PagBank através do plugin Virtuaria PagSeguro, mas essas notificações estão sendo bloqueadas pelo servidor de hospedagem antes mesmo de chegarem ao seu site. Isso acontece porque:
+**Note:** Rates may be changed at PagSeguro's discretion.
 
-O servidor identifica as notificações como "não seguras"
-O PagSeguro envia as notificações usando um identificador técnico (Go-http-client/2.0), que alguns servidores bloqueiam automaticamente.
+= 20 - By using 3DS, will my store be free from disputes on PagBank?
+The use of 3DS authentication does not guarantee the prevention of disputes in your online store. The buyer protection program remains active, requiring you to maintain delivery records in the cardholder's name to contest possible claims. However, when a transaction is authenticated, the issuing bank assumes responsibility for fraudulent chargebacks (Liability shift), providing greater security. In addition, 3DS authentication increases the approval rate, reducing suspicions of unauthorized purchases. It is important to note that 3DS only addresses cases of fraud, not issues related to delivery or consumer rights, such as product/service quality.
 
-Firewalls de segurança estão interferindo
-Muitas hospedagens usam sistemas de proteção (como ModSecurity ou CDN) que podem bloquear requisições de formatos específicos.
+= 21 = Problems with Pix Payment Confirmation
+Your online store is configured to receive automatic payment confirmations from PagSeguro/PagBank through the Virtuaria PagSeguro plugin, but these notifications are being blocked by the hosting server before they even reach your website. This happens because:
 
-Como Resolver?
-Passo 1: Entre em Contato com o Suporte da Sua Hospedagem
-Explique que o servidor está bloqueando as notificações do PagSeguro e solicite:
+The server identifies the notifications as "not secure"
+PagSeguro sends notifications using a technical identifier (Go-http-client/2.0), which some servers automatically block.
 
-Adicionar à lista de permissões (whitelist):
-✅ /wc-api/WC_Virtuaria_PagSeguro_Gateway  
+Security firewalls are interfering
+Many hosting providers use protection systems (such as ModSecurity or CDN) that can block requests of specific formats.
+
+How to Solve?
+
+Step 1: Contact Your Hosting Support
+
+Explain that the server is blocking PagSeguro notifications and request:
+
+Add to the whitelist:
+
+✅ /wc-api/WC_Virtuaria_PagSeguro_Gateway
 ✅ Go-http-client/2.0
 
-Desativar bloqueios temporários:
-Peça para verificarem se o firewall ou CDN está bloqueando requisições para o endpoint:
+Disable temporary blocks:
 
-/wc-api/WC_Virtuaria_PagSeguro_Gateway  
+Ask them to check if the firewall or CDN is blocking requests to the endpoint:
 
-O Que Escrever para o Suporte? Use este modelo:
+/wc-api/WC_Virtuaria_PagSeguro_Gateway
 
-Assunto: Bloqueio de Notificações do PagSeguro
+What to Write to Support? Use this template:
 
-Olá,
+Subject: PagSeguro Notification Blocking
 
-Estou com problemas para receber notificações de pagamento do PagSeguro em minha loja através do plugin Virtuaria PagSeguro.
+Hello,
 
-Detalhes técnicos:
+I am having problems receiving payment notifications from PagSeguro in my store through the Virtuaria PagSeguro plugin.
 
-Endpoint bloqueado: /wc-api/WC_Virtuaria_PagSeguro_Gateway
+Technical Details:
 
-Código de erro no servidor: HTTP 406
+Blocked endpoint: /wc-api/WC_Virtuaria_PagSeguro_Gateway
 
-utilizado: Go-http-client/2.0
+Server error code: HTTP 406
 
-Solicito que:
+Used: Go-http-client/2.0
 
-Adicione à whitelist do firewall
+Request that:
 
-Verifiquem se o endpoint acima está liberado
+Add to firewall whitelist
 
-Segue exemplo do log com o erro:
-15.229.10.19 - - [29/Apr/2025:16:45:06 -0300] "POST /wc-api/WC_Virtuaria_PagSeguro_Gateway HTTP/2.0" 406 226 "-" "Go-http-client/2.0" 
+Verify if the above endpoint is allowed
 
-Atenciosamente,
-[Seu Nome]
+Example of the error log:
 
-Importante!
-Se você usa Cloudflare ou CDN:
-Desative temporariamente ou configure regras para não bloquear o User-Agent Go-http-client/2.0.
+15.229.10.19 - - [29/Apr/2025:16:45:06 -0300] "POST /wc-api/WC_Virtuaria_PagSeguro_Gateway HTTP/2.0" 406 226 "-" "Go-http-client/2.0"
 
-O plugin Virtuaria PagSeguro está funcionando corretamente:
-O problema não é do plugin, mas sim de configurações de segurança externas.
+Sincerely,
 
+[Your Name]
 
+Important!
 
+If you use Cloudflare or a CDN:
+Temporarily disable or configure rules to not block the Go-http-client/2.0 User-Agent.
 
-
-
+The Virtuaria PagSeguro plugin is working correctly:
+The problem is not with the plugin, but with external security settings.
 == Screenshots ==
 
-1. Configurações do plugin;
-2. Configurações de cartão de crédito - separado;
-3. Configurações de pix - separado;
-4. Configurações de boleto bancário - separado;
-5. Configurações de cartão de crédito, pix e boleto - unificado;
-6. Checkout transparente com crédito;
-7. Checkout transparente com boleto;
-8. Checkout transparente com pix;
-9. Reembolso;
-10. Reembolso bem sucedido;
-11. Armazenamento dos dados de pagamento;
-12. Cobrança adicional;
-13. Boleto bancário;
-14. Boleto bancário no e-mail de novo pedido;
-15. Pagamento com Pix;
-16. Segunda via do Pix no e-mail de novo pedido;
-17. Consulta de status de pagamento;
-18. Parcelamento na página do produto;
-19. Layout de finalização em linhas - Crédito;
-20. Layout de finalização em linhas - Pix;
-21. Layout de finalização com métodos separados;
-22. Transações (Virtuaria PagBank Split);
+1. Plugin settings;
+2. Credit card settings - separate;
+3. Pix settings - separate;
+4. Bank slip settings - separate;
+5. Credit card, Pix, and bank slip settings - unified;
+6. Transparent checkout with credit;
+7. Transparent checkout with bank slip;
+8. Transparent checkout with Pix;
+9. Refund;
+10. Successful refund;
+11. Storage of payment data;
+12. Additional charge;
+13. Bank slip;
+14. Bank slip in the new order email;
+15. Payment with Pix;
+16. Second copy of Pix in the new order email;
+17. Payment status inquiry;
+18. Installment payment on the product page;
+19. Checkout layout in lines - Credit;
+20. Checkout layout in lines - Pix;
+21. Checkout layout with separate methods;
+22. Transactions (Virtuaria PagBank Split);
 23. Sellers (Virtuaria PagBank Split);
-24. Autenticação 3DS em ação;
-25. Pagamento com Crédito + Pix.
+24. 3DS Authentication in action;
+25. Payment with Credit + Pix.
 
 == Upgrade Notice ==
-Nenhuma atualização disponível
+No updates available
 
 == Changelog ==
+= 3.6.5 2026-06-18 =
+* Adjustment - Improved security of the IPN resquests.
+
 = 3.6.4 2025-12-15 =
-* Ajuste - Melhoria na Segurança da conexão oauth.
+* Adjustment - Improved security of the OAuth connection.
+
 = 3.6.3 2025-10-20 =
-* Ajuste - Pagamento pix no checkout em blocos.
+* Adjustment - Pix payment in checkout in blocks.
+
 = 3.6.2 2025-08-12 =
-* Melhoria - Compatibilidade com o checkout do tema Maxcoach;
-* Melhoria - Compatibiliadade com status customizados no duopay.
+* Improvement - Compatibility with the Maxcoach theme checkout;
+* Improvement - Compatibility with custom statuses in DuoPay.
+
 = 3.6.1 2025-07-07 =
-* Melhoria - Performance e pequenos bugs.
+* Improvement - Performance and minor bugs.
+
 = 3.6.0 2025-07-02 =
-* Novo - Suporte a forma de pagamento Duopay;
-* Ajustes - Estabilidade e correção de bugs menores.
-= 3.5.3 2025–05-29 =
-* Ajuste - Melhoria na aplicação do desconto pix.
-= 3.5.2 2025–05-20 =
-* Melhoria - Formatação do número de telefone.
-= 3.5.1 2025–05-15 =
-* Melhoria - Compatibilidade com carregamento de traduções no Wordpress 6.8+.
+* New - Support for Duopay payment method;
+* Adjustments - Stability and minor bug fixes.
+
+= 3.5.3 2025-05-29 =
+* Adjustment - Improved application of Pix discount.
+
+= 3.5.2 2025-05-20 =
+* Improvement - Phone number formatting.
+
+= 3.5.1 2025-05-15 =
+* Improvement - Compatibility with loading translations in WordPress 6.8+.
+
 = 3.5.0 2025-05-14 =
-* Novo - Compatibilidade com checkout em blocos do Woocommerce.
+* New - Compatibility with WooCommerce block checkout.
+
 = 3.4.5 2025-05-08 =
-* Melhoria - Fallback para confirmação de pagamentos Pix.
+* Improvement - Fallback for Pix payment confirmation.
 = 3.4.4 2025-02-18 =
-* Melhoria - Atualização das traduções do plugin (.pot, .po e .po);
-* Melhoria - Ajuste no envio de dados ao 3DS.
+* Improvement - Update of plugin translations (.pot, .po and .po);
+* Improvement - Adjustment in sending data to 3DS.
+
 = 3.4.2 2025-02-14 =
-* Melhoria - Internacionalização das strings do plugin, atualização dos aquivos: .pot, .pot e .po.
+* Improvement - Internationalization of plugin strings, update of files: .pot, .pot and .po.
+
 = 3.4.1 2025-02-10 =
-* Melhoria - Registro de falhas de validação no 3DS em log.
+* Improvement - Log of validation failures in 3DS.
+
 = 3.4.0 2024-12-23 =
-* Novo - Suporte a Woocommerce Subscriptions;
-* Novo - Configuração que permite não enviar dados de entrega. Essa configuração é útil para lojas virtuais que não realizam entregas físicas ou que não possuem campos de endereço no checkout, evitando problemas de validação de vendas.
-* Melhoria - Compatibilidade com Wordpress 6.7.1;
-* Ajuste - Correção na exibição da caixa de cobranças extras.
+* New - Support for WooCommerce Subscriptions;
+* New - Configuration that allows not sending delivery data. This configuration is useful for online stores that do not offer physical delivery or that do not have address fields at checkout, avoiding sales validation problems.
+* Improvement - Compatibility with WordPress 6.7.1;
+* Adjustment - Correction in the display of the extra charges box.
+
 = 3.3.7 2024-10-22 =
-* Novo - filtro “virtuaria_pagseguro_menu_capability” que permite alterar a capability usada nas páginas de menu do plugin.
+* New - “virtuaria_pagseguro_menu_capability” filter that allows changing the capability used on the plugin's menu pages.
 
 = 3.3.6 2024-09-24 =
-* Novo - Compatibilidade com Campos Extras do Virtuaria Correios.
+* New - Compatibility with Virtuaria Correios Extra Fields.
 
 = 3.3.5 2024-08-07 =
-* Ajuste - Remoção de warnings.
+* Adjustment - Removal of warnings.
 
 = 3.3.4 2024-04-09 =
-* Novo endpoint para sessões 3DS;
-* Ajuste na exibição de método crédito armazenado;
-* Ajuste para remoção de warnings;
-* Informativo sobre obrigatoriedade de chave para uso do método Pix.
+* New endpoint for 3DS sessions;
+* Adjustment in the display of the stored credit method;
+* Adjustment to remove warnings;
+* Information regarding the mandatory key for using the Pix method.
 
 = 3.3.3 2024-03-15 =
-* Ajuste na validação 3DS no modo unificado com crédito.
+* Adjustment to 3DS validation in unified mode with credit.
 
 = 3.3.2 2024-02-29 =
-* Melhorias de algumas validações de informações.
+* Improvements to some information validations.
 
 = 3.3.1 2024-02-29 =
-* Renomeando plugin para "Virtuaria PagBank / PagSeguro para Woocommerce";
-* Melhoria na exibição de mensagens sobre falha de autenticação 3DS para o cliente.
+* Renaming the plugin to "Virtuaria PagBank / PagSeguro for WooCommerce";
+* Improved display of 3DS authentication failure messages to the customer.
 
 = 3.3.0 2024-02-27 =
-* Compatibilidade com Woocommerce High-performance order storage;
-* Correção no link para o log;
+* Compatibility with WooCommerce High-performance order storage;
+* Fixed link to the log;
 
 = 3.2.0 2024-02-20 =
-* Autenticação 3D Secure com opção de valor mínimo e permitir compras para cartões que não suportem a tecnologia;
-* Nova configuração para esconder o logo do PagBank(antigo PagSeguro) no checkout;
-* Nova configuração para adicionar linhas de instrução de pagamento no boleto bancário;
-* Novas configurações para descontos percentuais no Boleto bancário.
+* 3D Secure authentication with minimum value option and allowing purchases for cards that do not support the technology;
+* New setting to hide the PagBank (formerly PagSeguro) logo at checkout;
+* New setting to add payment instruction lines to bank slips;
+* New settings for percentage discounts on Boleto Bancário (Brazilian bank slip).
 
 = 3.1.0 2024-02-05 =
-* Suporte a divisão de pagamento (Split) através do plugin “Virtuaria PagBank Split”;
-* Registro de código de barras e link para o PDF do boleto no histórico(notas) do pedido;
-* Correção de bug ao ignorar categorias no desconto Pix;
-* Logs de transações e notificações unificado;
-* Ajuste na exibição das observações de pagamento com cartão de crédito;
-* Correção no envio do endereço de entrega para novos pedidos e cobranças adicionais;
-* Melhoria na exibição do logo no pix, quando no modo separado.
+* Support for payment splitting through the “Virtuaria PagBank Split” plugin;
+* Registration of barcode and link to the Boleto PDF in the order history (notes);
+* Bug fix when ignoring categories in Pix discount;
+* Unified transaction logs and notifications;
+* Adjustment in the display of payment notes with credit card;
+* Correction in sending the delivery address for new orders and additional charges;
+* Improvement in the display of the logo in Pix, when in separate mode.
 
 = 3.0.1 2024-01-16 =
-* Correção na exibição do código copia e cola e QR code pix;
-* Correção no envio do endereço de entrega;
-* Melhoria no texto do desconto pix.
+* Correction in the display of the copy and paste code and Pix QR code;
+* Correction in sending the delivery address;
+* Improvement in the Pix discount text.
 
 = 3.0.0 2023-12-14 =
-* Novo menu para gerenciar configurações do plugin;
-* Nova tela de configuração;
-* Configuração para modo de funcionamento que permite o uso separado dos métodos de pagamento;
-* Ajuste na exibição do parcelamento em produtos variáveis;
-* Melhoria das legendas de configuração;
-* Adição da marca do PagBank ao checkout;
-* Compatibilidade com Wordpress 6.4.2.
+* New menu to manage plugin settings;
+* New configuration screen;
+* Configuration for operating mode that allows separate use of payment methods;
+* Adjustment to the display of installment payments for variable products;
+* Improved configuration legends;
+* Addition of the PagBank logo to the checkout;
+* Compatibility with WordPress 6.4.2.
 
 = 2.7.0 2023-11-10 =
-* Novo layout de exibição das formas de pagamento na tela de checkout;
-* Opção para remoção de todos os "Cartões" (tokens de pagamento) armazenados pelo plugin;
-* Correção de problema de confirmação de pagamento via pix/boleto quando a opção de log está inativa.
+* New layout for displaying payment methods on the checkout screen;
+* Option to remove all "Cards" (payment tokens) stored by the plugin;
+* Correction of a payment confirmation problem via PIX/boleto when the log option is inactive.
 
 = 2.6.0 2023-10-19 =
-* Exibição de parcelamento, controlável por configuração, para listagens de produtos(pesquisa/home/categorias e etc) e página do produto;
-* Compatibilidade Plugin Asaas Gateway for WooCommerce.
+* Display of installment options, controllable by configuration, for product listings (search/home/categories, etc.) and product page;
+* Asaas Gateway for WooCommerce plugin compatibility.
 
 = 2.5.0 2023-09-05 =
-* Taxas especiais para clientes;
-* Estilização da tela de configurações;
-* Warning no template de checkout transparente;
-* Ajuste para impedir o envio de produtos com preço 0 no JSON de produtos;
-* Atualização dos modelos de tradução (.POT, .PO, .MO);
-* Ajuste para limitar a 100, o número de caracteres do título de produtos.
+* Special rates for customers;
+* Styling of the settings screen;
+* Warning in the transparent checkout template;
+* Adjustment to prevent sending products with a price of 0 in the product JSON;
+* Update of translation templates (.POT, .PO, .MO);
+* Adjustment to limit the number of characters in the product title to 100.
 
 = 2.4.0 2023-07-13 =
-* Nova configuração que permite o controle do status utilizado para indicar que o pagamento do pedido foi confirmado, padrão “Processando”;
-* Opção de consulta de status de pagamento na tela de gerenciamento dos pedidos.
+* New configuration that allows control of the status used to indicate that the order payment has been confirmed, default “Processing”;
+* Payment status inquiry option on the order management screen.
 
 = 2.3.4 2023-06-22 =
-* Ajuste na exibição da mensagem sobre categorias ignoradas no desconto pix.
+* Adjustment to the display of the message about ignored categories in the Pix discount.
 
 = 2.3.3 2023-06-19 =
-* Ajuste no carregamento do QR Code;
-* Ajuste na exibição dos campos do checkout transparente;
-* Nova inicialização das classes de pagamento.
+* Adjustment to QR Code loading;
+* Adjustment to the display of transparent checkout fields;
+* New initialization of payment classes.
 
 = 2.3.2 2023-06-14 =
-* Ajuste no título do método de pagamento ao utilizar o modo assíncrono de processamento do pedido.
-* Texto sobre o desconto pix aparecendo mesmo com método Pix inativo.
+* Adjustment to the payment method title when using asynchronous order processing mode.
+* Text about the Pix discount appearing even with the Pix method inactive.
 
 = 2.3.1 2023-06-07 =
-* Configuração para desativar o desconto no Pix caso algum cupom seja aplicado.
-
-* Configuração para desativar o desconto no Pix para produtos de algumas categorias. O desconto será aplicado somente aos itens fora das categorias selecionadas.
-
-* Ajuste na confirmação automática do pix, em alguns ambientes a tela não mudava após o pagamento ser realizado.
-* Filter virtuaria_pagseguro_disable_discount, permite desabilitar o desconto Pix em produtos de acordo com regras personalizadas.
-* Filter ‘virtuaria_pagseguro_purchased_item’, permite manipular a lista de itens enviados ao PagSeguro.
-* Action ‘after_virtuaria_pix_validate_text’, permite adicionar conteúdo extra a caixa do pix no checkout.
+* Configuration to disable the Pix discount if a coupon is applied.
+* Configuration to disable the Pix discount for products in some categories. The discount will only be applied to items outside the selected categories.
+* Adjustment to automatic Pix confirmation; in some environments, the screen did not change after payment was made.
+* Filter virtuaria_pagseguro_disable_discount, allows disabling Pix discounts on products according to custom rules.
+* Filter ‘virtuaria_pagseguro_purchased_item’, allows manipulating the list of items sent to PagSeguro.
+* Action ‘after_virtuaria_pix_validate_text’, allows adding extra content to the Pix box at checkout.
 
 = 2.3.0 2023-05-30 =
-* Confirmação automática de pagamento Pix na tela de pedido recebido.
-* Correção na validação de acesso quando a opção do Woocommerce, criar conta no checkout estiver ativada.
+* Automatic Pix payment confirmation on the order received screen.
+* Correction to access validation when the WooCommerce option to create an account at checkout is enabled.
 
 = 2.2.8 2023-05-25 =
-* Exibindo no checkout o valor do pagamento com desconto Pix;
-* Retirada da obrigatoriedade do preenchimento da descrição do plugin para que os campos apareçam.
-* Ajuste no texto informativo sobre o Boleto bancário.
+* Displaying the payment amount with Pix discount at checkout;
+* Removal of the requirement to fill in the plugin description for the fields to appear.
+* Adjustment to the informational text about Boleto bancário (bank slip).
 
 = 2.2.7 2023-05-05 =
-* Correção no total do pix quando o desconto está ativo;
+* Correction to the total Pix payment when the discount is active;
 
 = 2.2.6 2023-05-02 =
-* Desconto Pix usando total do carrinho sem contar o valor de frete.
-* Identificação do titular do cartão no histórico(notas) do pedido.
-* Limite de tamanho nos campos de endereço do cliente.
-* Otimização na configuração Conectar / Desconectar com o PagSeguro.
+* Pix discount using the cart total excluding shipping costs.
+* Cardholder identification in the order history (notes).
+* Size limit for customer address fields.
+* Optimization in the Connect/Disconnect configuration with PagSeguro.
 
 = 2.2.5 2023-03-27 =
-* Correção do problema ao exibir cobrança adicional em ambientes com php 8.0.
-* Correção na apresentação do valor do item no relatório do PagSeguro.
+* Fixed the problem displaying additional charges in environments with PHP 8.0.
 
-= 2.2.4 2023-03-23 =
-* Correção do problema “Pagseguro: must be between 100 and 999999900” em compras no Pix.
+* Fixed the presentation of the item value in the PagSeguro report.
+
+= 2.2.4 2023-03-23 ​​=
+* Fixed the problem “PagSeguro: must be between 100 and 999999900” in Pix purchases.
 
 = 2.2.3 2023-03-22 =
-* Limpar inconsistências do banco de dados quando ocorrer falha ao conectar/desconectar.
+* Cleared database inconsistencies when a connection/disconnection failure occurs.
 
 = 2.2.2 2023-03-22 =
-* Correção na aplicação do desconto Pix no QR Code.
+* Fixed the application of the Pix discount in the QR Code.
+* Prefix for use in transactions in multiple stores with the same account.
 
-* Prefixo para uso de transações em várias lojas com a mesma conta.
 = 2.2.1 2023-03-21 =
-
-* Desconto em pagamentos com Pix.
-* Aviso sobre ausência do módulo Brazilian Market on WooCommerce.
+* Discount on payments with Pix.
+* Notice regarding the absence of the Brazilian Market module on WooCommerce.
 
 = 2.2.0 2023-03-10 =
-* Reconhecimento de bandeira de cartão de crédito e exibição de ícone no checkout.
-* Ajuste na altura do checkout quando o crédito não está ativo.
-* Ao sair do campo “Validade”, no checkout, converter data de expiração de MM/AA para MM/AAAA.
-* Nova cobrança Pix - reembolso para primeiro pagamento efetivado e ajuste para prevenir cancelamento do pedido quando a cobrança adicional tiver sido paga.
-* Identificação da forma de pagamento na lista de pedidos.
-* Melhorias no recebimento de webhooks e notas do histórico do pedido.
+* Credit card flag recognition and icon display at checkout.
+* Adjustment to checkout height when credit is not active.
+* When leaving the "Validity" field at checkout, convert expiration date from MM/YY to MM/YYYY.
+* New Pix charge - refund for the first payment made and adjustment to prevent order cancellation when the additional charge has been paid.
+* Payment method identification in the order list.
+* Improvements in receiving webhooks and order history notes.
 
 = 2.1.0 2023-02-14 =
-* Opção para configurar layout dos campos do checkout (crédito).
-* Melhoria no layout da configuração de autorização.
+* Option to configure the layout of checkout fields (credit).
+* Improvement in the authorization configuration layout.
 
 = 2.0.4 2023-02-07 =
-* Correção de problema de compatibilidade com php 8.2.
-* Compatibilidade com venda para pessoa jurídica(PJ).
-* Melhoria no espaçamento do e-mail com pedidos via Pix.
-* Campo Bairro (billing_neighborhood) obrigatório.
-* Melhoria visual na apresentação do QR code na página de agradecimento do pedido.
-* Melhorias visuais no checkout transparente.
+* Fixed compatibility issue with PHP 8.2.
+* Compatibility with sales to legal entities (PJ).
+* Improved email spacing for orders via Pix.
+* Neighborhood field (billing_neighborhood) is now mandatory.
+* Visual improvement in the presentation of the QR code on the order thank you page.
+* Visual improvements in the transparent checkout.
 
 = 2.0.3 2023-02-01 =
-* Correção na exibição do valor mínimo da parcela.
-* Novo campo "Observações" para exibir informações extras abaixo da descrição do método de pagamento.
+* Fixed the display of the minimum installment amount.
+* New "Notes" field to display extra information below the payment method description.
 
 = 2.0.2 2023-01-26 =
-* Melhorando exibição dos meios de pagamento do checkout.
+* Improved display of payment methods in the checkout.
 
 = 2.0.1 2023-01-24 =
-* Correção na exibição das abas do checkout.
-
+* Fixed the display of checkout tabs.
 = 2.0.0 2023-01-23 =
-* Suporte a API Orders;
-* Suporte a API Connect;
-* Pagamento com PIX;
-* Modo de processamento Assíncrono;
-* Melhorias no histórico de notas e logs do pedido.
+* Support for Orders API;
+* Support for Connect API;
+* Payment with PIX;
+* Asynchronous processing mode;
+* Improvements to the history of notes and order logs.
 
 = 1.2.0 2022-11-10 =
-* Arquivo de homologação gerado automaticamente.
+* Automatically generated homologation file.
 
 = 1.1.3 2022-09-15 =
-* Validação de campos do crédito.
+* Validation of credit fields.
 
 = 1.1.2 2022-09-13 =
-* Máscara para data de validade do cartão.
+* Mask for card expiration date.
 
 = 1.1.1 2022-09-08 =
-* Criptografia RSA para função crédito.
+* RSA encryption for credit function.
 
 = 1.1.0 2022-09-02 =
-* Configuração de valor mínimo e início dos juros por parcela.
+* Configuration of minimum value and start of interest per installment.
 
 = 1.0.2 2022-08-04 =
-* Atualizando documentação.
+* Updating documentation.
 
 = 1.0.1 2022-07-29 =
-* Tradução do plugin para pt-BR.
+* Plugin translation to Brazilian Portuguese.
 
 = 1.0 2022-07-28 =
-* Versão inicial.
+* Initial version.

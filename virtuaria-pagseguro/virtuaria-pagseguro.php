@@ -5,7 +5,7 @@
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.6.4
+ * Version: 3.6.5
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  * Text Domain: virtuaria-pagseguro
@@ -112,6 +112,10 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 			}
 
 			require_once 'includes/class-virtuaria-pagseguro-settings.php';
+			require_once 'includes/class-virtuaria-pagseguro-order-utils.php';
+			require_once 'includes/class-virtuaria-pagseguro-payment-link-meta.php';
+			require_once 'includes/class-virtuaria-pagseguro-payment-link-service.php';
+			require_once 'includes/class-virtuaria-pagseguro-payment-link.php';
 			$this->settings = Virtuaria_Pagseguro_Settings::get_settings();
 
 			require_once 'includes/traits/trait-virtuaria-pagseguro-common.php';
@@ -128,6 +132,8 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				require_once 'includes/class-wc-virtuaria-pagseguro-gateway.php';
 			}
 
+			/*
+			Old code.
 			if ( \Virtuaria\Plugins\Auth::is_premium(
 				isset( $this->settings['serial'] )
 					? $this->settings['serial']
@@ -136,9 +142,10 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 				'virtuaria-pagseguro',
 				$this->plugin_data['Version']
 			) ) {
-				require_once 'includes/traits/trait-virtuaria-pagseguro-duopay-o.php';
+			*/
+				require_once 'includes/traits/trait-virtuaria-pagseguro-duopay.php';
 				require_once 'includes/class-virtuaria-pagseguro-gateway-duopay.php';
-			}
+			// }
 
 			require_once 'includes/traits/trait-virtuaria-pagseguro-split.php';
 			require_once 'includes/class-virtuaria-pagseguro-handle-notifications.php';
@@ -206,38 +213,6 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 		}
 
 		/**
-		 * Endpoint to homolog file.
-		 */
-		public function register_endpoint() {
-			add_rewrite_rule( 'virtuaria-pagseguro(/)?', 'index.php?virtuaria-pagseguro=sim', 'top' );
-		}
-
-		/**
-		 * Add query vars.
-		 *
-		 * @param array $query_vars the query vars.
-		 * @return array
-		 */
-		public function add_query_vars( $query_vars ) {
-			$query_vars[] = 'virtuaria-pagseguro';
-			return $query_vars;
-		}
-
-		/**
-		 * Redirect access to confirm page.
-		 *
-		 * @param string $template the template path.
-		 * @return string
-		 */
-		public function redirect_to_homolog_page( $template ) {
-			if ( false == get_query_var( 'virtuaria-pagseguro' ) ) {
-				return $template;
-			}
-
-			return plugin_dir_path( __FILE__ ) . '/includes/endpoint-homolog.php';
-		}
-
-		/**
 		 * Display warning about missing dependency.
 		 */
 		public function missing_extra_checkout_fields() {
@@ -283,6 +258,8 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 							$payment_method_registry->register( new Virtuaria_PagSeguro_Unified_Block() );
 						}
 
+						/*
+						Old code.
 						if ( \Virtuaria\Plugins\Auth::is_premium(
 							isset( $this->settings['serial'] )
 								? $this->settings['serial']
@@ -291,8 +268,9 @@ if ( ! class_exists( 'Virtuaria_Pagseguro' ) ) :
 							'virtuaria-pagseguro',
 							$this->plugin_data['Version']
 						) ) {
+							*/
 							$payment_method_registry->register( new Virtuaria_PagSeguro_DuoPay_Block() );
-						}
+						// }
 					}
 				);
 			}

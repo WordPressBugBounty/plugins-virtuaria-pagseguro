@@ -7,8 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
-
 trait Virtuaria_PagSeguro_Common {
 	/**
 	 * Get default common settings.
@@ -311,22 +309,7 @@ trait Virtuaria_PagSeguro_Common {
 	 * @return string
 	 */
 	private function get_meta_boxes_screen() {
-		$screen_id = 'shop_order';
-		if ( class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' )
-			&& wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled()
-		) {
-			if ( ! function_exists( 'wc_get_page_screen_id' ) ) {
-				include_once plugin_dir_path( __FILE__ ) . '../../../woocommerce/includes/admin/wc-admin-functions.php';
-			}
-
-			if ( function_exists( 'wc_get_page_screen_id' ) ) {
-				$screen_id = wc_get_page_screen_id( 'shop-order' );
-			} else {
-				$screen_id = 'woocommerce_page_wc-orders';
-			}
-		}
-
-		return $screen_id;
+		return Virtuaria_PagSeguro_Order_Utils::get_meta_boxes_screen();
 	}
 
 	/**
@@ -336,9 +319,7 @@ trait Virtuaria_PagSeguro_Common {
 	 * @return WC_Order The WooCommerce order object
 	 */
 	private function get_order_from_mixed( $post_or_order ) {
-		return $post_or_order instanceof WP_Post
-		? wc_get_order( $post_or_order->ID )
-		: $post_or_order;
+		return Virtuaria_PagSeguro_Order_Utils::get_order_from_mixed( $post_or_order );
 	}
 
 	/**
@@ -615,7 +596,7 @@ trait Virtuaria_PagSeguro_Common {
 					$refunded = $this->process_refund(
 						$order_id,
 						$refund_value,
-						__( 'PagSeguro: Fail pix create order. Do refund to credit payment.', 'virtuaria-pagseguro ' ),
+						__( 'PagSeguro: Fail pix create order. Do refund to credit payment.', 'virtuaria-pagseguro' ),
 						'credit'
 					);
 
@@ -623,7 +604,7 @@ trait Virtuaria_PagSeguro_Common {
 						$order->add_order_note(
 							sprintf(
 								// translators: %s: title.
-								__( '%s: Fail pix create order. Credit payment refunded.', 'virtuaria-pagseguro ' ),
+								__( '%s: Fail pix create order. Credit payment refunded.', 'virtuaria-pagseguro' ),
 								$this->title
 							)
 						);

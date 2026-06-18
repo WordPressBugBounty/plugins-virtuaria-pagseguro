@@ -68,6 +68,158 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 	}
 
 	/**
+	 * Handle checkout status notifications.
+	 *
+	 * @param array  $request Request payload.
+	 * @param string $body    Raw body.
+	 * @return bool
+	 */
+	private function handle_checkout_notification( $request, $body ) {
+		if ( ! isset( $request['id'], $request['reference_id'] )
+			|| 0 !== strpos( $request['id'], 'CHEC_' ) ) {
+			return false;
+		}
+
+		if ( isset( $request['charges'] ) && is_array( $request['charges'] ) ) {
+			// Keep transaction status flow in the existing charge handler.
+			return false;
+		}
+
+		$prefix    = isset( $this->settings['invoice_prefix'] )
+			? $this->settings['invoice_prefix']
+			: 'WC-';
+		$reference = sanitize_text_field( $request['reference_id'] );
+		if ( 0 === strpos( $reference, $prefix ) ) {
+			$reference = str_replace( $prefix, '', $reference );
+		}
+
+		$order = wc_get_order( absint( $reference ) );
+		if ( ! $order ) {
+			if ( isset( $this->log ) ) {
+				$this->log->add(
+					$this->tag,
+					'Checkout webhook received but order was not found: ' . wp_json_encode( $request ),
+					WC_Log_Levels::INFO
+				);
+			}
+			return true;
+		}
+
+		if ( Virtuaria_PagSeguro_Payment_Link_Meta::is_duplicate_checkout_webhook( $order, $body ) ) {
+			return true;
+		}
+
+		Virtuaria_PagSeguro_Payment_Link_Meta::update_from_checkout_webhook(
+			$order,
+			$request,
+			$body
+		);
+
+		if ( $this->is_checkout_paid_notification( $request ) ) {
+			$payment_status = isset( $this->settings['payment_status'] )
+				? $this->settings['payment_status']
+				: 'processing';
+
+			if ( ! $order->has_status( 'completed' )
+				&& ! $order->has_status( $payment_status ) ) {
+				$order->update_status(
+					$payment_status,
+					__( 'PagSeguro: Payment approved.', 'virtuaria-pagseguro' )
+				);
+			}
+		}
+
+		if ( isset( $request['status'] ) ) {
+			$status = sanitize_text_field( $request['status'] );
+
+			if ( 'EXPIRED' === strtoupper( $status ) ) {
+				$order->add_order_note(
+					__( 'PagSeguro: Payment link expired.', 'virtuaria-pagseguro' )
+				);
+			} else {
+				$order->add_order_note(
+					sprintf(
+						/* translators: %s: checkout status */
+						__( 'PagSeguro: Payment link status updated to %s.', 'virtuaria-pagseguro' ),
+						$status
+					)
+				);
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check whether checkout webhook indicates paid status.
+	 *
+	 * @param array $request Checkout webhook payload.
+	 * @return bool
+	 */
+	private function is_checkout_paid_notification( $request ) {
+		$paid_statuses = array(
+			'PAID',
+			'AUTHORIZED',
+			'COMPLETED',
+		);
+
+		$candidate_keys = array(
+			'status',
+			'payment_status',
+			'checkout_status',
+		);
+
+		foreach ( $candidate_keys as $key ) {
+			if ( isset( $request[ $key ] )
+				&& in_array( strtoupper( sanitize_text_field( $request[ $key ] ) ), $paid_statuses, true ) ) {
+				return true;
+			}
+		}
+
+		$collections = array( 'payments', 'transactions' );
+		foreach ( $collections as $collection ) {
+			if ( ! isset( $request[ $collection ] )
+				|| ! is_array( $request[ $collection ] ) ) {
+				continue;
+			}
+
+			foreach ( $request[ $collection ] as $item ) {
+				if ( isset( $item['status'] )
+					&& in_array( strtoupper( sanitize_text_field( $item['status'] ) ), $paid_statuses, true ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether IPN request is authorized.
+	 *
+	 * @param string $body Raw body.
+	 * @return bool
+	 */
+	private function is_authorized_ipn_request( $body ) {
+		$all_headers = getallheaders();
+		$signature   = isset( $all_headers['x-authenticity-token'] )
+			? sanitize_text_field( wp_unslash( $all_headers['x-authenticity-token'] ) )
+			: '';
+
+		if ( empty( $signature ) ) {
+			return false;
+		}
+
+		$request_signature = hash(
+			'sha256',
+			$this->get_token() . '-' . $body
+		);
+
+		return hash_equals( $signature, $request_signature );
+	}
+
+
+	/**
 	 * IPN handler.
 	 */
 	public function ipn_handler() {
@@ -80,13 +232,36 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 				WC_Log_Levels::INFO
 			);
 		}
+
+		if ( ! $this->is_authorized_ipn_request( $body ) ) {
+			$this->log->add(
+				$this->tag,
+				sprintf(
+					/* translators: %s: raw body */
+					__( 'IPN request REJECT %s', 'virtuaria-pagseguro' ),
+					$body
+				),
+				WC_Log_Levels::WARNING
+			);
+			header( 'HTTP/1.1 403 Forbidden' );
+			return;
+		}
+
 		$request = json_decode( $body, true );
+		if ( ! is_array( $request ) ) {
+			$request = array();
+		}
 		if ( isset( $this->log ) ) {
 			$this->log->add(
 				$this->tag,
 				__( 'Request to order ', 'virtuaria-pagseguro' ) . $body,
 				WC_Log_Levels::INFO
 			);
+		}
+
+		if ( $this->handle_checkout_notification( $request, $body ) ) {
+			header( 'HTTP/1.1 200 OK' );
+			return;
 		}
 
 		if ( isset( $request['charges'] )
@@ -306,7 +481,8 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 			}
 			header( 'HTTP/1.1 200 OK' );
 			return;
-		} elseif ( 'transaction' === $request['notificationType'] && isset( $request['notificationCode'] ) ) {
+		} elseif ( isset( $request['notificationType'], $request['notificationCode'] )
+			&& 'transaction' === $request['notificationType'] ) {
 			if ( isset( $this->log ) ) {
 				$this->log->add( $this->tag, 'IPN valid', WC_Log_Levels::INFO );
 			}
@@ -373,7 +549,7 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 						$order->add_order_note(
 							sprintf(
 								/* translators: %s: amount */
-								__( 'PagSeguro: Charge received R$ %s' ),
+								__( 'PagSeguro: Charge received R$ %s', 'virtuaria-pagseguro' ),
 								// phpcs:ignore
 								number_format( (string) $transaction->grossAmount, 2, ',', '.' )
 							)
@@ -466,6 +642,24 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 			$error = __( 'PagSeguro request not authorized.', 'virtuaria-pagseguro' );
 			wp_die( esc_html( $error ), esc_html( $error ), array( 'response' => 401 ) );
 		}
+	}
+
+	/**
+	 * Get token.
+	 *
+	 * @return string
+	 */
+	private function get_token() {
+		if ( isset( $this->settings['environment'] )
+			&& 'sandbox' === $this->settings['environment'] ) {
+			return isset( $this->settings['token_sanbox'] )
+				? sanitize_text_field( $this->settings['token_sanbox'] )
+				: '';
+		}
+
+		return isset( $this->settings['token_production'] )
+			? sanitize_text_field( $this->settings['token_production'] )
+			: '';
 	}
 }
 
