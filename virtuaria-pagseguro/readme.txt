@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, card, pix, boleto
 Requires at least: 5.3
 Tested up to: 7.0
-Stable tag: 3.6.5
+Stable tag: 3.6.6
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -403,6 +403,9 @@ The problem is not with the plugin, but with external security settings.
 No updates available
 
 == Changelog ==
+= 3.6.5 2026-06-19 =
+* Adjustment - error loading dependency.
+
 = 3.6.5 2026-06-18 =
 * Adjustment - Improved security of the IPN resquests.
 
