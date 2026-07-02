@@ -177,6 +177,16 @@ if ( ! isset( $options['payment_form'] ) ) {
 
 					if ( $token ) {
 						$revoke_url = $app_revoke . '?state=' . $origin . ( $fee_setup ? '--' . $fee_setup : '' ) . '--' . $mail . ( isset( $options['marketplace'] ) ? $options['marketplace'] : '' );
+						$revoke_url = wp_nonce_url(
+							add_query_arg(
+								array(
+									'action'      => 'virtuaria_pagseguro_revoke_token',
+									'redirect_to' => $revoke_url,
+								),
+								admin_url( 'admin-post.php' )
+							),
+							'virtuaria_pagseguro_revoke_token'
+						);
 						echo '<span class="connected"><strong>Status: <span class="status">' . esc_html__( 'Connected.', 'virtuaria-pagseguro' ) . '</span></strong></span>';
 						echo '<a href="' . esc_url( $revoke_url ) . '" class="auth button-primary">' . esc_html__( 'Disconnect with PagSeguro', 'virtuaria-pagseguro' ) . ' <img src="' . esc_url( VIRTUARIA_PAGSEGURO_URL ) . 'public/images/conectado.svg" alt="Desconectar" /></a>';
 					} else {

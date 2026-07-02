@@ -35,6 +35,19 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 	private $settings;
 
 	/**
+	 * Supported methods.
+	 *
+	 * @var array
+	 */
+	private const SUPPORTED_PAYMENT_METHODS = array(
+		'virt_pagseguro_credit',
+		'virt_pagseguro_pix',
+		'virt_pagseguro_ticket',
+		'virt_pagseguro',
+		'virt_pagseguro_duopay',
+	);
+
+	/**
 	 * Initialization.
 	 */
 	public function __construct() {
@@ -206,13 +219,15 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 			? sanitize_text_field( wp_unslash( $all_headers['x-authenticity-token'] ) )
 			: '';
 
-		if ( empty( $signature ) ) {
+		$token = $this->get_token();
+
+		if ( empty( $signature ) || empty( $token ) ) {
 			return false;
 		}
 
 		$request_signature = hash(
 			'sha256',
-			$this->get_token() . '-' . $body
+			$token . '-' . $body
 		);
 
 		return hash_equals( $signature, $request_signature );
@@ -294,6 +309,17 @@ class Virtuaria_PagSeguro_Handle_Notifications {
 			if ( $order
 				&& isset( $request['charges'][0]['id'] )
 				&& isset( $request['charges'][0]['status'] ) ) {
+
+				if (
+					! in_array(
+						$order->get_payment_method(),
+						self::SUPPORTED_PAYMENT_METHODS,
+						true
+					)
+				) {
+					header( 'HTTP/1.1 404 Payment not found' );
+					return;
+				}
 
 				if ( ! $order->get_meta( '_charge_id' )
 					&& ! $is_additional_charge ) {

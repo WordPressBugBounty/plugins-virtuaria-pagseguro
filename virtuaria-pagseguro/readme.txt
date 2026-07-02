@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, card, pix, boleto
 Requires at least: 5.3
 Tested up to: 7.0
-Stable tag: 3.6.6
+Stable tag: 3.7.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -41,14 +41,11 @@ Now featuring Mixed Payment, a payment method that combines Credit and Pix to br
 - **Detailed Transactions**: Track the operations that occurred during communication with PagSeguro in the order notes (refunds, installments, status changes, and amounts received/charged);
 - **Use the same PagSeguro account**: In multiple online stores;
 - **Payment Confirmed Status**: Allows you to define, via configuration, which status identifies a confirmed payment;
-
 - **Check Status on PagSeguro**: Allows you to check the current transaction status on PagSeguro at any time;
-
 - **Installment Display**: Allows, via configuration, displaying installments on the product page and listings such as catalog and search;
-
 - **Operating Mode**: Allows, via configuration, separating Credit, Pix, and Boleto as independent payment methods. This option offers greater flexibility and facilitates integration with external systems and other plugins.
-
-- **3DS Authentication**: Increases security in online credit card transactions, significantly reducing chargebacks by transferring responsibility to the issuing bank.
+- **3DS Authentication**: Increases security in online credit card transactions, significantly reducing chargebacks by transferring responsibility to the issuing bank;
+- **Payment Link**: Allows for greater flexibility when accepting payments using PagBank checkout with a payment link. 
 
 ## ⭐ PREMIUM
 
@@ -403,6 +400,9 @@ The problem is not with the plugin, but with external security settings.
 No updates available
 
 == Changelog ==
+= 3.7.0 2026-07-02 =
+* New - Support for payment by link using PagBank checkout.
+
 = 3.6.5 2026-06-19 =
 * Adjustment - error loading dependency.
 

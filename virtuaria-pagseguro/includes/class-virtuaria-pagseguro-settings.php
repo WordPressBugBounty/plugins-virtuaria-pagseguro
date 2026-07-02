@@ -237,14 +237,10 @@ class Virtuaria_PagSeguro_Settings {
 					. '</a>';
 			}
 
-			$payment_link_section = '';
-			// TODO: Add Payment Link AFter development.
-			if ( false ) {
-				$payment_link_section = '<a class="tablinks '
-				. ( 'virtuaria_pagseguro_link' === $page ? 'active' : '' )
-				. '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro_link' ) . '">'
-				. esc_html( __( 'Payment Link', 'virtuaria-pagseguro' ) ) . '</a>';
-			}
+			$payment_link_section = '<a class="tablinks '
+			. ( 'virtuaria_pagseguro_link' === $page ? 'active' : '' )
+			. '" href="' . admin_url( 'admin.php?page=virtuaria_pagseguro_link' ) . '">'
+			. esc_html( __( 'Payment Link', 'virtuaria-pagseguro' ) ) . '</a>';
 
 			if ( ( 'virtuaria_pagseguro' === $page
 				|| 'virtuaria_pagbank_split' === $page

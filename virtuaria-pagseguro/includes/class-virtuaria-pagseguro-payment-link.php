@@ -91,8 +91,6 @@ class Virtuaria_PagSeguro_Payment_Link {
 	 * Class constructor.
 	 */
 	public function __construct() {
-		// Under development.
-		return;
 		$this->settings = Virtuaria_PagSeguro_Settings::get_settings();
 		$this->set_logger();
 		$this->service = new Virtuaria_PagSeguro_Payment_Link_Service(
