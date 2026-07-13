@@ -365,6 +365,7 @@ trait Virtuaria_PagSeguro_Credit {
 				<p class="description">
 					<?php echo wp_kses_post( $data['description'] ); ?>
 				</p>
+				<?php wp_nonce_field( 'request_erase_cards', 'erase_cards_nonce' ); ?>
 			</td>
 		</tr>  
 
@@ -376,13 +377,24 @@ trait Virtuaria_PagSeguro_Credit {
 	 * Do erase cards.
 	 */
 	public function erase_cards() {
-		if ( isset( $_POST['erase_cards'] )
+		$required_capacity = apply_filters(
+			'virtuaria_pagseguro_menu_capability',
+			'remove_users'
+		);
+
+		if ( isset( $_POST['erase_cards'], $_POST['erase_cards_nonce'] )
+			&& is_admin()
+			&& wp_verify_nonce(
+				sanitize_text_field( wp_unslash( $_POST['erase_cards_nonce'] ) ),
+				'request_erase_cards'
+			)
+			&& current_user_can( $required_capacity )
 			&& 'CONFIRMED' === $_POST['erase_cards'] ) {
 			global $wpdb;
 
 			$wpdb->query(
 				$wpdb->prepare(
-					"DELETE FROM wp_usermeta WHERE meta_key = '_pagseguro_credit_info_store_%d'",
+					"DELETE FROM $wpdb->usermeta WHERE meta_key = '_pagseguro_credit_info_store_%d'",
 					get_current_blog_id()
 				)
 			);

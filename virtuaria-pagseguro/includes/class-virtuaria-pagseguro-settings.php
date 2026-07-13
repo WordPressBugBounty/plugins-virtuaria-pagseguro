@@ -256,7 +256,7 @@ class Virtuaria_PagSeguro_Settings {
 							<a class="tablinks ' . ( 'virt_pagseguro_credit' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_credit' ) . '">' . esc_html( __( 'Credit', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks ' . ( 'virt_pagseguro_pix' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_pix' ) . '">' . esc_html( __( 'Pix', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks ' . ( 'virt_pagseguro_ticket' === $section ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=virt_pagseguro_ticket' ) . '">' . esc_html( __( 'Bank Slip', 'virtuaria-pagseguro' ) ) . '</a>
-							' . $payment_link_section . ' .
+							' . $payment_link_section . '
 							' . $doupay_section . '
 							<a class="tablinks split ' . ( 'virtuaria_pagbank_split' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_pagbank_split' ) . '">' . esc_html( __( 'Split', 'virtuaria-pagseguro' ) ) . '</a>
 							<a class="tablinks marketing ' . ( 'virtuaria_marketing' === $page ? 'active' : '' ) . '" href="' . admin_url( 'admin.php?page=virtuaria_marketing' ) . '">' . esc_html( __( 'Correios', 'virtuaria-pagseguro' ) ) . '</a>

@@ -4,7 +4,7 @@ Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, card, pix, boleto
 Requires at least: 5.3
 Tested up to: 7.0
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -400,6 +400,9 @@ The problem is not with the plugin, but with external security settings.
 No updates available
 
 == Changelog ==
+= 3.7.1 2026-07-13 =
+* Adjustment – ​​Security improvement suggested by Artus KG.
+
 = 3.7.0 2026-07-02 =
 * New - Support for payment by link using PagBank checkout.
 

@@ -223,15 +223,12 @@ if ( ! isset( $options['payment_form'] ) ) {
 						$plugin_data = Virtuaria_Pagseguro::get_instance()->get_plugin_data();
 						if ( ! isset( $options['serial'] )
 							|| ! $options['serial']
-						/*
-						Old code.
 							|| ! \Virtuaria\Plugins\Auth::is_premium(
 								$options['serial'],
 								get_home_url(),
 								'virtuaria-pagseguro',
 								'1'
 							)
-						*/
 						) :
 							?>
 							<p class="description">
