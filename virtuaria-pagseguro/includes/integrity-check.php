@@ -11,6 +11,8 @@ $allowed_plugin_name = array(
 	'Virtuaria - Pagseguro para Woocommerce',
 	'Virtuaria - Pagseguro Crédito, Pix e Boleto',
 	'Virtuaria PagBank / PagSeguro para Woocommerce',
+	'Virtuaria Payments with PagBank',
+	'Virtuaria Payments with PagBank for WooCommerce',
 );
 
 if ( ! is_plugin_active( 'virtuaria-pagseguro/virtuaria-pagseguro.php' )

@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Virtuaria PagBank / PagSeguro para Woocommerce
+ * Plugin Name: Virtuaria Payments with PagBank for WooCommerce
  * Plugin URI: https://virtuaria.com.br/virtuaria-pagseguro-plugin/
  * Description: Adiciona o método de pagamento PagSeguro a sua loja virtual.
  * Author: Virtuaria
  * Author URI: https://virtuaria.com.br/
- * Version: 3.7.1
+ * Version: 3.7.3
  * License: GPLv2 or later
  * WC tested up to: 8.6.1
  * Text Domain: virtuaria-pagseguro

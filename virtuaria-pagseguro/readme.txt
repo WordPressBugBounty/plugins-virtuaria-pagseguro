@@ -1,10 +1,10 @@
-=== Virtuaria PagBank / PagSeguro for WooCommerce ===
+=== Virtuaria Payments with PagBank for WooCommerce ===
 
 Contributors: tecnologiavirtuaria
 Tags: pagbank, pagseguro, card, pix, boleto
 Requires at least: 5.3
 Tested up to: 7.0
-Stable tag: 3.7.1
+Stable tag: 3.7.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -139,7 +139,7 @@ Connect your WooCommerce online store to Correios efficiently and reliably. The 
 
 ## Notes:
 
-- [PagSeguro](https://pagseguro.uol.com.br/) is a Brazilian payment platform developed by UOL. This plugin was developed without any incentive from PagSeguro or UOL, based on the [official PagSeguro documentation] and uses the latest version (4.0) of the billing API. None of the developers of this plugin have any ties to PagSeguro or UOL.
+- [PagSeguro](https://pagseguro.uol.com.br/) is a Brazilian payment platform developed by UOL. This plugin was developed without any incentive from PagBank or UOL, based on the [official PagSeguro documentation] and uses the latest version (4.0) of the billing API. None of the developers of this plugin have any ties to PagBank or UOL.
 
 - **For more information, visit** [virtuaria.com.br - plugin development, creation and hosting of online stores](https://virtuaria.com.br/) or send an email to tecnologia@virtuaria.com.br
 
@@ -260,7 +260,7 @@ In conversation with the PagSeguro integration team, we were informed that the O
 
 = 13 - What values ​​can my customers pay with this plugin? = There are no maximum values ​​for sales, however there are minimum values ​​to be transacted with PagSeguro, as listed below:
 
-Method | Card Brand | Minimum Value (R$) | Minimum Installment (R$)
+Method | Card Brand | Minimum Value (R$)| MinimumInstallment (R$)
 Credit | Visa | 1.00 | 5.00
 Credit | Mastercard | 0.20 | 5.00
 Credit | American Express | 0.20 | 5.00
@@ -400,6 +400,9 @@ The problem is not with the plugin, but with external security settings.
 No updates available
 
 == Changelog ==
+= 3.7.3 2026-10-14 =
+* Adjustment - Rename plugin to "Virtuaria Payments with PagBank for WooCommerce".
+
 = 3.7.1 2026-07-13 =
 * Adjustment – ​​Security improvement suggested by Artus KG.
 
